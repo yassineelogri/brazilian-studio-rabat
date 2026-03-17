@@ -1,0 +1,167 @@
+.section {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.backgroundImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(47, 33, 35, 0.85), rgba(47, 33, 35, 0.7));
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 700px;
+  padding: 4rem 2rem;
+  color: white;
+}
+
+.decorativeLine {
+  width: 40px;
+  height: 2px;
+  background: #D68F9F;
+  margin: 0 auto 2rem;
+}
+
+.subtitle {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 0.9rem;
+  color: #D68F9F;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.heading {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: white;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.paragraph {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+}
+
+.buttonPrimary {
+  background: linear-gradient(135deg, #D68F9F, #C56F7F);
+  color: white;
+}
+
+.buttonPrimary:hover {
+  background: linear-gradient(135deg, #E5A5B5, #D68F9F);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(214, 143, 159, 0.3);
+}
+
+.buttonOutline {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.buttonOutline:hover {
+  background: white;
+  color: #2f2123;
+  border-color: white;
+  transform: translateY(-2px);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .section {
+    min-height: 500px;
+  }
+
+  .content {
+    padding: 3rem 1.5rem;
+  }
+
+  .buttonsContainer {
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .heading {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .paragraph {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 2rem 1rem;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+  }
+
+  .paragraph {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+
+  .button {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .buttonsContainer {
+    gap: 1rem;
+  }
+}

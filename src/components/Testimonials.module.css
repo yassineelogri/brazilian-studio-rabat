@@ -1,0 +1,190 @@
+.testimonials {
+  padding: 8rem 0;
+  background-color: var(--color-background);
+  overflow: hidden;
+  position: relative;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.subtitle {
+  color: #D68F9F;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  perspective: 1000px;
+}
+
+.card {
+  position: absolute;
+  width: 100%;
+  max-width: 750px;
+  background: white;
+  border-radius: 24px;
+  padding: 4rem;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 2rem 1.5rem;
+    max-width: 90%;
+  }
+}
+
+.starsRow {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 2rem;
+  color: #E8A060;
+  justify-content: center;
+}
+
+.star {
+  color: #E8A060;
+}
+
+.quoteIcon {
+  color: rgba(232, 160, 96, 0.2);
+  margin-bottom: 2rem;
+}
+
+.quoteText {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  line-height: 1.5;
+  color: var(--color-text);
+  margin-bottom: 3rem;
+  font-style: italic;
+}
+
+.authorInfo {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.authorImage {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #E8A060;
+  flex-shrink: 0;
+}
+
+.authorDetails {
+  text-align: left;
+}
+
+.authorName {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-text);
+  display: block;
+}
+
+.authorService {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 3rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-text-muted);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dotActive {
+  background-color: #E8A060;
+  width: 12px;
+  height: 12px;
+}
+
+.dot:hover {
+  background-color: #E8A060;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.controlBtn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.controlBtn:hover {
+  background-color: #E8A060;
+  border-color: #E8A060;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .authorImage {
+    width: 60px;
+    height: 60px;
+  }
+
+  .dots {
+    gap: 8px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .dotActive {
+    width: 10px;
+    height: 10px;
+  }
+}

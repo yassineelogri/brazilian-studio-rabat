@@ -1,0 +1,175 @@
+.footer {
+  background-color: #3d1535;
+  color: #F0E0E4;
+  padding: 5rem 2rem 2rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Grid Layout */
+.grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+/* Column 1: Brand */
+.brandColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.desc {
+  color: #B59B9F;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialIcon {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F0E0E4;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.socialIcon:hover {
+  background-color: #D4A574;
+  color: white;
+}
+
+/* Column Titles */
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: white;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+/* Navigation & Services Lists */
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.link {
+  color: #B59B9F;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+  display: block;
+}
+
+.link:hover {
+  color: #D4A574;
+}
+
+/* Contact List */
+.contactList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.contactItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  color: #B59B9F;
+  font-size: 0.95rem;
+}
+
+/* Instagram CTA Strip */
+.ctaStrip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  padding: 1.5rem 0;
+  color: #F0E0E4;
+  font-size: 1rem;
+}
+
+.instagramLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #D4A574;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.instagramLink:hover {
+  color: #E5C494;
+}
+
+/* Bottom Bar */
+.bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 2rem;
+  margin-top: 4rem;
+  text-align: center;
+  color: #826E72;
+  font-size: 0.85rem;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer {
+    padding: 3rem 1rem 1rem;
+  }
+
+  .brand {
+    font-size: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.1rem;
+  }
+}

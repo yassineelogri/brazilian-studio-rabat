@@ -1,0 +1,319 @@
+.page {
+  background-color: #faf7f4;
+  min-height: 100vh;
+}
+
+/* Hero Section */
+.hero {
+  height: 45vh;
+  background: linear-gradient(135deg, #3d1535 0%, rgba(61, 21, 53, 0.95) 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(201, 169, 110, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+}
+
+.heroTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 600;
+  margin: 0;
+  color: white;
+  letter-spacing: -1px;
+}
+
+.heroSubtitle {
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(201, 169, 110, 0.9);
+  margin: 1rem 0 0 0;
+  font-weight: 400;
+}
+
+/* Intro Paragraph */
+.intro {
+  max-width: 680px;
+  margin: 3rem auto 4rem;
+  padding: 0 2rem;
+  text-align: center;
+  color: #6b5b5d;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* Menu Container */
+.menuContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.categorySection {
+  margin-bottom: 4rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.2);
+}
+
+.categorySection:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.categoryHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.categoryCircle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(201, 169, 110, 0.5);
+  box-shadow: 0 4px 16px rgba(201, 169, 110, 0.2);
+  flex-shrink: 0;
+}
+
+.categoryRule {
+  width: 40px;
+  height: 2px;
+  background-color: #c9a96e;
+  margin: 0 0 0.6rem 0;
+}
+
+.categoryTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: #3d2c2e;
+  margin: 0;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Price Grid */
+.priceGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  gap: 1rem;
+}
+
+.priceRow:last-child {
+  border-bottom: none;
+}
+
+.itemName {
+  flex: 0 0 auto;
+  font-size: 0.95rem;
+  color: #3d2c2e;
+  font-weight: 400;
+}
+
+.dots {
+  flex: 1;
+  border-bottom: 1.5px dotted rgba(0, 0, 0, 0.15);
+  margin: 0 1rem;
+  min-height: 1px;
+}
+
+.itemPrice {
+  flex: 0 0 auto;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: #c9a96e;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* CTA Section */
+.ctaSection {
+  background-color: #3d1535;
+  padding: 5rem 2rem;
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.ctaTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  color: white;
+  margin: 0 0 2rem 0;
+  font-weight: 400;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.ctaBtn {
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  border: none;
+}
+
+.ctaBtnPrimary {
+  background-color: #c9a96e;
+  color: white;
+}
+
+.ctaBtnPrimary:hover {
+  background-color: #dab882;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(201, 169, 110, 0.3);
+}
+
+.ctaBtnOutline {
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.ctaBtnOutline:hover {
+  border-color: white;
+  background-color: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroSubtitle {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+  }
+
+  .intro {
+    font-size: 1rem;
+    margin: 2rem auto 3rem;
+  }
+
+  .menuContainer {
+    padding: 1rem;
+  }
+
+  .categoryTitle {
+    font-size: 1.5rem;
+  }
+
+  .ctaTitle {
+    font-size: 2rem;
+  }
+
+  .ctaButtons {
+    gap: 0.75rem;
+  }
+
+  .ctaBtn {
+    padding: 0.8rem 2rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    height: 35vh;
+  }
+
+  .heroTitle {
+    font-size: 1.5rem;
+  }
+
+  .heroSubtitle {
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+  }
+
+  .intro {
+    font-size: 0.95rem;
+    margin: 1.5rem auto 2.5rem;
+    padding: 0 1rem;
+  }
+
+  .categoryRule {
+    width: 50px;
+  }
+
+  .categoryTitle {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .priceRow {
+    padding: 0.7rem 0;
+    gap: 0.75rem;
+  }
+
+  .itemName {
+    font-size: 0.9rem;
+  }
+
+  .itemPrice {
+    font-size: 0.95rem;
+  }
+
+  .ctaSection {
+    padding: 3rem 1rem;
+    margin-top: 2rem;
+  }
+
+  .ctaTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ctaButtons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .ctaBtn {
+    width: 100%;
+    padding: 0.9rem 2rem;
+    justify-content: center;
+  }
+}

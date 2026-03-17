@@ -1,0 +1,222 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 4rem;
+  overflow: hidden;
+  background-color: var(--color-background);
+}
+
+.bgImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 250, 252, 0.98) 0%,
+    rgba(255, 250, 252, 0.85) 50%,
+    rgba(255, 250, 252, 0.3) 100%
+  );
+  z-index: 1;
+}
+
+/* Badge positioned at top of viewport */
+.badge {
+  position: absolute;
+  top: 6rem;
+  left: 4rem;
+  z-index: 3;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #D68F9F;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #D68F9F;
+  background: rgba(255, 250, 252, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Badge alternative (hidden on desktop, shown on mobile inside content) */
+.badgeAlt {
+  display: none;
+}
+
+.subtitle {
+  color: #D68F9F;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.title {
+  margin-bottom: 1rem;
+  color: var(--color-text);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  line-height: 1.1;
+}
+
+.description {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--color-text-muted);
+  margin-bottom: 3rem;
+  max-width: 520px;
+}
+
+.actions {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+/* Floating Circular Image */
+.floatingImage {
+  position: absolute;
+  right: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  height: 200px;
+  z-index: 2;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid white;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  animation: float 4s ease-in-out infinite;
+}
+
+.floatingImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(calc(-50% - 20px));
+  }
+}
+
+/* Scroll Indicator */
+.scrollIndicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  color: #D68F9F;
+  cursor: pointer;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(8px);
+  }
+}
+
+/* Shimmer effect moved to globals.css */
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .hero {
+    padding: 0 1.5rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .badge {
+    display: none;
+  }
+
+  .badgeAlt {
+    display: block;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid #D68F9F;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #D68F9F;
+    background: rgba(255, 250, 252, 0.8);
+    backdrop-filter: blur(10px);
+    margin-bottom: 1.5rem;
+    align-self: center;
+  }
+
+  .overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 250, 252, 0.95) 0%,
+      rgba(255, 250, 252, 0.9) 100%
+    );
+  }
+
+  .content {
+    text-align: center;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .title {
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+  }
+
+  .description {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+
+  .floatingImage {
+    display: none;
+  }
+
+  .scrollIndicator {
+    bottom: 1.5rem;
+  }
+}

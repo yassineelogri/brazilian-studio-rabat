@@ -1,0 +1,38 @@
+.container {
+  background-color: #2f2123;
+  overflow: hidden;
+  padding: 1.5rem 0;
+}
+
+.marqueeTrack {
+  display: flex;
+  gap: 2rem;
+  white-space: nowrap;
+  animation: scroll-left 25s linear infinite;
+}
+
+.marqueeItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.separator {
+  color: #d68f9f;
+  font-size: 0.8rem;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
