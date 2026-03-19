@@ -447,12 +447,101 @@ Staff clicks Confirm
 
 ---
 
-## 13. Out of Scope for V1
+## 13. Product Roadmap
 
-- Payment processing
-- Client accounts / booking history view ("save my info" deferred to V2)
-- SMS notifications
-- Analytics dashboard
-- Multi-location support
-- Per-staff individual schedules (all active staff share salon hours)
-- Appointment reminders (automated day-before emails)
+Development is step-by-step: each version is fully built and working before the next begins. Each V2+ phase will get its own detailed design spec before implementation starts.
+
+---
+
+### V1 — Appointments (current spec)
+**Status: Designed ✓**
+- Public booking form (service → date → time → client info)
+- Dashboard calendar (day/week, confirm/cancel/assign staff)
+- Real-time sync via Supabase Realtime
+- Email notifications (Resend)
+- Staff + services management
+
+---
+
+### V2 — Products & Inventory
+**Status: Planned**
+
+Track products sold at the salon (nail polishes, hair treatments, skincare, etc.).
+
+**Core features:**
+- Product catalog: name, brand, buying price (DH), selling price (DH), stock quantity
+- Profit margin auto-calculated: `selling_price - buying_price = margin per unit`
+- Stock tracking: decrement stock when product is sold
+- Low stock alerts (when quantity falls below threshold)
+- Link products to appointments (what was sold in a session)
+- Sales log: date, product, quantity sold, revenue, profit
+
+**New DB tables:** `products`, `product_sales`
+**New dashboard pages:** `/dashboard/products`, `/dashboard/products/new`
+
+---
+
+### V3 — Devis & Factures (Quotes & Invoices)
+**Status: Planned**
+
+Professional PDF document generation for clients.
+
+**Core features:**
+- **Devis (quote)**: propose services + products with prices before the appointment
+- **Facture (invoice)**: generate after appointment is completed
+- PDF export (server-side generation with a library like `@react-pdf/renderer`)
+- Invoice includes: salon name + address, client name, itemized services + products, totals in MAD (Moroccan Dirham), date, invoice number
+- Invoice history per client
+- Status tracking: draft → sent → paid
+
+**New DB tables:** `invoices`, `invoice_items`
+**New dashboard pages:** `/dashboard/invoices`, `/dashboard/invoices/[id]`
+
+---
+
+### V4 — Smart Analytics & Business Intelligence
+**Status: Planned**
+
+A financial dashboard that tells you clearly: *is the business profitable?*
+
+**Revenue tracking:**
+- Daily / weekly / monthly revenue from services
+- Daily / weekly / monthly revenue from product sales
+- Combined total revenue
+
+**Profit & margin analysis:**
+- Per-product margin (selling - buying price)
+- Per-service revenue (no cost tracked — pure revenue)
+- Best-selling services and products
+
+**Fixed costs input:**
+- Manager enters monthly fixed costs: rent (e.g. 20,000 DH), supplies, utilities, salaries
+- System stores these per month
+
+**Net profit calculation:**
+```
+Net Profit = Total Revenue (services + products) - Product Costs - Fixed Costs
+```
+
+**Smart indicators:**
+- Monthly break-even point: "You need X DH this month to cover costs"
+- Current progress: "You've earned Y DH — Z% of your break-even"
+- End-of-month summary: "This month: +X DH profit / -X DH loss"
+- Week-over-week and month-over-month trend charts
+
+**Dashboard views:**
+- `/dashboard/analytics` — overview: today / this week / this month
+- `/dashboard/analytics/costs` — enter and track fixed monthly costs
+- Monthly PDF report: full P&L (profit & loss) summary exportable for accounting
+
+**New DB tables:** `monthly_costs`, `analytics_snapshots` (cached aggregates)
+
+---
+
+### Future Ideas (V5+)
+- Client accounts with booking history
+- Automated appointment reminders (email/SMS day before)
+- Online payment integration (CMI, PayDunya for Morocco)
+- Marketing: loyalty points, promotions, birthday messages
+- Multi-staff individual schedules
+- WhatsApp notification integration (very common in Morocco)
