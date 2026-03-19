@@ -177,7 +177,10 @@ Creates a new appointment from the public booking form.
 4. **Capacity check**: count appointments on same `date` where status IN ('pending','confirmed') and time windows overlap with requested window
    - Overlap condition: `start_time < requested_end_time AND end_time > requested_start_time`
    - If count >= 2 → return `409 { error: "No availability at this time" }`
-5. Upsert client (find by phone, create if not found)
+5. **Upsert client by phone**:
+   - Query `clients` where `phone = req.phone`
+   - If found: use existing `client.id` (do NOT overwrite name — phone is the identity key)
+   - If not found: insert new client with `{ name, phone }` and use new `client.id`
 6. Insert appointment with `status: 'pending'`, `staff_id: null`, `created_by: 'client'`
 7. Insert notification `{ type: 'new_booking' }`
 8. Send email to manager/secretary (see Section 7)
@@ -194,10 +197,9 @@ Creates a new appointment from the public booking form.
 ### `PATCH /api/appointments/[id]`
 Update appointment — staff only (middleware verifies session).
 
-**Request body (all fields optional):**
+**Patchable fields (all optional, partial updates allowed):**
 ```json
 {
-  "status": "confirmed|cancelled|completed|no_show",
   "staff_id": "uuid",
   "date": "YYYY-MM-DD",
   "start_time": "HH:MM",
@@ -205,32 +207,98 @@ Update appointment — staff only (middleware verifies session).
   "notes": "string"
 }
 ```
+Note: `status` is NOT patchable via this route — use dedicated routes (`/confirm`, or set cancelled/completed/no_show via status-specific actions in the dashboard). This prevents accidental invalid transitions.
 
-- If `date` or `start_time` changed → re-run capacity check (excluding this appointment)
-- Returns `200 { appointment }` or `409` on overlap
+**Logic:**
+1. Verify appointment exists → 404 if not
+2. If `date` or `start_time` or `duration_minutes` changed → re-run capacity check using the same overlap formula (`existing.start_time < new_end AND existing.end_time > new_start`), excluding the current appointment from the count → 409 if full
+3. Validate `new end_time ≤ 20:00` and date is not Sunday → 400
+4. Apply partial update, return `200 { appointment }`
+
+**Status transitions** (from dashboard UI — each calls PATCH with the new status field separately):
+| from | to | allowed |
+|---|---|---|
+| pending | confirmed | ✓ |
+| pending | cancelled | ✓ |
+| confirmed | completed | ✓ |
+| confirmed | no_show | ✓ |
+| confirmed | cancelled | ✓ |
+| any | pending | ✗ (cannot revert to pending) |
+
+Status update endpoint: `PATCH /api/appointments/[id]/status`
+```json
+{ "status": "confirmed|cancelled|completed|no_show" }
+```
+Returns 400 if transition is not allowed, 404 if not found, 200 on success.
+
+**Error responses for PATCH:**
+| status | condition |
+|---|---|
+| 404 | Appointment not found |
+| 400 | Invalid date / end_time > 20:00 / Sunday |
+| 409 | Capacity full after time change |
+| 500 | DB failure |
 
 ### `DELETE /api/appointments/[id]`
-Delete appointment — staff only. Returns `204`.
+Delete appointment — staff only. Returns `204`. Returns `404` if not found.
 
 ### `POST /api/appointments/[id]/confirm`
-Confirm a pending appointment — staff only.
-1. Update status to `confirmed`
-2. Send confirmation email to client (if email on file)
-3. Returns `200 { appointment }`
+Shortcut to confirm a pending appointment — staff only.
+
+**Guard conditions:**
+- 404 if appointment not found
+- 422 if appointment status is not `pending` (already confirmed, cancelled, etc.)
+- No capacity re-check at confirmation time (capacity was checked at booking creation; pending slots are counted in capacity, so no race condition exists)
+
+**Logic:**
+1. Verify appointment exists and status === 'pending'
+2. Update status to `confirmed`
+3. Update `notifications` row for this appointment to `read: false` (refresh badge)
+4. Send confirmation email to client (if `clients.email` is not null)
+5. Return `200 { appointment }`
+
+**Error responses:**
+| status | condition |
+|---|---|
+| 404 | Appointment not found |
+| 422 | Status is not pending |
+| 500 | DB or email failure |
 
 ---
 
 ## 6. Time Slot Generation
 
-Used by the booking form (step 3) to show available time slots.
+Used by the booking form (step 3) to show available time slots. Logic runs **client-side** using a direct Supabase read.
 
-- **Slot interval**: every 30 minutes
-- **Slot range**: 10:00 → last slot start such that `slot_start + duration_minutes ≤ 20:00`
-- **Fetched client-side**: query Supabase directly for confirmed+pending appointments on selected date
-- **Slot availability**: a slot is available if adding 1 more appointment would not exceed capacity (2 simultaneous)
-- **Displayed as**: a grid of time buttons (e.g. "10:00", "10:30") — greyed out if full
+**Step 1 — Generate candidate slots:**
+- Interval: every 30 minutes
+- Range: 10:00 → last slot where `slot_start + duration_minutes ≤ 20:00`
+- Example: duration = 90 min → slots from 10:00 to 18:30 inclusive
 
-Example: service duration = 90 min → last available slot = 18:30 (18:30 + 90min = 20:00 ✓)
+**Step 2 — Fetch existing appointments for selected date:**
+```typescript
+const { data: existing } = await supabase
+  .from('appointments')
+  .select('start_time, end_time')
+  .eq('date', selectedDate)
+  .in('status', ['pending', 'confirmed'])
+```
+
+**Step 3 — Filter slots using identical overlap formula as the API:**
+For each candidate slot:
+```
+slot_end = slot_start + duration_minutes
+overlap_count = existing.filter(appt =>
+  appt.start_time < slot_end AND appt.end_time > slot_start
+).length
+
+available = overlap_count < 2   // capacity = 2
+```
+Slots where `available === false` are greyed out and non-clickable.
+
+**Displayed as**: a grid of time buttons (e.g. "10:00", "10:30") — grey + disabled if full.
+
+Note: This check is advisory (UX). The API performs the authoritative check on submit. If a slot becomes full between the user loading the form and submitting, the API returns 409 and the form shows the conflict error.
 
 ---
 
