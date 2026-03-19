@@ -4,6 +4,7 @@ export type CreatedBy = 'client' | 'staff'
 export type NotificationType = 'new_booking' | 'confirmed' | 'cancelled'
 
 export interface Staff {
+  [key: string]: unknown
   id: string
   name: string
   role: StaffRole
@@ -13,6 +14,7 @@ export interface Staff {
 }
 
 export interface Service {
+  [key: string]: unknown
   id: string
   name: string
   description: string | null
@@ -23,6 +25,7 @@ export interface Service {
 }
 
 export interface Client {
+  [key: string]: unknown
   id: string
   name: string
   phone: string
@@ -32,6 +35,7 @@ export interface Client {
 }
 
 export interface Appointment {
+  [key: string]: unknown
   id: string
   client_id: string
   service_id: string
@@ -54,6 +58,7 @@ export interface AppointmentWithRelations extends Appointment {
 }
 
 export interface Notification {
+  [key: string]: unknown
   id: string
   appointment_id: string
   type: NotificationType
@@ -61,14 +66,19 @@ export interface Notification {
   created_at: string
 }
 
+type DBRelationship = { foreignKeyName: string; columns: string[]; isOneToOne?: boolean; referencedRelation: string; referencedColumns: string[] }
+
 export type Database = {
+  __InternalSupabase: { PostgrestVersion: '11' }
   public: {
     Tables: {
-      staff:        { Row: Staff;        Insert: Omit<Staff, 'id' | 'created_at'>; Update: Partial<Omit<Staff, 'id'>> }
-      services:     { Row: Service;      Insert: Omit<Service, 'id'>;              Update: Partial<Omit<Service, 'id'>> }
-      clients:      { Row: Client;       Insert: Omit<Client, 'id' | 'created_at'>; Update: Partial<Omit<Client, 'id'>> }
-      appointments: { Row: Appointment;  Insert: Omit<Appointment, 'id' | 'created_at' | 'updated_at'>; Update: Partial<Omit<Appointment, 'id'>> }
-      notifications:{ Row: Notification; Insert: Omit<Notification, 'id' | 'created_at'>; Update: Partial<Omit<Notification, 'id'>> }
+      staff:        { Row: Staff;        Insert: Omit<Staff, 'id' | 'created_at'>;                       Update: Partial<Omit<Staff, 'id'>>;         Relationships: DBRelationship[] }
+      services:     { Row: Service;      Insert: Omit<Service, 'id'>;                                    Update: Partial<Omit<Service, 'id'>>;       Relationships: DBRelationship[] }
+      clients:      { Row: Client;       Insert: Omit<Client, 'id' | 'created_at'>;                      Update: Partial<Omit<Client, 'id'>>;        Relationships: DBRelationship[] }
+      appointments: { Row: Appointment;  Insert: Omit<Appointment, 'id' | 'created_at' | 'updated_at'>; Update: Partial<Omit<Appointment, 'id'>>;   Relationships: DBRelationship[] }
+      notifications:{ Row: Notification; Insert: Omit<Notification, 'id' | 'created_at'>;               Update: Partial<Omit<Notification, 'id'>>;  Relationships: DBRelationship[] }
     }
+    Views: Record<string, { Row: Record<string, unknown>; Relationships: DBRelationship[] }>
+    Functions: Record<string, { Args: Record<string, unknown>; Returns: unknown }>
   }
 }
