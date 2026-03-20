@@ -1,14 +1,6 @@
 -- supabase/migrations/002_products_inventory.sql
 -- Note: is_staff() function already defined in migration 001 — do not redefine.
 
--- Atomic stock decrement function (prevents race conditions)
-CREATE OR REPLACE FUNCTION decrement_stock(p_product_id uuid, p_quantity integer)
-RETURNS void AS $$
-  UPDATE products
-  SET stock_quantity = stock_quantity - p_quantity
-  WHERE id = p_product_id AND stock_quantity >= p_quantity;
-$$ LANGUAGE sql SECURITY DEFINER;
-
 -- Products table
 CREATE TABLE products (
   id                  uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -33,6 +25,15 @@ CREATE TABLE product_sales (
   sold_at        timestamptz NOT NULL DEFAULT now(),
   notes          text
 );
+
+-- Atomic stock decrement function (prevents race conditions)
+-- Must be created AFTER products table exists
+CREATE OR REPLACE FUNCTION decrement_stock(p_product_id uuid, p_quantity integer)
+RETURNS void AS $$
+  UPDATE products
+  SET stock_quantity = stock_quantity - p_quantity
+  WHERE id = p_product_id AND stock_quantity >= p_quantity;
+$$ LANGUAGE sql SECURITY DEFINER;
 
 -- Public view: hides buying_price from anonymous users
 CREATE VIEW products_public AS
