@@ -95,16 +95,21 @@ CREATE TABLE facture_items (
 ```
 
 ### Numbering Functions
+
+Uses `MAX()` on the numeric suffix (not `COUNT(*)`) to be safe against draft deletions and low-volume concurrent requests. The `UNIQUE` constraint on `number` provides a final safety net.
+
 ```sql
 CREATE OR REPLACE FUNCTION generate_devis_number()
 RETURNS text AS $$
 DECLARE
-  yr text := to_char(now(), 'YYYY');
-  n  integer;
+  yr   text := to_char(now(), 'YYYY');
+  last text;
+  n    integer;
 BEGIN
-  SELECT COUNT(*) + 1 INTO n
+  SELECT MAX(split_part(number, '-', 3)) INTO last
   FROM devis
   WHERE number LIKE 'DEV-' || yr || '-%';
+  n := COALESCE(last::integer, 0) + 1;
   RETURN 'DEV-' || yr || '-' || lpad(n::text, 3, '0');
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -112,12 +117,14 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE OR REPLACE FUNCTION generate_facture_number()
 RETURNS text AS $$
 DECLARE
-  yr text := to_char(now(), 'YYYY');
-  n  integer;
+  yr   text := to_char(now(), 'YYYY');
+  last text;
+  n    integer;
 BEGIN
-  SELECT COUNT(*) + 1 INTO n
+  SELECT MAX(split_part(number, '-', 3)) INTO last
   FROM factures
   WHERE number LIKE 'FAC-' || yr || '-%';
+  n := COALESCE(last::integer, 0) + 1;
   RETURN 'FAC-' || yr || '-' || lpad(n::text, 3, '0');
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -205,15 +212,26 @@ Email PDF to client. Sets `status → sent`.
 { "email": "override@email.com" }
 ```
 
-Uses client's email if no override. Appends event to `events`. Returns `200`.
+Uses client's email if no override. If client has no email AND no override is provided, returns `422 { error: "no_email" }`. Appends event to `events`. Returns `200`.
+
+#### `POST /api/devis/[id]/reject`
+Mark devis as rejected.
+
+**Precondition:** devis must be `sent`. Returns `422 { error: 'invalid_status' }` otherwise.
+
+Sets `status → rejected`, appends event. Returns `200`.
+
+**Note:** `expired` status is set automatically on read when `valid_until < today` and status is `sent`. No separate route needed — the GET endpoints check and update expiry on fetch.
 
 #### `POST /api/devis/[id]/convert`
-Convert accepted devis to a facture.
+Convert devis to a facture.
+
+**Precondition:** devis must be `draft` or `sent`. Returns `422 { error: 'invalid_status' }` otherwise.
 
 **Logic:**
 1. Set devis `status → accepted`, append event
 2. Generate new facture number via `generate_facture_number()`
-3. Create facture with `devis_id` link, same client, same items
+3. Create facture with: `devis_id` link, same `client_id`, `appointment_id`, `tva_rate`, `notes`, and all items copied
 4. Return `201` with created facture
 
 #### `POST /api/devis/[id]/duplicate`
@@ -249,10 +267,12 @@ Update. **Only allowed when `status = 'draft'`.**
 Hard delete. **Only allowed when `status = 'draft'`.**
 
 #### `POST /api/factures/[id]/send`
-Email PDF to client. Sets `status → sent`. Same optional email override.
+Email PDF to client. Sets `status → sent`. Same optional email override. Returns `422 { error: "no_email" }` if no client email and no override.
 
 #### `POST /api/factures/[id]/mark-paid`
 Mark invoice as paid.
+
+**Precondition:** facture must be `sent`. Returns `422 { error: 'invalid_status' }` otherwise.
 
 **Request body:**
 ```json
@@ -263,6 +283,13 @@ Mark invoice as paid.
 ```
 
 Sets `status → paid`, `paid_at → now()`, appends event. Returns `200`.
+
+#### `POST /api/factures/[id]/cancel`
+Cancel a facture.
+
+**Precondition:** facture must be `draft` or `sent` — never `paid`. Returns `422 { error: 'invalid_status' }` if already paid.
+
+Sets `status → cancelled`, appends event. Returns `200`.
 
 #### `GET /api/factures/[id]/pdf`
 Generate and stream PDF.
