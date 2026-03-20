@@ -72,3 +72,27 @@ export function cancellationEmail(data: {
     `,
   }
 }
+
+export function lowStockEmail(data: {
+  productName: string
+  brand: string | null
+  stockQuantity: number
+  lowStockThreshold: number
+}) {
+  const brandText = data.brand ? ` (${data.brand})` : ''
+  return {
+    subject: `⚠️ Stock bas — ${data.productName}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto;">
+        <h2 style="color: #B76E79;">⚠️ Alerte stock bas</h2>
+        <p>Le produit <strong>${data.productName}${brandText}</strong> est en stock bas.</p>
+        <table style="width:100%; border-collapse: collapse;">
+          <tr><td style="padding: 8px 0; color: #666;">Stock actuel</td><td><strong>${data.stockQuantity} unité(s)</strong></td></tr>
+          <tr><td style="padding: 8px 0; color: #666;">Seuil d'alerte</td><td><strong>${data.lowStockThreshold} unité(s)</strong></td></tr>
+        </table>
+        <p style="margin-top: 16px;">Pensez à réapprovisionner.</p>
+        <p style="color: #999; font-size: 14px;">— Brazilian Studio Rabat</p>
+      </div>
+    `,
+  }
+}
