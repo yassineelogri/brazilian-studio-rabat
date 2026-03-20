@@ -117,7 +117,7 @@ export default function Hero() {
           className={styles.actions}
           variants={actionsVariants}
         >
-          <button className="button-primary">Réserver</button>
+          <a href="/booking" className="button-primary">Réserver</a>
           <button className="button-outline">Nos Services</button>
         </motion.div>
       </motion.div>
