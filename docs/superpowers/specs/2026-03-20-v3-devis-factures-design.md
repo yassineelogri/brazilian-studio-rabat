@@ -198,14 +198,16 @@ Update devis. **Only allowed when `status = 'draft'`.**
 
 **Allowed fields:** `notes`, `valid_until`, `tva_rate`, `items` (full replacement of items array)
 
-**Returns:** `422` if not draft. `200` with updated devis.
+**Returns:** `409 { error: 'not_draft' }` if not draft. `200` with updated devis.
 
 #### `DELETE /api/devis/[id]`
 Hard delete. **Only allowed when `status = 'draft'`.**
-Returns `409` with `{ error: 'not_draft' }` if status ≠ draft.
+Returns `409 { error: 'not_draft' }` if status ≠ draft.
 
 #### `POST /api/devis/[id]/send`
 Email PDF to client. Sets `status → sent`.
+
+**Precondition:** devis must be `draft` or `sent` (resend allowed). Returns `409 { error: 'invalid_status' }` otherwise.
 
 **Request body (optional):**
 ```json
@@ -221,7 +223,7 @@ Mark devis as rejected.
 
 Sets `status → rejected`, appends event. Returns `200`.
 
-**Note:** `expired` status is set automatically on read when `valid_until < today` and status is `sent`. No separate route needed — the GET endpoints check and update expiry on fetch.
+**Note:** `expired` is a computed projection only. The DB status remains `sent`; no UPDATE is issued. GET endpoints for devis return `status: 'expired'` in the response when `valid_until < today AND status = 'sent'`, but the stored value in the DB stays `sent`. This avoids writes in read routes.
 
 #### `POST /api/devis/[id]/convert`
 Convert devis to a facture.
@@ -261,13 +263,17 @@ List factures. Same filter params as GET /api/devis. Response includes revenue s
 Fetch single facture with items and computed totals.
 
 #### `PATCH /api/factures/[id]`
-Update. **Only allowed when `status = 'draft'`.**
+Update. **Only allowed when `status = 'draft'`.** Returns `409 { error: 'not_draft' }` otherwise.
 
 #### `DELETE /api/factures/[id]`
-Hard delete. **Only allowed when `status = 'draft'`.**
+Hard delete. **Only allowed when `status = 'draft'`.** Returns `409 { error: 'not_draft' }` if status ≠ draft.
 
 #### `POST /api/factures/[id]/send`
-Email PDF to client. Sets `status → sent`. Same optional email override. Returns `422 { error: "no_email" }` if no client email and no override.
+Email PDF to client. Sets `status → sent`.
+
+**Precondition:** facture must be `draft` or `sent` (resend allowed). Returns `409 { error: 'invalid_status' }` otherwise.
+
+Same optional email override. Returns `422 { error: "no_email" }` if no client email and no override.
 
 #### `POST /api/factures/[id]/mark-paid`
 Mark invoice as paid.
