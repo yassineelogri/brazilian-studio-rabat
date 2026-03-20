@@ -67,19 +67,29 @@ CREATE TABLE product_sales (
 - `unit_price` is a snapshot of `selling_price` at time of sale (price may change later)
 - `ON DELETE RESTRICT` on `product_id` — cannot delete a product that has sales history; use `is_active = false` instead
 
+### `products_public` View
+
+Anonymous users must never see `buying_price`. A view exposes only safe columns:
+
+```sql
+CREATE VIEW products_public AS
+  SELECT id, name, brand, selling_price, is_active
+  FROM products
+  WHERE is_active = true;
+```
+
 ### RLS Policies
 
 ```sql
--- Products: anyone can read active products; only staff can write
+-- Products table: staff only (buying_price must stay internal)
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "public can read active products"
-  ON products FOR SELECT
-  USING (is_active = true);
 
 CREATE POLICY "staff can manage products"
   ON products FOR ALL
   USING (is_staff());
+
+-- No public SELECT policy on products table itself.
+-- Anonymous reads use the products_public view instead.
 
 -- Product sales: staff only
 ALTER TABLE product_sales ENABLE ROW LEVEL SECURITY;
@@ -117,9 +127,7 @@ Create a new product.
 - `stock_quantity` ≥ 0, integer
 - `low_stock_threshold` ≥ 0, integer
 
-**Response:** `201` with created product (without `buying_price` — omit from response for security; buying_price only returned to staff via separate authenticated fetch)
-
-**Note:** `buying_price` is stored in DB but the POST response returns the full product including `buying_price` since this endpoint is staff-only.
+**Response:** `201` with full created product including `buying_price`. This endpoint is staff-only, so cost data is intentionally included — staff need to verify the margin after creation.
 
 ---
 
