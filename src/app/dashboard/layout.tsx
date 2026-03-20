@@ -2,15 +2,19 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Calendar, Plus, Users, Scissors, LogOut } from 'lucide-react'
+import { Calendar, Plus, Users, Scissors, LogOut, Package, ShoppingBag, BarChart2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import PendingBadge from '@/components/dashboard/PendingBadge'
+import LowStockBadge from '@/components/dashboard/LowStockBadge'
 
 const navItems = [
-  { href: '/dashboard/calendar',         label: 'Calendrier',  icon: Calendar },
-  { href: '/dashboard/appointments/new', label: 'Nouveau RDV', icon: Plus },
-  { href: '/dashboard/staff',            label: 'Staff',       icon: Users },
-  { href: '/dashboard/services',         label: 'Prestations', icon: Scissors },
+  { href: '/dashboard/calendar',              label: 'Calendrier',        icon: Calendar,    badge: 'pending' as const },
+  { href: '/dashboard/appointments/new',      label: 'Nouveau RDV',       icon: Plus,        badge: null },
+  { href: '/dashboard/staff',                 label: 'Staff',             icon: Users,       badge: null },
+  { href: '/dashboard/services',              label: 'Prestations',       icon: Scissors,    badge: null },
+  { href: '/dashboard/products',              label: 'Produits',          icon: Package,     badge: 'lowstock' as const },
+  { href: '/dashboard/ventes/new',            label: 'Ventes',            icon: ShoppingBag, badge: null },
+  { href: '/dashboard/ventes/historique',     label: 'Historique ventes', icon: BarChart2,   badge: null },
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -32,7 +36,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
 
         <nav className="flex-1 space-y-1">
-          {navItems.map(({ href, label, icon: Icon }) => {
+          {navItems.map(({ href, label, icon: Icon, badge }) => {
             const active = pathname.startsWith(href)
             return (
               <Link
@@ -46,7 +50,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               >
                 <Icon size={16} />
                 {label}
-                {href === '/dashboard/calendar' && <PendingBadge />}
+                {badge === 'pending' && <PendingBadge />}
+                {badge === 'lowstock' && <LowStockBadge />}
               </Link>
             )
           })}
