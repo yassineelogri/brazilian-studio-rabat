@@ -74,7 +74,7 @@ export default function Navigation() {
             <Link href="/contact">Contact</Link>
           </li>
         </ul>
-        <a href="tel:0661215800" className={styles.bookBtn}>Réserver</a>
+        <Link href="/booking" className={styles.bookBtn}>Réserver</Link>
 
         {/* Mobile Hamburger Button */}
         <button
@@ -121,16 +121,19 @@ export default function Navigation() {
                 ))}
               </ul>
 
-              <motion.a
-                href="tel:0661215800"
-                className={styles.mobileBookBtn}
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
-                onClick={() => setMenuOpen(false)}
               >
-                Réserver
-              </motion.a>
+                <Link
+                  href="/booking"
+                  className={styles.mobileBookBtn}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Réserver
+                </Link>
+              </motion.div>
 
               <motion.div
                 className={styles.mobileContact}

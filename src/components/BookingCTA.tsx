@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Phone, Instagram } from "lucide-react";
+import Link from "next/link";
 import styles from "./BookingCTA.module.css";
 
 export default function BookingCTA() {
@@ -34,9 +35,16 @@ export default function BookingCTA() {
         </p>
 
         <div className={styles.buttonsContainer}>
+          <Link
+            href="/booking"
+            className={`${styles.button} ${styles.buttonPrimary}`}
+          >
+            Réserver en ligne
+          </Link>
+
           <a
             href="tel:0661215800"
-            className={`${styles.button} ${styles.buttonPrimary}`}
+            className={`${styles.button} ${styles.buttonOutline}`}
           >
             <Phone size={20} />
             Appeler: 0661215800
