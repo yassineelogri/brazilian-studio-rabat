@@ -26,6 +26,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [mobileOpen, setMobileOpen] = useState(false)
 
   async function handleLogout() {
+    setMobileOpen(false)
     const supabase = createClient()
     await supabase.auth.signOut()
     router.push('/login')
@@ -45,7 +46,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                          w-16 hover:w-52
                          transition-all duration-300 ease-in-out
                          bg-gradient-to-b from-salon-dark to-salon-sidebar-bottom
-                         flex flex-col items-center hover:items-start
+                         flex flex-col
                          overflow-hidden
                          ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
 
@@ -92,6 +93,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="w-full px-2 pb-4">
           <button
             onClick={handleLogout}
+            aria-label="Déconnexion"
+            title="Déconnexion"
             className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl
                        text-white/40 hover:bg-white/10 hover:text-white/70
                        transition-all duration-150">
