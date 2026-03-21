@@ -22,7 +22,7 @@ function canCancel(status: string, startsAt: string): boolean {
 
 const STATUS_LABELS: Record<string, string> = {
   pending: 'En attente', confirmed: 'Confirmé',
-  cancelled: 'Annulé', completed: 'Terminé',
+  cancelled: 'Annulé', completed: 'Terminé', no_show: 'Absent',
 }
 
 export default function TokenViewPage({ params }: { params: { token: string } }) {

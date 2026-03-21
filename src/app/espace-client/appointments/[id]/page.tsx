@@ -46,13 +46,14 @@ export default function AppointmentDetailPage({ params }: { params: { id: string
     if (!confirm('Annuler ce rendez-vous ?')) return
     setCancelling(true)
     setError(null)
+    const previousStatus = appt.status
     // Optimistic update
     setAppt(prev => prev ? { ...prev, status: 'cancelled' as AppointmentStatus } : prev)
     const res = await fetch(`/api/client/appointments/${params.id}/cancel`, { method: 'POST' })
     if (!res.ok) {
-      // Rollback
-      setAppt(prev => prev ? { ...prev, status: 'confirmed' as AppointmentStatus } : prev)
-      const body = await res.json()
+      // Rollback to actual previous status
+      setAppt(prev => prev ? { ...prev, status: previousStatus } : prev)
+      const body = await res.json().catch(() => ({}))
       setError(body.error === 'too_late_to_cancel'
         ? 'Annulation impossible moins de 24h avant le RDV.'
         : "Erreur lors de l'annulation.")
