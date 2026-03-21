@@ -29,6 +29,7 @@ export default function CalendarPage() {
   const [appointments, setAppointments] = useState<AppointmentWithRelations[]>([])
   const [selected, setSelected] = useState<AppointmentWithRelations | null>(null)
   const [loading, setLoading] = useState(true)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
 
   const weekStart = getMondayOfWeek(currentDate)
   const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 5)
@@ -75,6 +76,20 @@ export default function CalendarPage() {
     ? currentDate.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
     : `${weekStart.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })} – ${weekEnd.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}`
 
+  async function copyPrivateLink(appointmentId: string) {
+    const res = await fetch('/api/client/tokens', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ appointment_id: appointmentId }),
+    })
+    if (res.ok) {
+      const { url } = await res.json()
+      await navigator.clipboard.writeText(url)
+      setCopiedId(appointmentId)
+      setTimeout(() => setCopiedId(null), 2000)
+    }
+  }
+
   return (
     <div>
       {/* Toolbar */}
@@ -119,12 +134,16 @@ export default function CalendarPage() {
           date={formatDate(currentDate)}
           appointments={appointments}
           onAppointmentClick={setSelected}
+          copiedId={copiedId}
+          onCopyLink={copyPrivateLink}
         />
       ) : (
         <CalendarWeek
           weekStart={weekStart}
           appointments={appointments}
           onAppointmentClick={setSelected}
+          copiedId={copiedId}
+          onCopyLink={copyPrivateLink}
         />
       )}
 
