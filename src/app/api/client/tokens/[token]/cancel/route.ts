@@ -66,8 +66,8 @@ export async function POST(
     if (notifError) throw notifError
 
     // Fire-and-forget emails
-    const clientData = appointment.clients as any
-    const serviceName = (appointment.services as any)?.name ?? 'Service'
+    const clientData = appointment.clients as unknown as { name: string; email: string | null } | null
+    const serviceName = (appointment.services as unknown as { name: string } | null)?.name ?? 'Service'
     if (clientData?.email) {
       const emailContent = cancellationEmail({
         clientName: clientData.name,
