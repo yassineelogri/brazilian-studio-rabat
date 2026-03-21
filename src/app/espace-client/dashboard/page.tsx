@@ -135,6 +135,7 @@ export default function EspaceClientDashboard() {
                         type="button"
                         onClick={() => handleCancel(a.id)}
                         disabled={cancelling === a.id}
+                        aria-label={`Annuler le rendez-vous du ${new Date(a.starts_at).toLocaleDateString('fr-FR')}`}
                         className="btn-secondary flex-1 text-xs"
                       >
                         {cancelling === a.id ? 'Annulation...' : 'Annuler'}
