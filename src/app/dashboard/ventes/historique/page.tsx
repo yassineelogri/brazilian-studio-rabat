@@ -13,9 +13,14 @@ export default function HistoriquePage() {
 
   async function fetchSales() {
     setLoading(true)
-    const res = await fetch(`/api/sales?from=${from}T00:00:00Z&to=${to}T23:59:59Z`)
-    const data = await res.json()
-    setSales(data)
+    try {
+      const res = await fetch(`/api/sales?from=${from}T00:00:00Z&to=${to}T23:59:59Z`)
+      if (!res.ok) { setSales([]); setLoading(false); return }
+      const json = await res.json()
+      setSales(Array.isArray(json) ? json : [])
+    } catch {
+      setSales([])
+    }
     setLoading(false)
   }
 
