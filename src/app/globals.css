@@ -1,8 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  /* Salon color palette */
+  --color-salon-pink: #F8D7DA;
+  --color-salon-rose: #E8B4B8;
+  --color-salon-gold: #B76E79;
+  --color-salon-dark: #6B3A3F;
+  --color-salon-cream: #FDF6F0;
+  --color-salon-muted: #9E7B7F;
+  --color-salon-sidebar-bottom: #4A2528;
+  --color-salon-cream-light: #FDF0F3;
+
+  /* Card shadows */
+  --shadow-card: 0 2px 8px rgba(107,58,63,0.10);
+  --shadow-card-hover: 0 4px 16px rgba(107,58,63,0.14);
+
+  /* Serif font family */
+  --font-family-serif: 'Playfair Display', serif;
+}
 
 :root {
   --color-primary: #FFB6C1;
@@ -144,4 +161,30 @@ a {
 .container {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-br from-salon-dark to-salon-sidebar-bottom text-white
+           rounded-xl px-4 py-2 font-semibold text-sm
+           shadow-card hover:shadow-card-hover hover:opacity-95
+           transition-all duration-150 disabled:opacity-50 cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply border border-salon-rose/40 text-salon-muted bg-white rounded-xl
+           px-4 py-2 text-sm font-medium
+           hover:bg-salon-cream hover:border-salon-rose/60
+           transition-all duration-150 cursor-pointer;
+  }
+
+  .input-field {
+    @apply border border-salon-rose/30 rounded-xl px-3 py-2 text-sm
+           focus:outline-none focus:ring-2 focus:ring-salon-gold/30
+           focus:border-salon-gold/50 bg-white transition-all duration-150;
+  }
+
+  .heading-serif {
+    @apply font-serif italic text-salon-dark;
+  }
 }

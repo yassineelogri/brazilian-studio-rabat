@@ -110,7 +110,19 @@ export default function CalendarPage() {
           <button onClick={() => navigate(-1)} className="p-2 rounded-lg hover:bg-gray-100 transition">
             <ChevronLeft size={16} />
           </button>
-          <h2 className="text-base font-semibold text-salon-dark capitalize">{headerLabel}</h2>
+          {view === 'day' ? (
+            <div>
+              <h1 className="heading-serif text-2xl">{headerLabel}</h1>
+              <p className="text-xs text-salon-muted tracking-widest uppercase mt-0.5">
+                {appointments.length} RENDEZ-VOUS
+                {appointments.filter((a: AppointmentWithRelations) => a.status === 'pending').length > 0
+                  ? ` · ${appointments.filter((a: AppointmentWithRelations) => a.status === 'pending').length} EN ATTENTE`
+                  : ''}
+              </p>
+            </div>
+          ) : (
+            <h2 className="text-base font-semibold text-salon-dark capitalize">{headerLabel}</h2>
+          )}
           <button onClick={() => navigate(1)} className="p-2 rounded-lg hover:bg-gray-100 transition">
             <ChevronRight size={16} />
           </button>
@@ -123,14 +135,14 @@ export default function CalendarPage() {
         </div>
 
         {/* View toggle */}
-        <div className="flex bg-gray-100 rounded-lg p-1">
+        <div className="flex gap-1">
           {(['day', 'week'] as View[]).map(v => (
             <button
               key={v}
               onClick={() => setView(v)}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition ${
-                view === v ? 'bg-white shadow-sm text-salon-dark' : 'text-gray-400'
-              }`}
+              className={view === v
+                ? 'bg-gradient-to-br from-salon-dark to-salon-sidebar-bottom text-white rounded-lg px-3 py-1.5 text-xs font-semibold'
+                : 'border border-salon-rose/40 text-salon-muted rounded-lg px-3 py-1.5 text-xs hover:bg-salon-cream'}
             >
               {v === 'day' ? 'Jour' : 'Semaine'}
             </button>
