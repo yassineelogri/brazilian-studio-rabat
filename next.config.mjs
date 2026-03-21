@@ -31,6 +31,7 @@ const nextConfig = {
   // Faster page transitions
   experimental: {
     optimizeCss: false,
+    serverComponentsExternalPackages: ['@react-pdf/renderer'],
   },
 };
 

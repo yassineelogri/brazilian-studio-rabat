@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Calendar, Plus, Users, Scissors, LogOut, Package, ShoppingBag, BarChart2 } from 'lucide-react'
+import { Calendar, Plus, Users, Scissors, LogOut, Package, ShoppingBag, BarChart2, FileText, Receipt } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import PendingBadge from '@/components/dashboard/PendingBadge'
 import LowStockBadge from '@/components/dashboard/LowStockBadge'
@@ -15,6 +15,8 @@ const navItems = [
   { href: '/dashboard/products',              label: 'Produits',          icon: Package,     badge: 'lowstock' as const },
   { href: '/dashboard/ventes/new',            label: 'Ventes',            icon: ShoppingBag, badge: null },
   { href: '/dashboard/ventes/historique',     label: 'Historique ventes', icon: BarChart2,   badge: null },
+  { href: '/dashboard/devis',                 label: 'Devis',             icon: FileText,    badge: null },
+  { href: '/dashboard/factures',              label: 'Factures',          icon: Receipt,     badge: null },
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

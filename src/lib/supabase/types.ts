@@ -99,6 +99,83 @@ export interface ProductSaleWithRelations extends ProductSale {
   margin_total: number
 }
 
+export type DevisStatus = 'draft' | 'sent' | 'accepted' | 'rejected' | 'expired'
+export type FactureStatus = 'draft' | 'sent' | 'paid' | 'cancelled'
+export type PaymentMethod = 'cash' | 'card' | 'transfer'
+
+export interface StatusEvent {
+  at: string    // ISO timestamp
+  by: string    // staff id
+  status: string
+}
+
+export interface DevisItem {
+  [key: string]: unknown
+  id: string
+  devis_id: string
+  description: string
+  quantity: number
+  unit_price: number
+  sort_order: number
+}
+
+export interface Devis {
+  [key: string]: unknown
+  id: string
+  number: string
+  client_id: string
+  appointment_id: string | null
+  status: DevisStatus
+  tva_rate: number
+  notes: string | null
+  valid_until: string | null
+  events: StatusEvent[]
+  created_at: string
+}
+
+export interface DevisWithRelations extends Devis {
+  clients: Pick<Client, 'name' | 'phone' | 'email'>
+  items: DevisItem[]
+  subtotal_ht: number
+  tva_amount: number
+  total_ttc: number
+}
+
+export interface FactureItem {
+  [key: string]: unknown
+  id: string
+  facture_id: string
+  description: string
+  quantity: number
+  unit_price: number
+  sort_order: number
+}
+
+export interface Facture {
+  [key: string]: unknown
+  id: string
+  number: string
+  client_id: string
+  devis_id: string | null
+  appointment_id: string | null
+  status: FactureStatus
+  tva_rate: number
+  notes: string | null
+  paid_at: string | null
+  paid_amount: number | null
+  payment_method: PaymentMethod | null
+  events: StatusEvent[]
+  created_at: string
+}
+
+export interface FactureWithRelations extends Facture {
+  clients: Pick<Client, 'name' | 'phone' | 'email'>
+  items: FactureItem[]
+  subtotal_ht: number
+  tva_amount: number
+  total_ttc: number
+}
+
 type DBRelationship = { foreignKeyName: string; columns: string[]; isOneToOne?: boolean; referencedRelation: string; referencedColumns: string[] }
 
 export type Database = {
@@ -112,6 +189,10 @@ export type Database = {
       notifications: { Row: Notification; Insert: Omit<Notification, 'id' | 'created_at'>;               Update: Partial<Omit<Notification, 'id'>>;  Relationships: DBRelationship[] }
       products:      { Row: Product;      Insert: Omit<Product, 'id' | 'created_at'>;                     Update: Partial<Omit<Product, 'id'>>;       Relationships: DBRelationship[] }
       product_sales: { Row: ProductSale;  Insert: Omit<ProductSale, 'id'>;                                 Update: Partial<Omit<ProductSale, 'id'>>;   Relationships: DBRelationship[] }
+      devis:         { Row: Devis;       Insert: Omit<Devis, 'id' | 'created_at'>;        Update: Partial<Omit<Devis, 'id'>>;        Relationships: DBRelationship[] }
+      devis_items:   { Row: DevisItem;   Insert: Omit<DevisItem, 'id'>;                    Update: Partial<Omit<DevisItem, 'id'>>;    Relationships: DBRelationship[] }
+      factures:      { Row: Facture;     Insert: Omit<Facture, 'id' | 'created_at'>;       Update: Partial<Omit<Facture, 'id'>>;      Relationships: DBRelationship[] }
+      facture_items: { Row: FactureItem; Insert: Omit<FactureItem, 'id'>;                  Update: Partial<Omit<FactureItem, 'id'>>; Relationships: DBRelationship[] }
     }
     Views: Record<string, { Row: Record<string, unknown>; Relationships: DBRelationship[] }>
     Functions: Record<string, { Args: Record<string, unknown>; Returns: unknown }>
