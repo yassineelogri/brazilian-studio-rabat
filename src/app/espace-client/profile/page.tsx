@@ -21,6 +21,7 @@ export default function ClientProfilePage() {
           setPhone(data.phone)
         }
       })
+      .catch(() => setError('Impossible de charger le profil.'))
   }, [])
 
   async function handleSubmit(e: React.FormEvent) {
@@ -28,18 +29,23 @@ export default function ClientProfilePage() {
     setSaving(true)
     setError(null)
     setSuccess(false)
-    const res = await fetch('/api/client/profile', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, phone }),
-    })
-    if (res.ok) {
-      setSuccess(true)
-    } else {
-      const body = await res.json()
-      setError(body.error || 'Erreur lors de la mise à jour.')
+    try {
+      const res = await fetch('/api/client/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone }),
+      })
+      if (res.ok) {
+        setSuccess(true)
+      } else {
+        const body = await res.json()
+        setError(body.error || 'Erreur lors de la mise à jour.')
+      }
+    } catch {
+      setError('Erreur lors de la mise à jour.')
+    } finally {
+      setSaving(false)
     }
-    setSaving(false)
   }
 
   return (

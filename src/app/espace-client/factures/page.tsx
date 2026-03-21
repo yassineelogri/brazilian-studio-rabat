@@ -25,14 +25,17 @@ export default function ClientFacturesPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    supabase
-      .from('factures')
-      .select('id, number, status, paid_at, payment_method, created_at, total_ttc')
-      .order('created_at', { ascending: false })
+    Promise.resolve(
+      supabase
+        .from('factures')
+        .select('id, number, status, paid_at, payment_method, created_at, total_ttc')
+        .order('created_at', { ascending: false })
+    )
       .then(({ data }) => {
-        if (data) setFactures(data as FactureRow[])
+        if (data) setFactures((data as unknown) as FactureRow[])
         setLoading(false)
       })
+      .catch(() => setLoading(false))
   }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

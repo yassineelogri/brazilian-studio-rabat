@@ -23,14 +23,17 @@ export default function ClientDevisPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    supabase
-      .from('devis')
-      .select('id, number, status, tva_rate, valid_until, created_at, total_ttc')
-      .order('created_at', { ascending: false })
+    Promise.resolve(
+      supabase
+        .from('devis')
+        .select('id, number, status, tva_rate, valid_until, created_at, total_ttc')
+        .order('created_at', { ascending: false })
+    )
       .then(({ data }) => {
-        if (data) setDevis(data as DevisRow[])
+        if (data) setDevis((data as unknown) as DevisRow[])
         setLoading(false)
       })
+      .catch(() => setLoading(false))
   }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
