@@ -58,6 +58,7 @@ export async function GET(request: NextRequest) {
       .eq('id', client.id)
     if (updateError) {
       console.error('Failed to link auth_user_id to client:', updateError)
+      return NextResponse.redirect(new URL('/espace-client?error=server_error', origin))
     }
   }
 

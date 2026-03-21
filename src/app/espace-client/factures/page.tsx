@@ -6,6 +6,8 @@ import { Download } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import type { Facture } from '@/lib/supabase/types'
 
+type FactureRow = Pick<Facture, 'id' | 'number' | 'status' | 'paid_at' | 'payment_method' | 'created_at'>
+
 const STATUS_LABELS: Record<string, string> = {
   draft: 'Brouillon', sent: 'Envoyé', paid: 'Payée', cancelled: 'Annulée',
 }
@@ -17,8 +19,6 @@ const PAYMENT_LABELS: Record<string, string> = {
   cash: 'Espèces', card: 'Carte', transfer: 'Virement',
 }
 
-type FactureRow = Facture & { total_ttc: number | null }
-
 export default function ClientFacturesPage() {
   const supabase = createClient()
   const [factures, setFactures] = useState<FactureRow[]>([])
@@ -28,11 +28,11 @@ export default function ClientFacturesPage() {
     Promise.resolve(
       supabase
         .from('factures')
-        .select('id, number, status, paid_at, payment_method, created_at, total_ttc')
+        .select('id, number, status, paid_at, payment_method, created_at')
         .order('created_at', { ascending: false })
     )
       .then(({ data }) => {
-        if (data) setFactures((data as unknown) as FactureRow[])
+        if (data) setFactures(data)
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -56,9 +56,6 @@ export default function ClientFacturesPage() {
                 <div>
                   <p className="font-mono text-sm font-medium text-salon-dark">{f.number}</p>
                   <p className="text-xs text-salon-muted">{new Date(f.created_at).toLocaleDateString('fr-FR')}</p>
-                  {f.total_ttc != null && (
-                    <p className="text-sm font-medium text-salon-dark">{f.total_ttc.toFixed(2)} MAD</p>
-                  )}
                   <span className={`inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[f.status] ?? ''}`}>
                     {STATUS_LABELS[f.status] ?? f.status}
                   </span>

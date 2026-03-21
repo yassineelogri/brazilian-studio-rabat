@@ -5,11 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import type { AppointmentForClient } from '@/lib/supabase/types'
 import type { AppointmentStatus } from '@/lib/supabase/types'
-
-function canCancel(status: string, startsAt: string): boolean {
-  if (!['pending', 'confirmed'].includes(status)) return false
-  return new Date(startsAt).getTime() - Date.now() > 24 * 60 * 60 * 1000
-}
+import { canCancel } from '@/lib/client-portal-utils'
 
 const STATUS_LABELS: Record<string, string> = {
   pending: 'En attente', confirmed: 'Confirmé',

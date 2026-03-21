@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { canCancel } from '@/lib/client-portal-utils'
+import type { AppointmentStatus } from '@/lib/supabase/types'
 
 interface TokenData {
   id: string
@@ -15,10 +17,6 @@ interface TokenData {
   staff: { name: string } | null
 }
 
-function canCancel(status: string, startsAt: string): boolean {
-  if (!['pending', 'confirmed'].includes(status)) return false
-  return new Date(startsAt).getTime() - Date.now() > 24 * 60 * 60 * 1000
-}
 
 const STATUS_LABELS: Record<string, string> = {
   pending: 'En attente', confirmed: 'Confirmé',
@@ -111,7 +109,7 @@ export default function TokenViewPage({ params }: { params: { token: string } })
               <p className="text-xs text-red-600 bg-red-50 rounded px-3 py-2">{cancelError}</p>
             )}
 
-            {!cancelled && canCancel(data.status, data.starts_at) && (
+            {!cancelled && canCancel(data.status as AppointmentStatus, data.starts_at) && (
               <button
                 type="button"
                 onClick={handleCancel}

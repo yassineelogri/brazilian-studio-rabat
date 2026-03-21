@@ -6,6 +6,8 @@ import { Download } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import type { Devis } from '@/lib/supabase/types'
 
+type DevisRow = Pick<Devis, 'id' | 'number' | 'status' | 'tva_rate' | 'valid_until' | 'created_at'>
+
 const STATUS_LABELS: Record<string, string> = {
   draft: 'Brouillon', sent: 'Envoyé', accepted: 'Accepté', rejected: 'Refusé', expired: 'Expiré',
 }
@@ -14,8 +16,6 @@ const STATUS_COLORS: Record<string, string> = {
   accepted: 'bg-green-100 text-green-700', rejected: 'bg-red-100 text-red-700',
   expired: 'bg-orange-100 text-orange-700',
 }
-
-type DevisRow = Devis & { total_ttc: number | null }
 
 export default function ClientDevisPage() {
   const supabase = createClient()
@@ -26,11 +26,11 @@ export default function ClientDevisPage() {
     Promise.resolve(
       supabase
         .from('devis')
-        .select('id, number, status, tva_rate, valid_until, created_at, total_ttc')
+        .select('id, number, status, tva_rate, valid_until, created_at')
         .order('created_at', { ascending: false })
     )
       .then(({ data }) => {
-        if (data) setDevis((data as unknown) as DevisRow[])
+        if (data) setDevis(data)
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -54,9 +54,6 @@ export default function ClientDevisPage() {
                 <div>
                   <p className="font-mono text-sm font-medium text-salon-dark">{d.number}</p>
                   <p className="text-xs text-salon-muted">{new Date(d.created_at).toLocaleDateString('fr-FR')}</p>
-                  {d.total_ttc != null && (
-                    <p className="text-sm font-medium text-salon-dark">{d.total_ttc.toFixed(2)} MAD</p>
-                  )}
                   <span className={`inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[d.status] ?? ''}`}>
                     {STATUS_LABELS[d.status] ?? d.status}
                   </span>

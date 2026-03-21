@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Plus, LogOut } from 'lucide-react'
 import type { AppointmentForClient, AppointmentStatus } from '@/lib/supabase/types'
+import { canCancel } from '@/lib/client-portal-utils'
 
 const STATUS_LABELS: Record<string, string> = {
   pending: 'En attente', confirmed: 'Confirmé',
@@ -19,10 +20,6 @@ const STATUS_COLORS: Record<string, string> = {
   no_show: 'bg-gray-100 text-gray-400',
 }
 
-function canCancel(status: string, startsAt: string): boolean {
-  if (!['pending', 'confirmed'].includes(status)) return false
-  return new Date(startsAt).getTime() - Date.now() > 24 * 60 * 60 * 1000
-}
 
 export default function EspaceClientDashboard() {
   const router = useRouter()
@@ -55,12 +52,14 @@ export default function EspaceClientDashboard() {
     if (!confirm('Annuler ce rendez-vous ?')) return
     setCancelling(id)
     setError(null)
+    const upcomingAppt = upcoming.find(a => a.id === id)
+    const previousStatus = upcomingAppt?.status
     // Optimistic update
     setUpcoming(prev => prev.map(a => a.id === id ? { ...a, status: 'cancelled' as AppointmentStatus } : a))
     const res = await fetch(`/api/client/appointments/${id}/cancel`, { method: 'POST' })
     if (!res.ok) {
       // Rollback
-      setUpcoming(prev => prev.map(a => a.id === id ? { ...a, status: 'confirmed' as AppointmentStatus } : a))
+      setUpcoming(prev => prev.map(a => a.id === id ? { ...a, status: (previousStatus ?? 'confirmed') as AppointmentStatus } : a))
       const body = await res.json()
       setError(body.error === 'too_late_to_cancel'
         ? 'Annulation impossible moins de 24h avant le RDV.'
