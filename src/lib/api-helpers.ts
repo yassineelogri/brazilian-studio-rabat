@@ -20,6 +20,29 @@ export async function requireStaff(): Promise<{ id: string } | null> {
 }
 
 /**
+ * Verify the caller is an authenticated client.
+ * Returns { id, name, phone, email } or null.
+ * Client portal API routes import from here.
+ */
+export async function requireClient(): Promise<{
+  id: string
+  name: string
+  phone: string
+  email: string | null
+} | null> {
+  const anon = createAnonSupabaseClient()
+  const { data: { user } } = await anon.auth.getUser()
+  if (!user) return null
+  const supabase = createServerSupabaseClient()
+  const { data } = await supabase
+    .from('clients')
+    .select('id, name, phone, email')
+    .eq('auth_user_id', user.id)
+    .single()
+  return data ?? null
+}
+
+/**
  * Compute HT/TVA/TTC totals from line items.
  * Always called server-side — never trust frontend totals.
  */

@@ -5,6 +5,8 @@ interface Props {
   weekStart: Date // Monday of the week
   appointments: AppointmentWithRelations[]
   onAppointmentClick: (a: AppointmentWithRelations) => void
+  copiedId?: string
+  onCopyLink?: (id: string) => void
 }
 
 function formatDate(d: Date) {
@@ -17,7 +19,7 @@ function addDays(d: Date, n: number) {
 
 const DAY_LABELS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
 
-export default function CalendarWeek({ weekStart, appointments, onAppointmentClick }: Props) {
+export default function CalendarWeek({ weekStart, appointments, onAppointmentClick, copiedId, onCopyLink }: Props) {
   const days = Array.from({ length: 6 }, (_, i) => addDays(weekStart, i))
 
   return (
@@ -43,7 +45,7 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                 <p className="text-xs text-gray-300 text-center pt-4">—</p>
               )}
               {dayAppts.map(appt => (
-                <AppointmentBlock key={appt.id} appointment={appt} onClick={onAppointmentClick} />
+                <AppointmentBlock key={appt.id} appointment={appt} onClick={onAppointmentClick} copiedId={copiedId} onCopyLink={onCopyLink} />
               ))}
             </div>
           </div>

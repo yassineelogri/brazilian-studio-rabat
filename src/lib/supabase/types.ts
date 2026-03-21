@@ -49,10 +49,34 @@ export interface Appointment {
   created_by: CreatedBy
   created_at: string
   updated_at: string
+  starts_at?: string | null
 }
 
 export interface AppointmentWithRelations extends Appointment {
   clients: Pick<Client, 'name' | 'phone' | 'email'>
+  services: Pick<Service, 'name' | 'color'>
+  staff: Pick<Staff, 'name'> | null
+}
+
+export interface BookingToken {
+  [key: string]: unknown
+  id: string
+  token: string
+  client_id: string
+  appointment_id: string
+  expires_at: string
+  created_at: string
+}
+
+export interface AppointmentForClient {
+  id: string
+  date: string
+  start_time: string
+  end_time: string
+  duration_minutes: number
+  status: AppointmentStatus
+  notes: string | null
+  starts_at: string
   services: Pick<Service, 'name' | 'color'>
   staff: Pick<Staff, 'name'> | null
 }
@@ -193,6 +217,7 @@ export type Database = {
       devis_items:   { Row: DevisItem;   Insert: Omit<DevisItem, 'id'>;                    Update: Partial<Omit<DevisItem, 'id'>>;    Relationships: DBRelationship[] }
       factures:      { Row: Facture;     Insert: Omit<Facture, 'id' | 'created_at'>;       Update: Partial<Omit<Facture, 'id'>>;      Relationships: DBRelationship[] }
       facture_items: { Row: FactureItem; Insert: Omit<FactureItem, 'id'>;                  Update: Partial<Omit<FactureItem, 'id'>>; Relationships: DBRelationship[] }
+      booking_tokens: { Row: BookingToken; Insert: Omit<BookingToken, 'id' | 'token' | 'created_at'>; Update: Partial<Omit<BookingToken, 'id' | 'token'>>; Relationships: DBRelationship[] }
     }
     Views: Record<string, { Row: Record<string, unknown>; Relationships: DBRelationship[] }>
     Functions: Record<string, { Args: Record<string, unknown>; Returns: unknown }>
