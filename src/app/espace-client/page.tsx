@@ -110,13 +110,11 @@ export default function EspaceClientLoginPage() {
         <p className="text-salon-pink/50 text-xs tracking-widest mt-1">RABAT ✦</p>
       </div>
 
-      {/* Login card */}
-      <div className="px-4 -mt-4">
-        <div className="bg-white rounded-2xl shadow-card p-6 max-w-sm mx-auto">
-          <Suspense>
-            <LoginForm />
-          </Suspense>
-        </div>
+      {/* Login form */}
+      <div className="px-4 -mt-4 max-w-sm mx-auto">
+        <Suspense>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   )
