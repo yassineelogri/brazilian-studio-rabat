@@ -33,8 +33,8 @@ export async function PATCH(request: NextRequest) {
     }
 
     const updates: Record<string, string> = {}
-    if (name) updates.name = name.trim()
-    if (phone) updates.phone = phone.trim()
+    if (name !== undefined) updates.name = name.trim()
+    if (phone !== undefined) updates.phone = phone.trim()
 
     if (Object.keys(updates).length === 0) {
       return NextResponse.json(client, { status: 200 })

@@ -53,10 +53,11 @@ export async function POST(
     if (updateError) throw updateError
 
     // Insert notification
-    await supabase.from('notifications').insert({
+    const { error: notifError } = await supabase.from('notifications').insert({
       appointment_id: params.id,
       type: 'cancelled',
     })
+    if (notifError) throw notifError
 
     // Fire-and-forget emails
     const serviceName = (appointment.services as any)?.name ?? 'Service'
