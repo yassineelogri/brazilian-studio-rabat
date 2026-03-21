@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { resend, NOTIFY_EMAILS } from '@/lib/resend'
-import { newBookingEmail } from '@/lib/email-templates'
+import { newBookingEmail, bookingConfirmationEmail } from '@/lib/email-templates'
 
 function timeToMinutes(time: string): number {
   const [h, m] = time.split(':').map(Number)
@@ -111,14 +111,47 @@ export async function POST(request: NextRequest) {
     type: 'new_booking',
   })
 
+  // 9. Generate booking token (for client portal private link)
+  let bookingToken: string | null = null
+  const { data: tokenRow } = await supabase
+    .from('booking_tokens')
+    .insert({
+      client_id: clientId,
+      appointment_id: appointment.id,
+      expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    })
+    .select('token')
+    .single()
+  if (tokenRow) bookingToken = tokenRow.token
+
+  // Fetch service once — reused by both the confirmation email and staff notification email below
+  const { data: service } = await supabase
+    .from('services')
+    .select('name')
+    .eq('id', service_id)
+    .single()
+
+  // 10. Send confirmation email to client (non-blocking)
+  // staff is not fetched in this route, so staffName is null
+  if (bookingToken && client?.email) {
+    const emailContent = bookingConfirmationEmail({
+      clientName: client.name,
+      serviceName: service?.name ?? 'Service',
+      date,
+      startTime: start_time,
+      staffName: null,
+      token: bookingToken,
+    })
+    resend.emails.send({
+      from: 'Brazilian Studio <onboarding@resend.dev>',
+      to: [client.email],
+      subject: emailContent.subject,
+      html: emailContent.html,
+    }).catch(err => console.error('Booking confirmation email failed:', err))
+  }
+
   // 8. Send email to staff (non-fatal)
   try {
-    const { data: service } = await supabase
-      .from('services')
-      .select('name')
-      .eq('id', service_id)
-      .single()
-
     const template = newBookingEmail({
       clientName: client.name,
       clientPhone: client.phone,
