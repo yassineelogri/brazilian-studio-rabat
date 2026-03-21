@@ -217,6 +217,7 @@ export type Database = {
       devis_items:   { Row: DevisItem;   Insert: Omit<DevisItem, 'id'>;                    Update: Partial<Omit<DevisItem, 'id'>>;    Relationships: DBRelationship[] }
       factures:      { Row: Facture;     Insert: Omit<Facture, 'id' | 'created_at'>;       Update: Partial<Omit<Facture, 'id'>>;      Relationships: DBRelationship[] }
       facture_items: { Row: FactureItem; Insert: Omit<FactureItem, 'id'>;                  Update: Partial<Omit<FactureItem, 'id'>>; Relationships: DBRelationship[] }
+      booking_tokens: { Row: BookingToken; Insert: Omit<BookingToken, 'id' | 'token' | 'created_at'>; Update: Partial<Omit<BookingToken, 'id' | 'token'>>; Relationships: DBRelationship[] }
     }
     Views: Record<string, { Row: Record<string, unknown>; Relationships: DBRelationship[] }>
     Functions: Record<string, { Args: Record<string, unknown>; Returns: unknown }>
