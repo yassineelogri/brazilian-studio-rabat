@@ -30,27 +30,31 @@ export default function CalendarDay({ date, appointments, onAppointmentClick, co
 
   const dayAppts = appointments.filter(a => a.date === date)
 
+  const busyHours = new Set(dayAppts.map(a => parseInt(a.start_time.split(':')[0], 10)))
+
   return (
     <div className="flex">
-      {/* Time labels */}
-      <div className="w-14 flex-shrink-0">
-        {hours.map(h => (
-          <div key={h} style={{ height: HOUR_HEIGHT }} className="flex items-start pt-1">
-            <span className="text-xs text-gray-400">{h}:00</span>
-          </div>
-        ))}
-      </div>
-
       {/* Timeline */}
-      <div className="flex-1 relative border-l border-gray-100">
-        {/* Hour lines */}
-        {hours.map(h => (
-          <div
-            key={h}
-            style={{ top: (h - START_HOUR) * HOUR_HEIGHT, height: HOUR_HEIGHT }}
-            className="absolute left-0 right-0 border-t border-gray-100"
-          />
-        ))}
+      <div className="flex-1 relative">
+        {/* Hour rows */}
+        {hours.map(h => {
+          const hasBusy = busyHours.has(h)
+          return (
+            <div key={h} style={{ height: HOUR_HEIGHT }}>
+              {hasBusy ? (
+                <div className="flex items-start pt-1 gap-2">
+                  <span className="text-xs text-salon-rose/60 w-8 text-right flex-shrink-0">{h}h</span>
+                  <div className="flex-1 border-t border-salon-rose/15" />
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 h-6">
+                  <span className="text-xs text-salon-rose/60 w-8 text-right flex-shrink-0">{h}h</span>
+                  <div className="flex-1 border-t border-salon-rose/15" />
+                </div>
+              )}
+            </div>
+          )
+        })}
 
         {/* Appointment blocks */}
         {dayAppts.map(appt => (
@@ -60,7 +64,7 @@ export default function CalendarDay({ date, appointments, onAppointmentClick, co
               position: 'absolute',
               top: getTopOffset(appt.start_time),
               height: Math.max(getHeight(appt.start_time, appt.end_time) - 4, 28),
-              left: 4,
+              left: 44,
               right: 4,
             }}
           >

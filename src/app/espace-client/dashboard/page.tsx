@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { Plus, LogOut } from 'lucide-react'
+import { Plus, LogOut, FileText, Receipt, User } from 'lucide-react'
 import type { AppointmentForClient, AppointmentStatus } from '@/lib/supabase/types'
 import { canCancel } from '@/lib/client-portal-utils'
 
@@ -79,14 +79,17 @@ export default function EspaceClientDashboard() {
   return (
     <div className="min-h-screen bg-salon-cream">
       {/* Header */}
-      <div className="bg-white border-b border-salon-rose/20 px-4 py-3 flex items-center justify-between">
-        <div>
-          <p className="text-xs text-salon-muted">Brazilian Studio Rabat</p>
-          <h1 className="font-semibold text-salon-dark">Bonjour, {clientName} ✦</h1>
+      <div className="bg-gradient-to-br from-salon-dark to-salon-sidebar-bottom px-5 pt-6 pb-5">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-xs text-salon-pink/70 tracking-widest uppercase">Bonjour</p>
+            <h1 className="heading-serif text-3xl text-salon-pink mt-1">{clientName} ✦</h1>
+            <p className="text-xs text-salon-pink/50 mt-1">Brazilian Studio Rabat</p>
+          </div>
+          <button type="button" onClick={handleLogout} className="flex items-center gap-1 text-sm text-salon-pink/60 hover:text-red-400 mt-1">
+            <LogOut size={14} /> Déconnexion
+          </button>
         </div>
-        <button type="button" onClick={handleLogout} className="flex items-center gap-1 text-sm text-salon-muted hover:text-red-500">
-          <LogOut size={14} /> Déconnexion
-        </button>
       </div>
 
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
@@ -110,15 +113,14 @@ export default function EspaceClientDashboard() {
           ) : (
             <div className="space-y-2">
               {upcoming.map(a => (
-                <Link key={a.id} href={`/espace-client/appointments/${a.id}`}
-                  className="block bg-white rounded-xl border border-salon-rose/20 p-4 hover:border-salon-pink/40 transition">
+                <div key={a.id} className="bg-white rounded-2xl shadow-card border border-salon-rose/20 p-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <p className="font-medium text-salon-dark">{a.services?.name}</p>
-                      <p className="text-sm text-salon-muted">
+                      <p className="heading-serif text-base">{a.services?.name}</p>
+                      <p className="text-xs font-bold text-salon-gold">
                         {new Date(a.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
-                        {' '}· {a.start_time.slice(0, 5)}
                       </p>
+                      <p className="text-sm font-bold text-salon-dark">{a.start_time.slice(0, 5)}</p>
                       {a.staff?.name && (
                         <p className="text-xs text-salon-muted mt-0.5">avec {a.staff.name}</p>
                       )}
@@ -127,17 +129,25 @@ export default function EspaceClientDashboard() {
                       {STATUS_LABELS[a.status] ?? a.status}
                     </span>
                   </div>
-                  {canCancel(a.status, a.starts_at) && (
-                    <button
-                      type="button"
-                      onClick={e => { e.preventDefault(); handleCancel(a.id) }}
-                      disabled={cancelling === a.id}
-                      className="mt-3 text-xs text-red-500 hover:text-red-700"
-                    >
-                      {cancelling === a.id ? 'Annulation...' : 'Annuler ce rendez-vous'}
-                    </button>
-                  )}
-                </Link>
+                  <div className="border-t border-salon-rose/15 mt-3 pt-3 flex gap-2">
+                    {canCancel(a.status, a.starts_at) ? (
+                      <button
+                        type="button"
+                        onClick={() => handleCancel(a.id)}
+                        disabled={cancelling === a.id}
+                        aria-label={`Annuler le rendez-vous du ${new Date(a.starts_at).toLocaleDateString('fr-FR')}`}
+                        className="btn-secondary flex-1 text-xs"
+                      >
+                        {cancelling === a.id ? 'Annulation...' : 'Annuler'}
+                      </button>
+                    ) : (
+                      <div className="flex-1" />
+                    )}
+                    <Link href={`/espace-client/appointments/${a.id}`} className="btn-primary flex-1 text-xs text-center">
+                      Voir détails
+                    </Link>
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -149,12 +159,14 @@ export default function EspaceClientDashboard() {
             <h2 className="text-xs font-semibold text-salon-muted uppercase tracking-wide mb-2">Passés</h2>
             <div className="space-y-2">
               {past.slice(0, 5).map(a => (
-                <div key={a.id} className="bg-white rounded-xl border border-salon-rose/10 p-4 opacity-60">
-                  <p className="font-medium text-salon-dark text-sm">{a.services?.name}</p>
-                  <p className="text-xs text-salon-muted">
-                    {new Date(a.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                    {' '}· {a.start_time.slice(0, 5)}
-                  </p>
+                <div key={a.id} className="opacity-60">
+                  <div className="bg-white rounded-xl border border-salon-rose/10 p-4">
+                    <p className="font-medium text-salon-dark text-sm">{a.services?.name}</p>
+                    <p className="text-xs text-salon-muted">
+                      {new Date(a.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      {' '}· {a.start_time.slice(0, 5)}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -162,11 +174,26 @@ export default function EspaceClientDashboard() {
         )}
 
         {/* Footer nav */}
-        <nav className="flex justify-center gap-6 text-sm text-salon-muted border-t border-salon-rose/20 pt-4">
-          <Link href="/espace-client/factures" className="hover:text-salon-pink">Mes factures</Link>
-          <Link href="/espace-client/devis" className="hover:text-salon-pink">Mes devis</Link>
-          <Link href="/espace-client/profile" className="hover:text-salon-pink">Mon profil</Link>
-        </nav>
+        <div className="mt-6 pt-4 border-t border-salon-rose/20 flex justify-around">
+          <Link
+            href="/espace-client/devis"
+            className="flex flex-col items-center gap-1 text-salon-muted hover:text-salon-gold transition-colors">
+            <FileText size={18} />
+            <span className="text-xs">Devis</span>
+          </Link>
+          <Link
+            href="/espace-client/factures"
+            className="flex flex-col items-center gap-1 text-salon-muted hover:text-salon-gold transition-colors">
+            <Receipt size={18} />
+            <span className="text-xs">Factures</span>
+          </Link>
+          <Link
+            href="/espace-client/profile"
+            className="flex flex-col items-center gap-1 text-salon-muted hover:text-salon-gold transition-colors">
+            <User size={18} />
+            <span className="text-xs">Profil</span>
+          </Link>
+        </div>
       </div>
     </div>
   )
