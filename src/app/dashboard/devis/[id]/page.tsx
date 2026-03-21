@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Download, Send, ArrowRightLeft, Copy, Trash2, CheckCircle, XCircle } from 'lucide-react'
+import { Download, Send, ArrowRightLeft, Copy, Trash2, CheckCircle, XCircle, Edit } from 'lucide-react'
 import type { DevisWithRelations, StatusEvent } from '@/lib/supabase/types'
+import { LineItemsBuilder, LineItem } from '@/components/dashboard/LineItemsBuilder'
 
 const STATUS_LABELS: Record<string, string> = {
   draft: 'Brouillon', sent: 'Envoyé', accepted: 'Accepté', rejected: 'Refusé', expired: 'Expiré',
@@ -21,6 +22,12 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
   const [loading, setLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editTvaRate, setEditTvaRate] = useState(20)
+  const [editValidUntil, setEditValidUntil] = useState('')
+  const [editNotes, setEditNotes] = useState('')
+  const [editItems, setEditItems] = useState<LineItem[]>([])
+  const [saving, setSaving] = useState(false)
 
   async function load() {
     setLoading(true)
@@ -79,6 +86,44 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
     router.push('/dashboard/devis')
   }
 
+  function startEdit() {
+    if (!devis) return
+    setEditTvaRate(Number(devis.tva_rate))
+    setEditValidUntil(devis.valid_until ?? '')
+    setEditNotes(devis.notes ?? '')
+    setEditItems(devis.items.map(i => ({
+      id: crypto.randomUUID(),
+      description: i.description,
+      quantity: Number(i.quantity),
+      unit_price: Number(i.unit_price),
+    })))
+    setIsEditing(true)
+  }
+
+  async function handleSave() {
+    const validItems = editItems.filter(i => i.description.trim() && i.quantity > 0)
+    if (validItems.length === 0) { setError('Au moins une ligne requise.'); return }
+    setSaving(true)
+    const res = await fetch(`/api/devis/${params.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tva_rate: editTvaRate,
+        valid_until: editValidUntil || null,
+        notes: editNotes || null,
+        items: validItems.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price })),
+      }),
+    })
+    if (res.ok) {
+      setIsEditing(false)
+      await load()
+    } else {
+      const b = await res.json()
+      setError(b.error || 'Erreur lors de la mise à jour.')
+    }
+    setSaving(false)
+  }
+
   if (loading) return <p className="text-salon-muted text-sm">Chargement...</p>
   if (!devis) return null
 
@@ -100,46 +145,105 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
 
         {/* Actions */}
         <div className="flex gap-2 flex-wrap justify-end">
-          <a href={`/api/devis/${devis.id}/pdf`} target="_blank" rel="noreferrer"
-            className="btn-secondary flex items-center gap-1 text-sm">
-            <Download size={14} /> PDF
-          </a>
-          {['draft', 'sent'].includes(devis.status) && (
-            <button onClick={() => action('send', 'POST', {})}
-              disabled={!!actionLoading}
+          {devis.status === 'draft' && !isEditing && (
+            <button onClick={startEdit}
               className="btn-secondary flex items-center gap-1 text-sm">
-              <Send size={14} /> Envoyer
+              <Edit size={14} /> Modifier
             </button>
           )}
-          {devis.status === 'sent' && (
-            <button onClick={() => action('reject')}
-              disabled={!!actionLoading}
-              className="btn-secondary flex items-center gap-1 text-sm text-red-600">
-              <XCircle size={14} /> Refuser
-            </button>
-          )}
-          {['draft', 'sent'].includes(devis.status) && (
-            <button onClick={handleConvert}
-              disabled={!!actionLoading}
-              className="btn-secondary flex items-center gap-1 text-sm text-green-700">
-              <ArrowRightLeft size={14} /> Convertir
-            </button>
-          )}
-          <button onClick={handleDuplicate} disabled={!!actionLoading}
-            className="btn-secondary flex items-center gap-1 text-sm">
-            <Copy size={14} /> Dupliquer
-          </button>
-          {devis.status === 'draft' && (
-            <button onClick={handleDelete} disabled={!!actionLoading}
-              className="btn-secondary flex items-center gap-1 text-sm text-red-600">
-              <Trash2 size={14} /> Supprimer
-            </button>
+          {!isEditing && (
+            <>
+              <a href={`/api/devis/${devis.id}/pdf`} target="_blank" rel="noreferrer"
+                className="btn-secondary flex items-center gap-1 text-sm">
+                <Download size={14} /> PDF
+              </a>
+              {['draft', 'sent'].includes(devis.status) && (
+                <button onClick={() => action('send', 'POST', {})}
+                  disabled={!!actionLoading}
+                  className="btn-secondary flex items-center gap-1 text-sm">
+                  <Send size={14} /> Envoyer
+                </button>
+              )}
+              {devis.status === 'sent' && (
+                <button onClick={() => action('reject')}
+                  disabled={!!actionLoading}
+                  className="btn-secondary flex items-center gap-1 text-sm text-red-600">
+                  <XCircle size={14} /> Refuser
+                </button>
+              )}
+              {['draft', 'sent'].includes(devis.status) && (
+                <button onClick={handleConvert}
+                  disabled={!!actionLoading}
+                  className="btn-secondary flex items-center gap-1 text-sm text-green-700">
+                  <ArrowRightLeft size={14} /> Convertir
+                </button>
+              )}
+              <button onClick={handleDuplicate} disabled={!!actionLoading}
+                className="btn-secondary flex items-center gap-1 text-sm">
+                <Copy size={14} /> Dupliquer
+              </button>
+              {devis.status === 'draft' && (
+                <button onClick={handleDelete} disabled={!!actionLoading}
+                  className="btn-secondary flex items-center gap-1 text-sm text-red-600">
+                  <Trash2 size={14} /> Supprimer
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg text-sm">{error}</div>
+      )}
+
+      {isEditing && (
+        <div className="bg-white rounded-xl border border-salon-rose/20 p-5 space-y-4">
+          <h2 className="font-medium text-salon-dark">Modifier le devis</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-salon-muted mb-1">Taux TVA (%)</label>
+              <input
+                type="number" min={0} max={100} step={0.01}
+                value={editTvaRate}
+                onChange={e => setEditTvaRate(Number(e.target.value))}
+                className="input-field w-full text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-salon-muted mb-1">Valable jusqu&apos;au</label>
+              <input
+                type="date"
+                value={editValidUntil}
+                onChange={e => setEditValidUntil(e.target.value)}
+                className="input-field w-full text-sm"
+              />
+            </div>
+          </div>
+          <LineItemsBuilder
+            key="edit"
+            tva_rate={editTvaRate}
+            initialItems={editItems}
+            onChange={(newItems) => setEditItems(newItems)}
+          />
+          <div>
+            <label className="block text-xs text-salon-muted mb-1">Notes</label>
+            <textarea
+              value={editNotes}
+              onChange={e => setEditNotes(e.target.value)}
+              rows={3}
+              className="input-field w-full text-sm resize-none"
+            />
+          </div>
+          <div className="flex gap-3">
+            <button onClick={handleSave} disabled={saving} className="btn-primary text-sm">
+              {saving ? 'Enregistrement...' : 'Enregistrer'}
+            </button>
+            <button onClick={() => setIsEditing(false)} disabled={saving} className="btn-secondary text-sm">
+              Annuler
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Client + meta */}

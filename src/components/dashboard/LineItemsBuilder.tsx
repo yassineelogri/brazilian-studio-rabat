@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, MutableRefObject } from 'react'
 import { Plus, Trash2, ChevronUp, ChevronDown } from 'lucide-react'
 
 export interface LineItem {
@@ -14,6 +14,7 @@ interface Props {
   tva_rate: number
   onChange: (items: LineItem[], totals: { subtotal_ht: number; tva_amount: number; total_ttc: number }) => void
   initialItems?: LineItem[]
+  appendItemRef?: MutableRefObject<((item: LineItem) => void) | null>
 }
 
 function computeTotals(items: LineItem[], tva_rate: number) {
@@ -31,8 +32,19 @@ function newItem(): LineItem {
   return { id: crypto.randomUUID(), description: '', quantity: 1, unit_price: 0 }
 }
 
-export function LineItemsBuilder({ tva_rate, onChange, initialItems }: Props) {
+export function LineItemsBuilder({ tva_rate, onChange, initialItems, appendItemRef }: Props) {
   const [items, setItems] = useState<LineItem[]>(initialItems ?? [newItem()])
+
+  useEffect(() => {
+    if (appendItemRef) {
+      appendItemRef.current = (item: LineItem) => {
+        setItems(prev => [...prev, item])
+      }
+    }
+    return () => {
+      if (appendItemRef) appendItemRef.current = null
+    }
+  }, [appendItemRef])  // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     onChange(items, computeTotals(items, tva_rate))

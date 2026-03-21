@@ -29,6 +29,8 @@ export default function DevisListPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -37,6 +39,8 @@ export default function DevisListPage() {
     const params = new URLSearchParams()
     if (search)       params.set('search', search)
     if (statusFilter) params.set('status', statusFilter)
+    if (dateFrom) params.set('from', dateFrom)
+    if (dateTo)   params.set('to', dateTo)
     const res = await fetch(`/api/devis?${params}`)
     if (res.ok) {
       setDevis(await res.json())
@@ -44,7 +48,7 @@ export default function DevisListPage() {
     setLoading(false)
   }
 
-  useEffect(() => { load() }, [search, statusFilter])  // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { load() }, [search, statusFilter, dateFrom, dateTo])  // eslint-disable-line react-hooks/exhaustive-deps
 
   async function handleSend(id: string) {
     setActionLoading(id + '-send')
@@ -126,6 +130,14 @@ export default function DevisListPage() {
             <option key={v} value={v}>{l}</option>
           ))}
         </select>
+        <div className="flex items-center gap-1 text-sm text-salon-muted">
+          <span>Du</span>
+          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="input-field text-sm" />
+        </div>
+        <div className="flex items-center gap-1 text-sm text-salon-muted">
+          <span>Au</span>
+          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="input-field text-sm" />
+        </div>
         <button onClick={load} className="btn-secondary flex items-center gap-1 text-sm">
           <RefreshCw size={14} /> Actualiser
         </button>
