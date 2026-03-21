@@ -125,7 +125,10 @@ export default function FacturesListPage() {
   async function handleDelete(id: string, number: string) {
     if (!confirm(`Supprimer définitivement la facture ${number} ?`)) return
     setActionLoading(id + '-del')
-    await fetch(`/api/factures/${id}`, { method: 'DELETE' })
+    const res = await fetch(`/api/factures/${id}`, { method: 'DELETE' })
+    if (!res.ok) {
+      setError('Erreur lors de la suppression.')
+    }
     setActionLoading(null)
     await load()
   }
