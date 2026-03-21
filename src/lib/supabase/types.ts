@@ -59,6 +59,7 @@ export interface AppointmentWithRelations extends Appointment {
 }
 
 export interface BookingToken {
+  [key: string]: unknown
   id: string
   token: string
   client_id: string
