@@ -49,10 +49,33 @@ export interface Appointment {
   created_by: CreatedBy
   created_at: string
   updated_at: string
+  starts_at?: string | null
 }
 
 export interface AppointmentWithRelations extends Appointment {
   clients: Pick<Client, 'name' | 'phone' | 'email'>
+  services: Pick<Service, 'name' | 'color'>
+  staff: Pick<Staff, 'name'> | null
+}
+
+export interface BookingToken {
+  id: string
+  token: string
+  client_id: string
+  appointment_id: string
+  expires_at: string
+  created_at: string
+}
+
+export interface AppointmentForClient {
+  id: string
+  date: string
+  start_time: string
+  end_time: string
+  duration_minutes: number
+  status: AppointmentStatus
+  notes: string | null
+  starts_at: string
   services: Pick<Service, 'name' | 'color'>
   staff: Pick<Staff, 'name'> | null
 }
