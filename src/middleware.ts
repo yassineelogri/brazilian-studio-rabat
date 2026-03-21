@@ -58,8 +58,8 @@ export const config = {
     '/dashboard/:path*',
     '/espace-client/dashboard/:path*',
     '/espace-client/appointments/:path*',
-    '/espace-client/devis',
-    '/espace-client/factures',
-    '/espace-client/profile',
+    '/espace-client/devis/:path*',
+    '/espace-client/factures/:path*',
+    '/espace-client/profile/:path*',
   ],
 }

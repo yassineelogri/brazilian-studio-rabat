@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
 
   // 9. Generate booking token (for client portal private link)
   let bookingToken: string | null = null
-  const { data: tokenRow } = await supabase
+  const { data: tokenRow, error: tokenError } = await supabase
     .from('booking_tokens')
     .insert({
       client_id: clientId,
@@ -122,6 +122,7 @@ export async function POST(request: NextRequest) {
     })
     .select('token')
     .single()
+  if (tokenError) console.error('Failed to create booking token:', tokenError)
   if (tokenRow) bookingToken = tokenRow.token
 
   // Fetch service once — reused by both the confirmation email and staff notification email below
