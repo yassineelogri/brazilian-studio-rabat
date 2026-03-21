@@ -5,13 +5,15 @@ interface Props {
   date: string // YYYY-MM-DD
   appointments: AppointmentWithRelations[]
   onAppointmentClick: (a: AppointmentWithRelations) => void
+  copiedId?: string
+  onCopyLink?: (id: string) => void
 }
 
 const HOUR_HEIGHT = 64 // px per hour
 const START_HOUR = 10
 const END_HOUR = 20
 
-export default function CalendarDay({ date, appointments, onAppointmentClick }: Props) {
+export default function CalendarDay({ date, appointments, onAppointmentClick, copiedId, onCopyLink }: Props) {
   const hours = Array.from({ length: END_HOUR - START_HOUR }, (_, i) => START_HOUR + i)
 
   function getTopOffset(time: string) {
@@ -62,7 +64,7 @@ export default function CalendarDay({ date, appointments, onAppointmentClick }: 
               right: 4,
             }}
           >
-            <AppointmentBlock appointment={appt} onClick={onAppointmentClick} />
+            <AppointmentBlock appointment={appt} onClick={onAppointmentClick} copiedId={copiedId} onCopyLink={onCopyLink} />
           </div>
         ))}
       </div>

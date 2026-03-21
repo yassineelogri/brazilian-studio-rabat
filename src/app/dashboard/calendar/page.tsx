@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import type { AppointmentWithRelations } from '@/lib/supabase/types'
@@ -29,6 +29,8 @@ export default function CalendarPage() {
   const [appointments, setAppointments] = useState<AppointmentWithRelations[]>([])
   const [selected, setSelected] = useState<AppointmentWithRelations | null>(null)
   const [loading, setLoading] = useState(true)
+  const [copiedId, setCopiedId] = useState<string | undefined>()
+  const copiedTimerRef = useRef<ReturnType<typeof setTimeout>>()
 
   const weekStart = getMondayOfWeek(currentDate)
   const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 5)
@@ -75,6 +77,31 @@ export default function CalendarPage() {
     ? currentDate.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
     : `${weekStart.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })} – ${weekEnd.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}`
 
+  const copyPrivateLink = useCallback(async (appointmentId: string) => {
+    try {
+      const res = await fetch('/api/client/tokens', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ appointment_id: appointmentId }),
+      })
+      if (!res.ok) {
+        console.error('copyPrivateLink: server returned', res.status)
+        return
+      }
+      const { url } = await res.json()
+      await navigator.clipboard.writeText(url)
+      clearTimeout(copiedTimerRef.current)
+      setCopiedId(appointmentId)
+      copiedTimerRef.current = setTimeout(() => setCopiedId(undefined), 2000)
+    } catch (err) {
+      console.error('copyPrivateLink:', err)
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => clearTimeout(copiedTimerRef.current)
+  }, [])
+
   return (
     <div>
       {/* Toolbar */}
@@ -119,12 +146,16 @@ export default function CalendarPage() {
           date={formatDate(currentDate)}
           appointments={appointments}
           onAppointmentClick={setSelected}
+          copiedId={copiedId}
+          onCopyLink={copyPrivateLink}
         />
       ) : (
         <CalendarWeek
           weekStart={weekStart}
           appointments={appointments}
           onAppointmentClick={setSelected}
+          copiedId={copiedId}
+          onCopyLink={copyPrivateLink}
         />
       )}
 
