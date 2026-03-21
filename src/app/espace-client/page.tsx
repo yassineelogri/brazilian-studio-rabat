@@ -99,20 +99,24 @@ function LoginForm() {
 
 export default function EspaceClientLoginPage() {
   return (
-    <div className="min-h-screen bg-salon-cream flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold text-salon-dark">Brazilian Studio Rabat</h1>
-          <p className="text-salon-muted text-sm mt-1">Espace Client</p>
+    <div className="min-h-screen bg-salon-cream-light">
+      {/* Gradient header */}
+      <div className="bg-gradient-to-br from-salon-dark to-salon-sidebar-bottom px-6 pt-10 pb-8 text-center">
+        <div className="w-12 h-12 mx-auto rounded-2xl flex items-center justify-center
+                        bg-gradient-to-br from-salon-pink to-salon-gold mb-4">
+          <span className="font-serif italic text-white text-base font-semibold">BS</span>
         </div>
+        <p className="font-serif italic text-salon-pink text-xl">Brazilian Studio</p>
+        <p className="text-salon-pink/50 text-xs tracking-widest mt-1">RABAT ✦</p>
+      </div>
 
-        <Suspense fallback={
-          <div className="bg-white rounded-xl border border-salon-rose/20 p-6 shadow-sm text-center text-sm text-salon-muted">
-            Chargement...
-          </div>
-        }>
-          <LoginForm />
-        </Suspense>
+      {/* Login card */}
+      <div className="px-4 -mt-4">
+        <div className="bg-white rounded-2xl shadow-card p-6 max-w-sm mx-auto">
+          <Suspense>
+            <LoginForm />
+          </Suspense>
+        </div>
       </div>
     </div>
   )
