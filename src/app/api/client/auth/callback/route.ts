@@ -52,10 +52,13 @@ export async function GET(request: NextRequest) {
   }
 
   if (!client.auth_user_id) {
-    await admin
+    const { error: updateError } = await admin
       .from('clients')
       .update({ auth_user_id: user.id })
       .eq('id', client.id)
+    if (updateError) {
+      console.error('Failed to link auth_user_id to client:', updateError)
+    }
   }
 
   return successResponse
