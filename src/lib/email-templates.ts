@@ -139,3 +139,46 @@ export function factureEmail(data: {
     `,
   }
 }
+
+export function bookingConfirmationEmail(data: {
+  clientName: string
+  serviceName: string
+  date: string          // 'YYYY-MM-DD'
+  startTime: string     // 'HH:MM:SS'
+  staffName: string | null
+  token: string
+}) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+  const portalUrl = `${siteUrl}/espace-client/acces/${data.token}`
+  const formattedDate = new Date(data.date + 'T00:00:00').toLocaleDateString('fr-FR', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+  })
+  const formattedTime = data.startTime.slice(0, 5) // 'HH:MM'
+  const staffLine = data.staffName
+    ? `<tr><td style="padding: 8px 0; color: #666;">Avec</td><td><strong>${data.staffName}</strong></td></tr>`
+    : `<tr><td style="padding: 8px 0; color: #666;">Avec</td><td><strong>À confirmer</strong></td></tr>`
+
+  return {
+    subject: `Votre rendez-vous est enregistré — Brazilian Studio Rabat`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto;">
+        <h2 style="color: #B76E79;">Votre rendez-vous est enregistré !</h2>
+        <p>Bonjour ${data.clientName},</p>
+        <p>Votre rendez-vous a bien été enregistré :</p>
+        <table style="width:100%; border-collapse: collapse;">
+          <tr><td style="padding: 8px 0; color: #666;">Service</td><td><strong>${data.serviceName}</strong></td></tr>
+          <tr><td style="padding: 8px 0; color: #666;">Date</td><td><strong>${formattedDate} à ${formattedTime}</strong></td></tr>
+          ${staffLine}
+        </table>
+        <p style="margin-top: 24px;">
+          <a href="${portalUrl}" style="background: #B76E79; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none;">
+            Gérer mon rendez-vous
+          </a>
+        </p>
+        <p style="color: #999; font-size: 13px; margin-top: 24px;">
+          Ce lien est valable 30 jours. Brazilian Studio Rabat.
+        </p>
+      </div>
+    `,
+  }
+}
