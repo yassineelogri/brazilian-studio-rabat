@@ -5,7 +5,7 @@ interface Props {
   date: string // YYYY-MM-DD
   appointments: AppointmentWithRelations[]
   onAppointmentClick: (a: AppointmentWithRelations) => void
-  copiedId?: string | null
+  copiedId?: string
   onCopyLink?: (id: string) => void
 }
 

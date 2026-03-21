@@ -5,7 +5,7 @@ interface Props {
   appointment: AppointmentWithRelations
   onClick: (a: AppointmentWithRelations) => void
   style?: React.CSSProperties
-  copiedId?: string | null
+  copiedId?: string
   onCopyLink?: (id: string) => void
 }
 

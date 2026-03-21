@@ -5,7 +5,7 @@ interface Props {
   weekStart: Date // Monday of the week
   appointments: AppointmentWithRelations[]
   onAppointmentClick: (a: AppointmentWithRelations) => void
-  copiedId?: string | null
+  copiedId?: string
   onCopyLink?: (id: string) => void
 }
 
