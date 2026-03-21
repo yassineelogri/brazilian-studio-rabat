@@ -1,8 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  /* Salon color palette */
+  --color-salon-pink: #F8D7DA;
+  --color-salon-rose: #E8B4B8;
+  --color-salon-gold: #B76E79;
+  --color-salon-dark: #6B3A3F;
+  --color-salon-cream: #FDF6F0;
+  --color-salon-muted: #9E7B7F;
+  --color-salon-sidebar-bottom: #4A2528;
+  --color-salon-cream-light: #FDF0F3;
+
+  /* Card shadows */
+  --shadow-card: 0 2px 8px rgba(107,58,63,0.10);
+  --shadow-card-hover: 0 4px 16px rgba(107,58,63,0.14);
+
+  /* Serif font family */
+  --font-family-serif: 'Playfair Display', serif;
+}
 
 :root {
   --color-primary: #FFB6C1;
