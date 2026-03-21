@@ -112,7 +112,13 @@ export default function EspaceClientLoginPage() {
 
       {/* Login form */}
       <div className="px-4 -mt-4 max-w-sm mx-auto">
-        <Suspense>
+        <Suspense fallback={
+          <div className="bg-white rounded-xl border border-salon-rose/20 p-6 shadow-sm animate-pulse">
+            <div className="h-4 bg-salon-rose/20 rounded mb-4 w-3/4" />
+            <div className="h-10 bg-salon-rose/10 rounded mb-3" />
+            <div className="h-10 bg-salon-rose/20 rounded" />
+          </div>
+        }>
           <LoginForm />
         </Suspense>
       </div>
