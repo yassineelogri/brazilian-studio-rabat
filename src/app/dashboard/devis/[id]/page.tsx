@@ -82,8 +82,13 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
   async function handleDelete() {
     if (!devis || !confirm(`Supprimer définitivement le devis ${devis.number} ?`)) return
     setActionLoading('delete')
-    await fetch(`/api/devis/${params.id}`, { method: 'DELETE' })
-    router.push('/dashboard/devis')
+    const res = await fetch(`/api/devis/${params.id}`, { method: 'DELETE' })
+    if (res.ok) {
+      router.push('/dashboard/devis')
+    } else {
+      setError('Impossible de supprimer ce devis.')
+      setActionLoading(null)
+    }
   }
 
   function startEdit() {
@@ -127,7 +132,7 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
   if (loading) return <p className="text-salon-muted text-sm">Chargement...</p>
   if (!devis) return null
 
-  const client = devis.clients as any
+  const client = devis.clients
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -146,7 +151,7 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
         {/* Actions */}
         <div className="flex gap-2 flex-wrap justify-end">
           {devis.status === 'draft' && !isEditing && (
-            <button onClick={startEdit}
+            <button type="button" onClick={startEdit}
               className="btn-secondary flex items-center gap-1 text-sm">
               <Edit size={14} /> Modifier
             </button>
@@ -158,32 +163,32 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
                 <Download size={14} /> PDF
               </a>
               {['draft', 'sent'].includes(devis.status) && (
-                <button onClick={() => action('send', 'POST', {})}
+                <button type="button" onClick={() => action('send', 'POST', {})}
                   disabled={!!actionLoading}
                   className="btn-secondary flex items-center gap-1 text-sm">
                   <Send size={14} /> Envoyer
                 </button>
               )}
               {devis.status === 'sent' && (
-                <button onClick={() => action('reject')}
+                <button type="button" onClick={() => action('reject')}
                   disabled={!!actionLoading}
                   className="btn-secondary flex items-center gap-1 text-sm text-red-600">
                   <XCircle size={14} /> Refuser
                 </button>
               )}
               {['draft', 'sent'].includes(devis.status) && (
-                <button onClick={handleConvert}
+                <button type="button" onClick={handleConvert}
                   disabled={!!actionLoading}
                   className="btn-secondary flex items-center gap-1 text-sm text-green-700">
                   <ArrowRightLeft size={14} /> Convertir
                 </button>
               )}
-              <button onClick={handleDuplicate} disabled={!!actionLoading}
+              <button type="button" onClick={handleDuplicate} disabled={!!actionLoading}
                 className="btn-secondary flex items-center gap-1 text-sm">
                 <Copy size={14} /> Dupliquer
               </button>
               {devis.status === 'draft' && (
-                <button onClick={handleDelete} disabled={!!actionLoading}
+                <button type="button" onClick={handleDelete} disabled={!!actionLoading}
                   className="btn-secondary flex items-center gap-1 text-sm text-red-600">
                   <Trash2 size={14} /> Supprimer
                 </button>
@@ -236,10 +241,10 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
             />
           </div>
           <div className="flex gap-3">
-            <button onClick={handleSave} disabled={saving} className="btn-primary text-sm">
+            <button type="button" onClick={handleSave} disabled={saving} className="btn-primary text-sm">
               {saving ? 'Enregistrement...' : 'Enregistrer'}
             </button>
-            <button onClick={() => setIsEditing(false)} disabled={saving} className="btn-secondary text-sm">
+            <button type="button" onClick={() => setIsEditing(false)} disabled={saving} className="btn-secondary text-sm">
               Annuler
             </button>
           </div>

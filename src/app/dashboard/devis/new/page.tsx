@@ -24,7 +24,11 @@ export default function NewDevisPage() {
   const savedIdRef = useRef<string | null>(null)
   const [appointments, setAppointments] = useState<{ id: string; starts_at: string; services: string }[]>([])
   const [appointmentId, setAppointmentId] = useState<string | null>(null)
-  const [services, setServices] = useState<{ id: string; name: string; price: number }[]>([])
+  const latestRef = useRef({ clientId, tvaRate, validUntil, notes, items, appointmentId: appointmentId as string | null })
+  useEffect(() => {
+    latestRef.current = { clientId, tvaRate, validUntil, notes, items, appointmentId: appointmentId as string | null }
+  })
+  const [services, setServices] = useState<{ id: string; name: string }[]>([])
   const [catalogProducts, setCatalogProducts] = useState<{ id: string; name: string; brand: string | null; selling_price: number }[]>([])
   const [showCatalog, setShowCatalog] = useState(false)
   const appendItemRef = useRef<((item: LineItem) => void) | null>(null)
@@ -34,8 +38,8 @@ export default function NewDevisPage() {
     supabase.from('clients').select('id, name, phone, email').order('name').then(({ data }) => {
       if (data) setClients(data)
     })
-    supabase.from('services').select('id, name, price').eq('is_active', true).order('name').then(({ data }) => {
-      if (data) setServices(data as any)
+    supabase.from('services').select('id, name').eq('is_active', true).order('name').then(({ data }) => {
+      if (data) setServices(data)
     })
     supabase.from('products').select('id, name, brand, selling_price').eq('is_active', true).order('name').then(({ data }) => {
       if (data) setCatalogProducts(data)
@@ -87,16 +91,17 @@ export default function NewDevisPage() {
   }
 
   const autoSave = useCallback(async () => {
+    const { clientId, tvaRate, validUntil, notes, items, appointmentId } = latestRef.current
     if (!clientId) return
     const validItems = items.filter(i => i.description.trim() && i.quantity > 0)
     if (validItems.length === 0) return
 
     const payload = {
       client_id: clientId,
+      appointment_id: appointmentId || null,
       tva_rate: tvaRate,
       valid_until: validUntil || null,
       notes: notes || null,
-      appointment_id: appointmentId || null,
       items: validItems.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price })),
     }
 
@@ -117,7 +122,7 @@ export default function NewDevisPage() {
         savedIdRef.current = data.id
       }
     }
-  }, [clientId, items, tvaRate, validUntil, notes])
+  }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -260,11 +265,10 @@ export default function NewDevisPage() {
                     <button
                       key={s.id}
                       type="button"
-                      onClick={() => addFromCatalog(s.name, s.price)}
+                      onClick={() => addFromCatalog(s.name, 0)}
                       className="w-full text-left px-3 py-2 hover:bg-salon-cream flex justify-between"
                     >
                       <span>{s.name}</span>
-                      <span className="text-salon-muted">{s.price.toFixed(2)} MAD</span>
                     </button>
                   ))}
                 </div>

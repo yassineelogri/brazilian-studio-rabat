@@ -169,7 +169,7 @@ export default function DevisListPage() {
                       {d.number}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-salon-dark">{(d.clients as any)?.name}</td>
+                  <td className="px-4 py-3 text-salon-dark">{d.clients?.name}</td>
                   <td className="px-4 py-3 text-salon-muted">
                     {new Date(d.created_at).toLocaleDateString('fr-FR')}
                   </td>
