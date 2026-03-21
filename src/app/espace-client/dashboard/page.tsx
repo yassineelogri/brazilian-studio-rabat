@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Plus, LogOut } from 'lucide-react'
-import type { AppointmentForClient } from '@/lib/supabase/types'
+import type { AppointmentForClient, AppointmentStatus } from '@/lib/supabase/types'
 
 const STATUS_LABELS: Record<string, string> = {
   pending: 'En attente', confirmed: 'Confirmé',
@@ -55,10 +55,12 @@ export default function EspaceClientDashboard() {
     if (!confirm('Annuler ce rendez-vous ?')) return
     setCancelling(id)
     setError(null)
+    // Optimistic update
+    setUpcoming(prev => prev.map(a => a.id === id ? { ...a, status: 'cancelled' as AppointmentStatus } : a))
     const res = await fetch(`/api/client/appointments/${id}/cancel`, { method: 'POST' })
-    if (res.ok) {
-      setUpcoming(prev => prev.map(a => a.id === id ? { ...a, status: 'cancelled' as any } : a))
-    } else {
+    if (!res.ok) {
+      // Rollback
+      setUpcoming(prev => prev.map(a => a.id === id ? { ...a, status: 'confirmed' as AppointmentStatus } : a))
       const body = await res.json()
       setError(body.error === 'too_late_to_cancel'
         ? 'Annulation impossible moins de 24h avant le RDV.'
@@ -113,13 +115,13 @@ export default function EspaceClientDashboard() {
                   className="block bg-white rounded-xl border border-salon-rose/20 p-4 hover:border-salon-pink/40 transition">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <p className="font-medium text-salon-dark">{(a.services as any)?.name}</p>
+                      <p className="font-medium text-salon-dark">{a.services?.name}</p>
                       <p className="text-sm text-salon-muted">
                         {new Date(a.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
                         {' '}· {a.start_time.slice(0, 5)}
                       </p>
-                      {(a.staff as any)?.name && (
-                        <p className="text-xs text-salon-muted mt-0.5">avec {(a.staff as any).name}</p>
+                      {a.staff?.name && (
+                        <p className="text-xs text-salon-muted mt-0.5">avec {a.staff.name}</p>
                       )}
                     </div>
                     <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${STATUS_COLORS[a.status] ?? ''}`}>
@@ -149,7 +151,7 @@ export default function EspaceClientDashboard() {
             <div className="space-y-2">
               {past.slice(0, 5).map(a => (
                 <div key={a.id} className="bg-white rounded-xl border border-salon-rose/10 p-4 opacity-60">
-                  <p className="font-medium text-salon-dark text-sm">{(a.services as any)?.name}</p>
+                  <p className="font-medium text-salon-dark text-sm">{a.services?.name}</p>
                   <p className="text-xs text-salon-muted">
                     {new Date(a.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                     {' '}· {a.start_time.slice(0, 5)}
