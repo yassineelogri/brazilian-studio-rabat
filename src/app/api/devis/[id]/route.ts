@@ -26,8 +26,9 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     const items = ((data as any).devis_items || []).sort((a: any, b: any) => a.sort_order - b.sort_order)
     const totals = computeTotals(items, data.tva_rate)
 
+    const { devis_items: _raw, ...devisData } = data as any
     return NextResponse.json({
-      ...data,
+      ...devisData,
       status: projectDevisStatus(data.status, data.valid_until),
       items,
       ...totals,
@@ -55,7 +56,12 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     const updates: Record<string, unknown> = {}
     if (notes !== undefined)       updates.notes = notes?.trim() || null
     if (valid_until !== undefined) updates.valid_until = valid_until || null
-    if (tva_rate !== undefined)    updates.tva_rate = Number(tva_rate)
+    if (tva_rate !== undefined) {
+      if (isNaN(Number(tva_rate)) || Number(tva_rate) < 0 || Number(tva_rate) > 100) {
+        return NextResponse.json({ error: 'tva_rate must be between 0 and 100' }, { status: 422 })
+      }
+      updates.tva_rate = Number(tva_rate)
+    }
 
     if (Object.keys(updates).length > 0) {
       const { error: updateErr } = await supabase.from('devis').update(updates).eq('id', params.id)
@@ -65,6 +71,17 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     // Full replacement of items if provided
     if (Array.isArray(items)) {
       if (items.length === 0) return NextResponse.json({ error: 'items must not be empty' }, { status: 422 })
+      for (const item of items) {
+        if (!item.description || typeof item.description !== 'string' || item.description.trim() === '') {
+          return NextResponse.json({ error: 'each item must have a description' }, { status: 422 })
+        }
+        if (isNaN(Number(item.quantity)) || Number(item.quantity) <= 0) {
+          return NextResponse.json({ error: 'each item quantity must be > 0' }, { status: 422 })
+        }
+        if (isNaN(Number(item.unit_price)) || Number(item.unit_price) < 0) {
+          return NextResponse.json({ error: 'each item unit_price must be >= 0' }, { status: 422 })
+        }
+      }
       const { error: delErr } = await supabase.from('devis_items').delete().eq('devis_id', params.id)
       if (delErr) throw delErr
       const itemRows = items.map((item: any, idx: number) => ({
@@ -79,12 +96,13 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     }
 
     const { data, error } = await fetchDevisWithItems(supabase, params.id)
-    if (error || !data) throw error
+    if (error || !data) throw error ?? new Error('fetchDevisWithItems returned no data after PATCH')
 
     const sortedItems = ((data as any).devis_items || []).sort((a: any, b: any) => a.sort_order - b.sort_order)
     const totals = computeTotals(sortedItems, data.tva_rate)
 
-    return NextResponse.json({ ...data, items: sortedItems, ...totals })
+    const { devis_items: _rawPatch, ...devisDataPatch } = data as any
+    return NextResponse.json({ ...devisDataPatch, items: sortedItems, ...totals })
   } catch (err) {
     console.error('PATCH /api/devis/[id] error:', err)
     return NextResponse.json({ error: 'internal_server_error' }, { status: 500 })
