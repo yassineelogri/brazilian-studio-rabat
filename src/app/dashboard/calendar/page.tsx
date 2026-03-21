@@ -29,6 +29,7 @@ export default function CalendarPage() {
   const [appointments, setAppointments] = useState<AppointmentWithRelations[]>([])
   const [selected, setSelected] = useState<AppointmentWithRelations | null>(null)
   const [loading, setLoading] = useState(true)
+  const [fetchError, setFetchError] = useState<string | null>(null)
   const [copiedId, setCopiedId] = useState<string | undefined>()
   const copiedTimerRef = useRef<ReturnType<typeof setTimeout>>()
 
@@ -38,20 +39,30 @@ export default function CalendarPage() {
   const rangeEnd   = view === 'day' ? formatDate(currentDate) : formatDate(weekEnd)
 
   const fetchAppointments = useCallback(async () => {
-    const { data } = await supabase
-      .from('appointments')
-      .select(`
-        *,
-        clients(name, phone, email),
-        services(name, color),
-        staff(name)
-      `)
-      .gte('date', rangeStart)
-      .lte('date', rangeEnd)
-      .order('start_time')
+    try {
+      const { data, error } = await supabase
+        .from('appointments')
+        .select(`
+          *,
+          clients(name, phone, email),
+          services(name, color),
+          staff(name)
+        `)
+        .gte('date', rangeStart)
+        .lte('date', rangeEnd)
+        .order('start_time')
 
-    setAppointments((data as unknown as AppointmentWithRelations[]) ?? [])
-    setLoading(false)
+      if (error) {
+        console.error('Calendar fetch error:', error)
+        setFetchError('Impossible de charger les rendez-vous.')
+        setAppointments([])
+      } else {
+        setFetchError(null)
+        setAppointments((data as unknown as AppointmentWithRelations[]) ?? [])
+      }
+    } finally {
+      setLoading(false)
+    }
   }, [rangeStart, rangeEnd])
 
   useEffect(() => {
@@ -149,6 +160,10 @@ export default function CalendarPage() {
           ))}
         </div>
       </div>
+
+      {fetchError && (
+        <p className="text-red-600 text-sm px-2 py-1">{fetchError}</p>
+      )}
 
       {/* Calendar */}
       {loading ? (
