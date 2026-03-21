@@ -96,3 +96,46 @@ export function lowStockEmail(data: {
     `,
   }
 }
+
+export function devisEmail(data: {
+  clientName: string
+  number: string
+  totalTtc: number
+  validUntil: string | null
+}) {
+  const validity = data.validUntil
+    ? `<p>Ce devis est valable jusqu'au <strong>${data.validUntil}</strong>.</p>`
+    : ''
+  return {
+    subject: `Votre devis — Brazilian Studio Rabat (${data.number})`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto;">
+        <h2 style="color: #B76E79;">Votre devis — ${data.number}</h2>
+        <p>Bonjour ${data.clientName},</p>
+        <p>Veuillez trouver ci-joint votre devis pour un montant total de <strong>${data.totalTtc.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} MAD TTC</strong>.</p>
+        ${validity}
+        <p>N'hésitez pas à nous contacter pour toute question.</p>
+        <p style="color: #999; font-size: 14px;">Brazilian Studio Rabat</p>
+      </div>
+    `,
+  }
+}
+
+export function factureEmail(data: {
+  clientName: string
+  number: string
+  totalTtc: number
+}) {
+  return {
+    subject: `Votre facture — Brazilian Studio Rabat (${data.number})`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto;">
+        <h2 style="color: #B76E79;">Votre facture — ${data.number}</h2>
+        <p>Bonjour ${data.clientName},</p>
+        <p>Veuillez trouver ci-joint votre facture pour un montant total de <strong>${data.totalTtc.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} MAD TTC</strong>.</p>
+        <p>Merci pour votre confiance. Nous restons à votre disposition pour tout renseignement.</p>
+        <p style="color: #999; font-size: 14px;">Brazilian Studio Rabat</p>
+      </div>
+    `,
+  }
+}
