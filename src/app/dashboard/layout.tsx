@@ -48,7 +48,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="min-h-screen bg-salon-cream-light">
+    <div className="min-h-screen" style={{ background: '#141210' }}>
       {/* Mobile backdrop */}
       {mobileOpen && (
         <div
@@ -145,14 +145,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Hamburger button (mobile only) */}
       <button
-        className="fixed top-4 left-4 z-50 md:hidden bg-salon-dark text-white rounded-lg p-2 shadow-card"
+        className="fixed top-4 left-4 z-50 md:hidden text-white rounded-lg p-2" style={{ background: '#1C1816' }}
         onClick={() => setMobileOpen(true)}
         aria-label="Ouvrir le menu">
         <Menu size={18} />
       </button>
 
       <main className="ml-16 peer-hover:ml-52 transition-all duration-300 ease-in-out
-                       min-h-screen bg-salon-cream-light p-6">
+                       min-h-screen p-6" style={{ background: '#141210' }}>
         {children}
       </main>
     </div>

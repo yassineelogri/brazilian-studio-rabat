@@ -2,10 +2,18 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { Users } from 'lucide-react'
 import type { Staff } from '@/lib/supabase/types'
 
 const ROLE_LABELS: Record<string, string> = {
   worker: 'Employée', manager: 'Gérante', secretary: 'Secrétaire'
+}
+
+const th: React.CSSProperties = {
+  textAlign: 'left', padding: '10px 16px',
+  fontSize: '11px', fontWeight: 500, color: 'rgba(255,255,255,0.35)',
+  textTransform: 'uppercase', letterSpacing: '0.08em',
+  background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.06)',
 }
 
 export default function StaffPage() {
@@ -21,28 +29,36 @@ export default function StaffPage() {
   }
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-xl font-semibold text-salon-dark mb-6">Staff</h1>
-      <div className="bg-white rounded-2xl border border-salon-rose/20 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-salon-cream text-left">
+    <div style={{ maxWidth: '600px' }}>
+      <div style={{ marginBottom: '32px' }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Gestion</p>
+        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Users size={22} style={{ color: '#C9A96E' }} /> Staff
+        </h1>
+      </div>
+
+      <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
             <tr>
-              <th className="px-4 py-3 text-xs font-medium text-salon-muted uppercase">Nom</th>
-              <th className="px-4 py-3 text-xs font-medium text-salon-muted uppercase">Rôle</th>
-              <th className="px-4 py-3 text-xs font-medium text-salon-muted uppercase">Statut</th>
+              <th style={th}>Nom</th>
+              <th style={th}>Rôle</th>
+              <th style={th}>Statut</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody>
             {staff.map(s => (
-              <tr key={s.id}>
-                <td className="px-4 py-3 font-medium text-salon-dark">{s.name}</td>
-                <td className="px-4 py-3 text-sm text-salon-muted">{ROLE_LABELS[s.role] ?? s.role}</td>
-                <td className="px-4 py-3">
+              <tr key={s.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                <td style={{ padding: '12px 16px', fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{s.name}</td>
+                <td style={{ padding: '12px 16px', fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>{ROLE_LABELS[s.role] ?? s.role}</td>
+                <td style={{ padding: '12px 16px' }}>
                   <button
                     onClick={() => toggleActive(s.id, s.is_active)}
-                    className={`text-xs px-3 py-1 rounded-full font-medium transition ${
-                      s.is_active ? 'bg-green-100 text-green-700 hover:bg-red-50 hover:text-red-500' : 'bg-gray-100 text-gray-400 hover:bg-green-50 hover:text-green-600'
-                    }`}
+                    style={{
+                      fontSize: '11px', padding: '4px 12px', borderRadius: '20px', fontWeight: 500, cursor: 'pointer', border: 'none',
+                      background: s.is_active ? 'rgba(74,222,128,0.15)' : 'rgba(156,163,175,0.12)',
+                      color: s.is_active ? '#4ADE80' : '#9CA3AF',
+                    }}
                   >
                     {s.is_active ? 'Active' : 'Inactive'}
                   </button>

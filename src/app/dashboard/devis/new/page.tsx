@@ -4,23 +4,34 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { LineItemsBuilder, LineItem } from '@/components/dashboard/LineItemsBuilder'
-import { Book, UserPlus } from 'lucide-react'
+import { Book, UserPlus, FileText } from 'lucide-react'
 
 type ClientOption = { id: string; name: string; phone: string; email: string | null }
 type AppointmentOption = { id: string; date: string; start_time: string; services: string }
+
+const inputStyle: React.CSSProperties = {
+  width: '100%', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)',
+  borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '9px 12px', fontSize: '13px', outline: 'none',
+}
+const labelStyle: React.CSSProperties = {
+  display: 'block', fontSize: '11px', fontWeight: 500, color: 'rgba(255,255,255,0.4)',
+  textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px',
+}
+const card: React.CSSProperties = {
+  background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)',
+  borderRadius: '16px', padding: '20px',
+}
 
 export default function NewDevisPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  // Client state
   const [clients, setClients] = useState<ClientOption[]>([])
   const [clientId, setClientId] = useState('')
   const [clientSearch, setClientSearch] = useState('')
   const [walkIn, setWalkIn] = useState(false)
   const [walkInName, setWalkInName] = useState('')
 
-  // Devis state
   const [tvaRate, setTvaRate] = useState(20)
   const [validUntil, setValidUntil] = useState('')
   const [notes, setNotes] = useState('')
@@ -28,11 +39,9 @@ export default function NewDevisPage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Appointment state
   const [appointments, setAppointments] = useState<AppointmentOption[]>([])
   const [appointmentId, setAppointmentId] = useState<string | null>(null)
 
-  // Catalog state
   const [services, setServices] = useState<{ id: string; name: string; price?: number }[]>([])
   const [catalogProducts, setCatalogProducts] = useState<{ id: string; name: string; brand: string | null; selling_price: number }[]>([])
   const [showCatalog, setShowCatalog] = useState(false)
@@ -45,20 +54,12 @@ export default function NewDevisPage() {
     latestRef.current = { clientId, tvaRate, validUntil, notes, items, appointmentId }
   })
 
-  // Load clients, services, products
   useEffect(() => {
-    supabase.from('clients').select('id, name, phone, email').order('name').then(({ data }) => {
-      if (data) setClients(data)
-    })
-    supabase.from('services').select('id, name, price').eq('is_active', true).order('name').then(({ data }) => {
-      if (data) setServices(data as any)
-    })
-    supabase.from('products').select('id, name, brand, selling_price').eq('is_active', true).order('name').then(({ data }) => {
-      if (data) setCatalogProducts(data)
-    })
+    supabase.from('clients').select('id, name, phone, email').order('name').then((r: { data: ClientOption[] | null }) => { if (r.data) setClients(r.data) })
+    supabase.from('services').select('id, name, price').eq('is_active', true).order('name').then((r: { data: unknown }) => { if (r.data) setServices(r.data as any) })
+    supabase.from('products').select('id, name, brand, selling_price').eq('is_active', true).order('name').then((r: { data: { id: string; name: string; brand: string | null; selling_price: number }[] | null }) => { if (r.data) setCatalogProducts(r.data) })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Reset client selection when search changes and no longer matches selected client
   useEffect(() => {
     if (!clientSearch) return
     const selected = clients.find(c => c.id === clientId)
@@ -67,66 +68,39 @@ export default function NewDevisPage() {
     }
   }, [clientSearch]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Load appointments when a registered client is selected — includes past appointments
   useEffect(() => {
     setAppointmentId(null)
     setAppointments([])
     if (!clientId || walkIn) return
-
     const threeMonthsAgo = new Date()
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3)
     const fromDate = threeMonthsAgo.toISOString().split('T')[0]
-
-    supabase
-      .from('appointments')
-      .select('id, date, start_time, services(name)')
-      .eq('client_id', clientId)
-      .gte('date', fromDate)
-      .order('date', { ascending: false })
-      .limit(30)
-      .then(({ data }) => {
-        if (data) {
-          setAppointments((data as any[]).map(a => ({
-            id: a.id,
-            date: a.date,
-            start_time: a.start_time,
-            services: a.services?.name || 'RDV',
-          })))
+    supabase.from('appointments').select('id, date, start_time, services(name)').eq('client_id', clientId).gte('date', fromDate).order('date', { ascending: false }).limit(30)
+      .then((r: { data: unknown }) => {
+        if (r.data) {
+          setAppointments((r.data as any[]).map(a => ({ id: a.id, date: a.date, start_time: a.start_time, services: a.services?.name || 'RDV' })))
         }
       })
   }, [clientId, walkIn]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // When an appointment is selected, auto-add the service as a line item
   function handleAppointmentChange(id: string | null) {
     setAppointmentId(id)
     if (!id) return
     const appt = appointments.find(a => a.id === id)
     if (!appt) return
-
-    // Check if service is already in items
     const alreadyAdded = items.some(i => i.description === appt.services)
     if (!alreadyAdded && appt.services !== 'RDV') {
-      const serviceFromCatalog = services.find(s => s.name === appt.services)
-      const newItem: LineItem = {
-        id: crypto.randomUUID(),
-        description: appt.services,
-        quantity: 1,
-        unit_price: 0,
-      }
+      const newItem: LineItem = { id: crypto.randomUUID(), description: appt.services, quantity: 1, unit_price: 0 }
       appendItemRef.current?.(newItem)
     }
     triggerAutoSave()
   }
 
   const filteredClients = clients.filter(c =>
-    c.name.toLowerCase().includes(clientSearch.toLowerCase()) ||
-    c.phone.includes(clientSearch)
+    c.name.toLowerCase().includes(clientSearch.toLowerCase()) || c.phone.includes(clientSearch)
   )
 
-  function handleItemsChange(newItems: LineItem[]) {
-    setItems(newItems)
-    triggerAutoSave()
-  }
+  function handleItemsChange(newItems: LineItem[]) { setItems(newItems); triggerAutoSave() }
 
   function triggerAutoSave() {
     clearTimeout(autoSaveRef.current)
@@ -140,17 +114,11 @@ export default function NewDevisPage() {
     triggerAutoSave()
   }
 
-  // Ensure a client_id exists — creates a minimal walk-in client record if needed
   async function resolveClientId(): Promise<string | null> {
     if (!walkIn) return clientId || null
     const name = walkInName.trim()
     if (!name) return null
-    // Create a minimal client record for the walk-in
-    const { data, error } = await supabase
-      .from('clients')
-      .insert({ name, phone: 'Non renseigné' })
-      .select('id')
-      .single()
+    const { data, error } = await supabase.from('clients').insert({ name, phone: 'Non renseigné' }).select('id').single()
     if (error || !data) return null
     return data.id
   }
@@ -160,32 +128,12 @@ export default function NewDevisPage() {
     if (!clientId) return
     const validItems = items.filter(i => i.description.trim() && i.quantity > 0)
     if (validItems.length === 0) return
-
-    const payload = {
-      client_id: clientId,
-      appointment_id: appointmentId || null,
-      tva_rate: tvaRate,
-      valid_until: validUntil || null,
-      notes: notes || null,
-      items: validItems.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price })),
-    }
-
+    const payload = { client_id: clientId, appointment_id: appointmentId || null, tva_rate: tvaRate, valid_until: validUntil || null, notes: notes || null, items: validItems.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price })) }
     if (savedIdRef.current) {
-      await fetch(`/api/devis/${savedIdRef.current}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
+      await fetch(`/api/devis/${savedIdRef.current}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
     } else {
-      const res = await fetch('/api/devis', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-      if (res.ok) {
-        const data = await res.json()
-        savedIdRef.current = data.id
-      }
+      const res = await fetch('/api/devis', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      if (res.ok) { const data = await res.json(); savedIdRef.current = data.id }
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -193,220 +141,137 @@ export default function NewDevisPage() {
     e.preventDefault()
     clearTimeout(autoSaveRef.current)
     setError(null)
-
     const validItems = items.filter(i => i.description.trim() && i.quantity > 0)
     if (validItems.length === 0) { setError('Ajoutez au moins une ligne.'); return }
-
     if (walkIn && !walkInName.trim()) { setError('Entrez le nom du client.'); return }
     if (!walkIn && !clientId) { setError('Veuillez sélectionner un client.'); return }
-
     setSaving(true)
-
     const resolvedClientId = await resolveClientId()
-    if (!resolvedClientId) {
-      setError('Impossible de créer le client.')
-      setSaving(false)
-      return
-    }
-
-    const payload = {
-      client_id: resolvedClientId,
-      tva_rate: tvaRate,
-      valid_until: validUntil || null,
-      notes: notes || null,
-      appointment_id: appointmentId || null,
-      items: validItems.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price })),
-    }
-
+    if (!resolvedClientId) { setError('Impossible de créer le client.'); setSaving(false); return }
+    const payload = { client_id: resolvedClientId, tva_rate: tvaRate, valid_until: validUntil || null, notes: notes || null, appointment_id: appointmentId || null, items: validItems.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price })) }
     let res: Response
     if (savedIdRef.current) {
-      res = await fetch(`/api/devis/${savedIdRef.current}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
+      res = await fetch(`/api/devis/${savedIdRef.current}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
     } else {
-      res = await fetch('/api/devis', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
+      res = await fetch('/api/devis', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
     }
-
-    if (res.ok) {
-      const data = await res.json()
-      router.push(`/dashboard/devis/${data.id}`)
-    } else {
-      const body = await res.json()
-      setError(body.error || 'Erreur lors de la création.')
-      setSaving(false)
-    }
+    if (res.ok) { const data = await res.json(); router.push(`/dashboard/devis/${data.id}`) }
+    else { const body = await res.json(); setError(body.error || 'Erreur lors de la création.'); setSaving(false) }
   }
 
   const selectedClient = clients.find(c => c.id === clientId)
 
   return (
-    <div className="max-w-3xl space-y-6">
-      <h1 className="text-xl font-semibold text-salon-dark">Nouveau devis</h1>
+    <div style={{ maxWidth: '760px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <div>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Facturation</p>
+        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <FileText size={22} style={{ color: '#C9A96E' }} /> Nouveau devis
+        </h1>
+      </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg text-sm">{error}</div>
+        <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.25)', color: '#F87171', padding: '10px 16px', borderRadius: '10px', fontSize: '13px' }}>{error}</div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {/* Client */}
-        <div className="bg-white rounded-xl border border-salon-rose/20 p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="font-medium text-salon-dark">Client</h2>
-            <button
-              type="button"
+        <div style={card}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <h2 style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.8)' }}>Client</h2>
+            <button type="button"
               onClick={() => { setWalkIn(v => !v); setClientId(''); setClientSearch(''); setWalkInName(''); setAppointments([]); setAppointmentId(null) }}
-              className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border transition-colors ${
-                walkIn
-                  ? 'bg-salon-dark text-salon-pink border-salon-dark'
-                  : 'border-salon-rose/30 text-salon-muted hover:border-salon-gold hover:text-salon-gold'
-              }`}
-            >
-              <UserPlus size={12} /> Client de passage
+              style={{
+                display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', padding: '5px 12px', borderRadius: '8px', cursor: 'pointer',
+                background: walkIn ? 'rgba(201,169,110,0.15)' : 'transparent',
+                border: walkIn ? '1px solid rgba(201,169,110,0.4)' : '1px solid rgba(255,255,255,0.12)',
+                color: walkIn ? '#C9A96E' : 'rgba(255,255,255,0.4)',
+              }}>
+              <UserPlus size={11} /> Client de passage
             </button>
           </div>
 
           {walkIn ? (
             <div>
-              <label className="block text-xs text-salon-muted mb-1">Nom du client</label>
-              <input
-                type="text"
-                placeholder="Ex: Fatima Zahra"
-                value={walkInName}
-                onChange={e => setWalkInName(e.target.value)}
-                className="input-field w-full text-sm"
-                autoFocus
-              />
-              <p className="text-[11px] text-salon-muted mt-1">Un profil sera créé automatiquement.</p>
+              <label style={labelStyle}>Nom du client</label>
+              <input type="text" placeholder="Ex: Fatima Zahra" value={walkInName} onChange={e => setWalkInName(e.target.value)} style={inputStyle} autoFocus />
+              <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '4px' }}>Un profil sera créé automatiquement.</p>
             </div>
           ) : (
-            <div className="space-y-2">
-              <input
-                type="text"
-                placeholder="Rechercher par nom ou téléphone..."
-                value={clientSearch}
-                onChange={e => setClientSearch(e.target.value)}
-                className="input-field w-full text-sm"
-              />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <input type="text" placeholder="Rechercher par nom ou téléphone..." value={clientSearch} onChange={e => setClientSearch(e.target.value)} style={inputStyle} />
               {selectedClient ? (
-                <div className="flex items-center justify-between bg-salon-cream px-3 py-2 rounded-lg text-sm">
-                  <span className="font-medium text-salon-dark">{selectedClient.name} — {selectedClient.phone}</span>
-                  <button type="button" onClick={() => { setClientId(''); setClientSearch('') }} className="text-salon-muted hover:text-red-500 text-xs">✕</button>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.07)', borderRadius: '10px', padding: '9px 12px', fontSize: '13px' }}>
+                  <span style={{ fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{selectedClient.name} — {selectedClient.phone}</span>
+                  <button type="button" onClick={() => { setClientId(''); setClientSearch('') }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>✕</button>
                 </div>
               ) : (
-                <select
-                  value={clientId}
-                  onChange={e => { setClientId(e.target.value); setClientSearch(''); triggerAutoSave() }}
-                  className="input-field w-full text-sm"
-                  size={Math.min(filteredClients.length + 1, 5)}
-                >
+                <select value={clientId} onChange={e => { setClientId(e.target.value); setClientSearch(''); triggerAutoSave() }} style={inputStyle} size={Math.min(filteredClients.length + 1, 5)}>
                   <option value="">— Sélectionner —</option>
-                  {filteredClients.map(c => (
-                    <option key={c.id} value={c.id}>{c.name} — {c.phone}</option>
-                  ))}
+                  {filteredClients.map(c => <option key={c.id} value={c.id}>{c.name} — {c.phone}</option>)}
                 </select>
               )}
             </div>
           )}
 
-          {/* RDV linked — only for registered clients */}
           {clientId && !walkIn && (
-            <div>
-              <label className="block text-xs text-salon-muted mb-1">RDV lié (optionnel)</label>
-              <select
-                value={appointmentId ?? ''}
-                onChange={e => handleAppointmentChange(e.target.value || null)}
-                className="input-field w-full text-sm"
-              >
+            <div style={{ marginTop: '12px' }}>
+              <label style={labelStyle}>RDV lié (optionnel)</label>
+              <select value={appointmentId ?? ''} onChange={e => handleAppointmentChange(e.target.value || null)} style={inputStyle}>
                 <option value="">— Aucun RDV —</option>
-                {appointments.length === 0 && (
-                  <option disabled>Aucun RDV trouvé pour ce client</option>
-                )}
+                {appointments.length === 0 && <option disabled>Aucun RDV trouvé pour ce client</option>}
                 {appointments.map(a => (
-                  <option key={a.id} value={a.id}>
-                    {new Date(a.date + 'T00:00:00').toLocaleDateString('fr-FR')} à {a.start_time.slice(0, 5)} — {a.services}
-                  </option>
+                  <option key={a.id} value={a.id}>{new Date(a.date + 'T00:00:00').toLocaleDateString('fr-FR')} à {a.start_time.slice(0, 5)} — {a.services}</option>
                 ))}
               </select>
-              {appointments.length === 0 && clientId && (
-                <p className="text-[11px] text-salon-muted mt-1">Aucun RDV dans les 3 derniers mois.</p>
-              )}
+              {appointments.length === 0 && clientId && <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '4px' }}>Aucun RDV dans les 3 derniers mois.</p>}
             </div>
           )}
         </div>
 
         {/* Settings */}
-        <div className="bg-white rounded-xl border border-salon-rose/20 p-5 grid grid-cols-2 gap-4">
+        <div style={{ ...card, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
           <div>
-            <label className="block text-xs text-salon-muted mb-1">Taux TVA (%)</label>
-            <input
-              type="number"
-              min={0}
-              max={100}
-              step={0.01}
-              value={tvaRate}
-              onChange={e => { setTvaRate(Number(e.target.value)); triggerAutoSave() }}
-              className="input-field w-full text-sm"
-            />
+            <label style={labelStyle}>Taux TVA (%)</label>
+            <input type="number" min={0} max={100} step={0.01} value={tvaRate} onChange={e => { setTvaRate(Number(e.target.value)); triggerAutoSave() }} style={inputStyle} />
           </div>
           <div>
-            <label className="block text-xs text-salon-muted mb-1">Valable jusqu&apos;au</label>
-            <input
-              type="date"
-              value={validUntil}
-              onChange={e => { setValidUntil(e.target.value); triggerAutoSave() }}
-              className="input-field w-full text-sm"
-            />
+            <label style={labelStyle}>Valable jusqu&apos;au</label>
+            <input type="date" value={validUntil} onChange={e => { setValidUntil(e.target.value); triggerAutoSave() }} style={inputStyle} />
           </div>
         </div>
 
         {/* Line items */}
-        <div className="bg-white rounded-xl border border-salon-rose/20 p-5 space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="font-medium text-salon-dark">Prestations / Produits</h2>
-            <button
-              type="button"
-              onClick={() => setShowCatalog(v => !v)}
-              className="flex items-center gap-1 text-sm text-salon-pink hover:text-salon-dark"
-            >
-              <Book size={14} /> Catalogue
+        <div style={{ ...card, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <h2 style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.8)' }}>Prestations / Produits</h2>
+            <button type="button" onClick={() => setShowCatalog(v => !v)}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#C9A96E', background: 'none', border: 'none', cursor: 'pointer' }}>
+              <Book size={13} /> Catalogue
             </button>
           </div>
           {showCatalog && (
-            <div className="border border-salon-rose/20 rounded-lg overflow-hidden text-sm">
+            <div style={{ background: '#1C1816', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', overflow: 'hidden', fontSize: '13px' }}>
               {services.length > 0 && (
                 <div>
-                  <p className="px-3 py-1.5 bg-salon-cream text-xs text-salon-muted font-medium uppercase tracking-wide">Prestations</p>
+                  <p style={{ padding: '8px 14px', fontSize: '10px', color: 'rgba(255,255,255,0.35)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(255,255,255,0.03)' }}>Prestations</p>
                   {services.map(s => (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => addFromCatalog(s.name, (s as any).price ?? 0)}
-                      className="w-full text-left px-3 py-2 hover:bg-salon-cream flex justify-between"
-                    >
+                    <button key={s.id} type="button" onClick={() => addFromCatalog(s.name, (s as any).price ?? 0)}
+                      style={{ width: '100%', textAlign: 'left', padding: '9px 14px', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.8)', display: 'flex', justifyContent: 'space-between' }}>
                       <span>{s.name}</span>
-                      {(s as any).price ? <span className="text-salon-muted">{(s as any).price.toFixed(2)} MAD</span> : null}
+                      {(s as any).price ? <span style={{ color: 'rgba(255,255,255,0.35)' }}>{(s as any).price.toFixed(2)} MAD</span> : null}
                     </button>
                   ))}
                 </div>
               )}
               {catalogProducts.length > 0 && (
                 <div>
-                  <p className="px-3 py-1.5 bg-salon-cream text-xs text-salon-muted font-medium uppercase tracking-wide">Produits</p>
+                  <p style={{ padding: '8px 14px', fontSize: '10px', color: 'rgba(255,255,255,0.35)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(255,255,255,0.03)' }}>Produits</p>
                   {catalogProducts.map(p => (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() => addFromCatalog(p.brand ? `${p.brand} — ${p.name}` : p.name, p.selling_price)}
-                      className="w-full text-left px-3 py-2 hover:bg-salon-cream flex justify-between"
-                    >
+                    <button key={p.id} type="button" onClick={() => addFromCatalog(p.brand ? `${p.brand} — ${p.name}` : p.name, p.selling_price)}
+                      style={{ width: '100%', textAlign: 'left', padding: '9px 14px', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.8)', display: 'flex', justifyContent: 'space-between' }}>
                       <span>{p.brand ? `${p.brand} — ${p.name}` : p.name}</span>
-                      <span className="text-salon-muted">{p.selling_price.toFixed(2)} MAD</span>
+                      <span style={{ color: 'rgba(255,255,255,0.35)' }}>{p.selling_price.toFixed(2)} MAD</span>
                     </button>
                   ))}
                 </div>
@@ -417,22 +282,18 @@ export default function NewDevisPage() {
         </div>
 
         {/* Notes */}
-        <div className="bg-white rounded-xl border border-salon-rose/20 p-5">
-          <label className="block text-xs text-salon-muted mb-1">Notes (optionnel)</label>
-          <textarea
-            value={notes}
-            onChange={e => { setNotes(e.target.value); triggerAutoSave() }}
-            rows={3}
-            className="input-field w-full text-sm resize-none"
-            placeholder="Informations complémentaires..."
-          />
+        <div style={card}>
+          <label style={labelStyle}>Notes (optionnel)</label>
+          <textarea value={notes} onChange={e => { setNotes(e.target.value); triggerAutoSave() }} rows={3} style={{ ...inputStyle, resize: 'vertical' }} placeholder="Informations complémentaires..." />
         </div>
 
-        <div className="flex gap-3">
-          <button type="submit" disabled={saving} className="btn-primary">
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button type="submit" disabled={saving}
+            style={{ background: saving ? 'rgba(201,169,110,0.4)' : 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', padding: '12px 24px', borderRadius: '12px', fontSize: '14px', fontWeight: 600, border: 'none', cursor: saving ? 'not-allowed' : 'pointer' }}>
             {saving ? 'Enregistrement...' : 'Créer le devis'}
           </button>
-          <button type="button" onClick={() => router.back()} className="btn-secondary">
+          <button type="button" onClick={() => router.back()}
+            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', padding: '12px 24px', borderRadius: '12px', fontSize: '14px', cursor: 'pointer' }}>
             Annuler
           </button>
         </div>

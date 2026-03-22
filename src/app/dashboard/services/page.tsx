@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { Scissors } from 'lucide-react'
 import type { Service } from '@/lib/supabase/types'
 
 export default function ServicesPage() {
@@ -19,23 +20,29 @@ export default function ServicesPage() {
   }
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-xl font-semibold text-salon-dark mb-6">Prestations</h1>
-      <div className="space-y-3">
+    <div style={{ maxWidth: '600px' }}>
+      <div style={{ marginBottom: '32px' }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Gestion</p>
+        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Scissors size={22} style={{ color: '#C9A96E' }} /> Prestations
+        </h1>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {services.map(service => (
-          <div key={service.id} className="bg-white rounded-xl border border-salon-rose/20 p-4">
+          <div key={service.id} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '16px' }}>
             {editing === service.id ? (
               <EditServiceForm service={service} onSave={updates => updateService(service.id, updates)} onCancel={() => setEditing(null)} />
             ) : (
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="w-4 h-4 rounded-full" style={{ backgroundColor: service.color }} />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: service.color, flexShrink: 0, boxShadow: `0 0 8px ${service.color}60` }} />
                   <div>
-                    <p className="font-medium text-salon-dark">{service.name}</p>
-                    <p className="text-xs text-salon-muted">{service.min_duration}–{service.max_duration} min</p>
+                    <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{service.name}</p>
+                    <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{service.min_duration}–{service.max_duration} min</p>
                   </div>
                 </div>
-                <button onClick={() => setEditing(service.id)} className="text-xs text-salon-gold underline">
+                <button onClick={() => setEditing(service.id)} style={{ fontSize: '12px', color: '#C9A96E', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
                   Modifier
                 </button>
               </div>
@@ -56,28 +63,34 @@ function EditServiceForm({ service, onSave, onCancel }: {
   const [max, setMax] = useState(service.max_duration)
   const [color, setColor] = useState(service.color)
 
+  const labelStyle = { fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase' as const, letterSpacing: '0.1em', marginBottom: '4px', display: 'block' }
+  const inputStyle = { background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '8px 12px', fontSize: '13px', width: '100%', outline: 'none' }
+
   return (
-    <div className="space-y-3">
-      <p className="font-medium text-salon-dark">{service.name}</p>
-      <div className="flex gap-3">
-        <div className="flex-1">
-          <label className="text-xs text-salon-muted block mb-1">Durée min (min)</label>
-          <input type="number" value={min} onChange={e => setMin(Number(e.target.value))} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{service.name}</p>
+      <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ flex: 1 }}>
+          <label style={labelStyle}>Durée min (min)</label>
+          <input type="number" value={min} onChange={e => setMin(Number(e.target.value))} style={inputStyle} />
         </div>
-        <div className="flex-1">
-          <label className="text-xs text-salon-muted block mb-1">Durée max (min)</label>
-          <input type="number" value={max} onChange={e => setMax(Number(e.target.value))} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+        <div style={{ flex: 1 }}>
+          <label style={labelStyle}>Durée max (min)</label>
+          <input type="number" value={max} onChange={e => setMax(Number(e.target.value))} style={inputStyle} />
         </div>
         <div>
-          <label className="text-xs text-salon-muted block mb-1">Couleur</label>
-          <input type="color" value={color} onChange={e => setColor(e.target.value)} className="h-9 w-12 rounded-lg cursor-pointer border border-gray-200" />
+          <label style={labelStyle}>Couleur</label>
+          <input type="color" value={color} onChange={e => setColor(e.target.value)}
+            style={{ height: '38px', width: '48px', borderRadius: '10px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.07)', padding: '2px' }} />
         </div>
       </div>
-      <div className="flex gap-2">
-        <button onClick={() => onSave({ min_duration: min, max_duration: max, color })} className="px-4 py-2 bg-salon-gold text-white rounded-lg text-sm font-medium hover:bg-salon-dark transition">
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <button onClick={() => onSave({ min_duration: min, max_duration: max, color })}
+          style={{ padding: '8px 16px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '10px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
           Sauvegarder
         </button>
-        <button onClick={onCancel} className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-salon-muted hover:border-gray-300 transition">
+        <button onClick={onCancel}
+          style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}>
           Annuler
         </button>
       </div>
