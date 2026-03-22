@@ -1,4 +1,7 @@
-import { motion, type Variants } from 'framer-motion'
+'use client'
+
+import { motion } from 'framer-motion'
+import { type Variants } from 'framer-motion'
 import type { AppointmentWithRelations } from '@/lib/supabase/types'
 import AppointmentBlock from './AppointmentBlock'
 
@@ -10,29 +13,24 @@ interface Props {
   onCopyLink?: (id: string) => void
 }
 
+const HOURS = Array.from({ length: 11 }, (_, i) => i + 10) // 10h → 20h
+const DAY_LABELS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
+
 function formatDate(d: Date) {
   return d.toISOString().split('T')[0]
 }
-
 function addDays(d: Date, n: number) {
   const r = new Date(d); r.setDate(r.getDate() + n); return r
 }
 
-const DAY_LABELS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
-
-const containerVariants: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.05 } },
-}
-
-const columnVariants: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] } },
+const rowVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: (i: number) => ({ opacity: 1, transition: { delay: i * 0.03, duration: 0.2 } }),
 }
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.96 },
-  show:   { opacity: 1, scale: 1, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } },
+  hidden: { opacity: 0, y: 6 },
+  show: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.04, duration: 0.18 } }),
 }
 
 export default function CalendarWeek({ weekStart, appointments, onAppointmentClick, copiedId, onCopyLink }: Props) {
@@ -40,72 +38,100 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
   const todayStr = formatDate(new Date())
 
   return (
-    <motion.div
-      className="grid grid-cols-6 gap-2"
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-    >
-      {days.map((day, i) => {
-        const dateStr = formatDate(day)
-        const dayAppts = appointments.filter(a => a.date === dateStr)
-        const isToday = dateStr === todayStr
+    <div className="bg-white rounded-2xl border border-salon-rose/15 overflow-hidden shadow-card">
 
-        return (
-          <motion.div key={dateStr} variants={columnVariants}>
-            {/* Day header */}
-            <div className={`relative text-center py-2.5 px-1 rounded-xl mb-2 overflow-hidden ${
-              isToday
-                ? 'bg-gradient-to-b from-salon-dark to-salon-sidebar-bottom'
-                : 'bg-white border border-salon-rose/15'
-            }`}>
-              {isToday && (
-                <div className="absolute inset-0 opacity-20"
-                  style={{ backgroundImage: 'radial-gradient(circle at 50% 0%, #F8D7DA 0%, transparent 70%)' }}
-                />
-              )}
-              <p className={`text-[10px] font-semibold tracking-widest uppercase ${isToday ? 'text-salon-pink/70' : 'text-salon-muted'}`}>
+      {/* ── Day header row ── */}
+      <div className="grid border-b border-salon-rose/15" style={{ gridTemplateColumns: '52px repeat(6, 1fr)' }}>
+        <div className="py-4" /> {/* time gutter */}
+        {days.map((day, i) => {
+          const dateStr = formatDate(day)
+          const isToday = dateStr === todayStr
+          const count = appointments.filter(a => a.date === dateStr).length
+          return (
+            <div
+              key={dateStr}
+              className={`py-4 text-center border-l border-salon-rose/10 transition-colors ${
+                isToday ? 'bg-gradient-to-b from-salon-dark/[0.04] to-transparent' : ''
+              }`}
+            >
+              <p className={`text-[10px] font-bold tracking-[0.2em] uppercase ${isToday ? 'text-salon-gold' : 'text-salon-muted'}`}>
                 {DAY_LABELS[i]}
               </p>
-              <p className={`text-xl font-semibold mt-0.5 leading-none ${isToday ? 'text-salon-pink' : 'text-salon-dark'}`}>
-                {day.getDate()}
-              </p>
-              {dayAppts.length > 0 && (
-                <div className={`mt-1.5 inline-flex items-center justify-center w-4 h-4 rounded-full text-[9px] font-bold ${
-                  isToday ? 'bg-salon-pink/20 text-salon-pink' : 'bg-salon-rose/20 text-salon-gold'
+              <div className="relative inline-block mt-1">
+                {isToday && (
+                  <div className="absolute inset-0 rounded-full bg-salon-dark scale-110" />
+                )}
+                <p className={`relative text-2xl font-bold leading-none ${isToday ? 'text-salon-pink' : 'text-salon-dark'}`}>
+                  {day.getDate()}
+                </p>
+              </div>
+              {count > 0 && (
+                <div className={`mx-auto mt-2 w-5 h-5 rounded-full text-[9px] font-bold flex items-center justify-center ${
+                  isToday ? 'bg-salon-gold text-white' : 'bg-salon-rose/25 text-salon-gold'
                 }`}>
-                  {dayAppts.length}
+                  {count}
                 </div>
               )}
             </div>
+          )
+        })}
+      </div>
 
-            {/* Appointments */}
-            <motion.div
-              className="space-y-1.5 min-h-32"
-              variants={containerVariants}
-              initial="hidden"
-              animate="show"
-            >
-              {dayAppts.length === 0 ? (
-                <div className="flex items-center justify-center pt-6">
-                  <div className="w-6 h-px bg-salon-rose/20" />
+      {/* ── Time grid ── */}
+      <div className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 220px)' }}>
+        {HOURS.map((hour, hi) => (
+          <motion.div
+            key={hour}
+            custom={hi}
+            variants={rowVariants}
+            initial="hidden"
+            animate="show"
+            className={`grid ${hi < HOURS.length - 1 ? 'border-b border-salon-rose/8' : ''}`}
+            style={{ gridTemplateColumns: '52px repeat(6, 1fr)', minHeight: '80px' }}
+          >
+            {/* Time label */}
+            <div className="flex items-start justify-end pr-3 pt-2.5 flex-shrink-0 border-r border-salon-rose/10">
+              <span className="text-xs font-medium text-salon-muted/50 tabular-nums">{hour}h</span>
+            </div>
+
+            {/* Day columns */}
+            {days.map((day, di) => {
+              const dateStr = formatDate(day)
+              const isToday = dateStr === todayStr
+              const hourAppts = appointments.filter(a =>
+                a.date === dateStr && parseInt(a.start_time.slice(0, 2)) === hour
+              )
+
+              return (
+                <div
+                  key={di}
+                  className={`border-l border-salon-rose/10 p-1.5 space-y-1.5 ${
+                    isToday ? 'bg-salon-dark/[0.015]' : ''
+                  }`}
+                >
+                  {hourAppts.map((appt, ai) => (
+                    <motion.div
+                      key={appt.id}
+                      custom={di + ai}
+                      variants={cardVariants}
+                      initial="hidden"
+                      animate="show"
+                    >
+                      <AppointmentBlock
+                        appointment={appt}
+                        onClick={onAppointmentClick}
+                        copiedId={copiedId}
+                        onCopyLink={onCopyLink}
+                        showTime
+                      />
+                    </motion.div>
+                  ))}
                 </div>
-              ) : (
-                dayAppts.map(appt => (
-                  <motion.div key={appt.id} variants={cardVariants}>
-                    <AppointmentBlock
-                      appointment={appt}
-                      onClick={onAppointmentClick}
-                      copiedId={copiedId}
-                      onCopyLink={onCopyLink}
-                    />
-                  </motion.div>
-                ))
-              )}
-            </motion.div>
+              )
+            })}
           </motion.div>
-        )
-      })}
-    </motion.div>
+        ))}
+      </div>
+    </div>
   )
 }
