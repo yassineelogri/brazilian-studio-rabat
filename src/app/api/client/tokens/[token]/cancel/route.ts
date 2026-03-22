@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { resend, NOTIFY_EMAILS } from '@/lib/resend'
 import { cancellationEmail } from '@/lib/email-templates'
+
+export const dynamic = 'force-dynamic'
 
 export async function POST(
   _request: NextRequest,
