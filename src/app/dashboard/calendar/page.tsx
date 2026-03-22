@@ -41,26 +41,20 @@ export default function CalendarPage() {
 
   const fetchAppointments = useCallback(async () => {
     try {
-      const { data, error } = await supabase
-        .from('appointments')
-        .select(`
-          *,
-          clients(name, phone, email),
-          services(name, color),
-          staff(name)
-        `)
-        .gte('date', rangeStart)
-        .lte('date', rangeEnd)
-        .order('start_time')
-
-      if (error) {
-        console.error('Calendar fetch error:', error)
+      const res = await fetch(
+        `/api/appointments?from=${rangeStart}&to=${rangeEnd}`
+      )
+      if (!res.ok) {
         setFetchError('Impossible de charger les rendez-vous.')
         setAppointments([])
-      } else {
-        setFetchError(null)
-        setAppointments((data as unknown as AppointmentWithRelations[]) ?? [])
+        return
       }
+      const data = await res.json()
+      setFetchError(null)
+      setAppointments(Array.isArray(data) ? data : [])
+    } catch {
+      setFetchError('Erreur réseau.')
+      setAppointments([])
     } finally {
       setLoading(false)
     }

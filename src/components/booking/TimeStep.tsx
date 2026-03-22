@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
+
 
 interface Props {
   date: string
@@ -26,14 +26,16 @@ export default function TimeStep({ date, durationMinutes, selectedTime, onSelect
   useEffect(() => {
     async function fetchBooked() {
       setLoading(true)
-      const supabase = createClient()
-      const { data } = await supabase
-        .from('appointments')
-        .select('start_time, end_time')
-        .eq('date', date)
-        .in('status', ['pending', 'confirmed'])
-      setBookedSlots(data ?? [])
-      setLoading(false)
+      try {
+        const res = await fetch(`/api/appointments/availability?date=${date}`)
+        if (!res.ok) { setBookedSlots([]); return }
+        const data = await res.json()
+        setBookedSlots(Array.isArray(data) ? data : [])
+      } catch {
+        setBookedSlots([])
+      } finally {
+        setLoading(false)
+      }
     }
     if (date) fetchBooked()
   }, [date])
