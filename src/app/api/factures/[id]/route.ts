@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { requireStaff, computeTotals } from '@/lib/api-helpers'
 
-export const dynamic = 'force-dynamic'
 
 async function fetchFactureWithItems(supabase: ReturnType<typeof createServerSupabaseClient>, id: string) {
   return supabase

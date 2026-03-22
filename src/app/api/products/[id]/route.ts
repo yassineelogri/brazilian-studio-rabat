@@ -3,7 +3,6 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient, createSessionSupabaseClient } from '@/lib/supabase/server'
 
-export const dynamic = 'force-dynamic'
 
 async function requireStaff() {
   const session = await createSessionSupabaseClient()

@@ -5,7 +5,6 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { requireStaff, computeTotals, projectDevisStatus } from '@/lib/api-helpers'
 import type { DevisStatus } from '@/lib/supabase/types'
 
-export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {

@@ -6,7 +6,6 @@ import { requireClient } from '@/lib/api-helpers'
 import { resend, NOTIFY_EMAILS } from '@/lib/resend'
 import { cancellationEmail } from '@/lib/email-templates'
 
-export const dynamic = 'force-dynamic'
 
 export async function POST(
   _request: NextRequest,

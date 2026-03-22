@@ -3,7 +3,6 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createAnonSupabaseClient } from '@/lib/supabase/server'
 
-export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {

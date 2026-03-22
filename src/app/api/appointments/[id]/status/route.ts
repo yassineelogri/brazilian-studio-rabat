@@ -6,7 +6,6 @@ import type { AppointmentWithRelations, AppointmentStatus } from '@/lib/supabase
 import { resend } from '@/lib/resend'
 import { cancellationEmail } from '@/lib/email-templates'
 
-export const dynamic = 'force-dynamic'
 
 const ALLOWED_TRANSITIONS: Record<string, string[]> = {
   pending:   ['confirmed', 'cancelled'],
