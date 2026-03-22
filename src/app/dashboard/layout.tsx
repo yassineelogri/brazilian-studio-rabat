@@ -3,21 +3,36 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Calendar, Plus, Users, Scissors, LogOut, Package, ShoppingBag, BarChart2, FileText, Receipt, Menu } from 'lucide-react'
+import { Calendar, Plus, Users, Scissors, LogOut, Package, ShoppingBag, FileText, Receipt, Menu, Home } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import PendingBadge from '@/components/dashboard/PendingBadge'
 import LowStockBadge from '@/components/dashboard/LowStockBadge'
 
-const navItems = [
-  { href: '/dashboard/calendar',              label: 'Calendrier',        icon: Calendar,    badge: 'pending' as const },
-  { href: '/dashboard/appointments/new',      label: 'Nouveau RDV',       icon: Plus,        badge: null },
-  { href: '/dashboard/staff',                 label: 'Staff',             icon: Users,       badge: null },
-  { href: '/dashboard/services',              label: 'Prestations',       icon: Scissors,    badge: null },
-  { href: '/dashboard/products',              label: 'Produits',          icon: Package,     badge: 'lowstock' as const },
-  { href: '/dashboard/ventes/new',            label: 'Ventes',            icon: ShoppingBag, badge: null },
-  { href: '/dashboard/ventes/historique',     label: 'Historique ventes', icon: BarChart2,   badge: null },
-  { href: '/dashboard/devis',                 label: 'Devis',             icon: FileText,    badge: null },
-  { href: '/dashboard/factures',              label: 'Factures',          icon: Receipt,     badge: null },
+const navGroups = [
+  {
+    label: 'Agenda',
+    items: [
+      { href: '/dashboard', label: 'Accueil', icon: Home, badge: null },
+      { href: '/dashboard/calendar', label: 'Calendrier', icon: Calendar, badge: 'pending' as const },
+      { href: '/dashboard/appointments/new', label: 'Nouveau RDV', icon: Plus, badge: null },
+    ]
+  },
+  {
+    label: 'Commerce',
+    items: [
+      { href: '/dashboard/ventes/new', label: 'Ventes', icon: ShoppingBag, badge: null },
+      { href: '/dashboard/devis', label: 'Devis', icon: FileText, badge: null },
+      { href: '/dashboard/factures', label: 'Factures', icon: Receipt, badge: null },
+    ]
+  },
+  {
+    label: 'Gestion',
+    items: [
+      { href: '/dashboard/products', label: 'Produits', icon: Package, badge: 'lowstock' as const },
+      { href: '/dashboard/services', label: 'Prestations', icon: Scissors, badge: null },
+      { href: '/dashboard/staff', label: 'Staff', icon: Users, badge: null },
+    ]
+  },
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -62,36 +77,55 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </div>
 
-        {/* Nav items */}
-        <nav className="flex-1 w-full px-2 space-y-0.5">
-          {navItems.map(({ href, label, icon: Icon, badge }) => {
-            const active = pathname.startsWith(href)
-            return (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setMobileOpen(false)}
-                title={label}
-                className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl
-                            transition-all duration-150
-                            ${active
-                              ? 'bg-white/15 text-white'
-                              : 'text-white/60 hover:bg-white/10 hover:text-white'}`}>
-                <Icon size={18} className="flex-shrink-0" />
-                <span className="text-xs font-medium whitespace-nowrap overflow-hidden
-                                 w-0 max-w-0 group-hover:w-auto group-hover:max-w-xs
-                                 opacity-0 group-hover:opacity-100 transition-all duration-200">
-                  {label}
-                </span>
-                {badge === 'pending' && <PendingBadge />}
-                {badge === 'lowstock' && <LowStockBadge />}
-              </Link>
-            )
-          })}
+        {/* Nav groups */}
+        <nav className="flex-1 w-full px-2 space-y-0.5 overflow-hidden">
+          {navGroups.map((group, gi) => (
+            <div key={group.label}>
+              {/* Section label — visible only on sidebar hover */}
+              <div className="px-3 pt-3 pb-1 w-0 max-w-0 group-hover:w-auto group-hover:max-w-xs opacity-0 group-hover:opacity-100 transition-all duration-200 overflow-hidden whitespace-nowrap">
+                <p className="text-[9px] text-white/30 uppercase tracking-[0.2em] font-medium">{group.label}</p>
+              </div>
+
+              {group.items.map(({ href, label, icon: Icon, badge }) => {
+                const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
+                return (
+                  <div key={href} className="relative">
+                    {active && (
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-0.5 bg-salon-rose rounded-full" />
+                    )}
+                    <Link
+                      href={href}
+                      onClick={() => setMobileOpen(false)}
+                      title={label}
+                      className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl
+                                  transition-all duration-150
+                                  ${active
+                                    ? 'bg-white/15 text-white'
+                                    : 'text-white/60 hover:bg-white/10 hover:text-white'}`}>
+                      <Icon size={18} className="flex-shrink-0" />
+                      <span className="text-xs font-medium whitespace-nowrap overflow-hidden
+                                       w-0 max-w-0 group-hover:w-auto group-hover:max-w-xs
+                                       opacity-0 group-hover:opacity-100 transition-all duration-200">
+                        {label}
+                      </span>
+                      {badge === 'pending' && <PendingBadge />}
+                      {badge === 'lowstock' && <LowStockBadge />}
+                    </Link>
+                  </div>
+                )
+              })}
+
+              {/* Subtle separator between groups (except after last) */}
+              {gi < navGroups.length - 1 && (
+                <div className="mx-3 my-1 h-px bg-white/5" />
+              )}
+            </div>
+          ))}
         </nav>
 
         {/* Sign out */}
         <div className="w-full px-2 pb-4">
+          <div className="mx-3 mb-2 h-px bg-white/10" />
           <button
             onClick={handleLogout}
             aria-label="Déconnexion"
