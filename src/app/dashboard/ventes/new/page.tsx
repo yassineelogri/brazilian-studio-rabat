@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Product, AppointmentWithRelations } from '@/lib/supabase/types'
-import { ShoppingBag, Plus, Minus, Trash2, CheckCircle } from 'lucide-react'
+import { ShoppingBag, Plus, Minus, Trash2, CheckCircle, ChevronDown } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -50,6 +50,10 @@ export default function NewVentePage() {
   const [clients, setClients] = useState<{ id: string; name: string; phone: string }[]>([])
   const [clientSearch, setClientSearch] = useState('')
   const [clientId, setClientId] = useState('')
+  const [apptDropdownOpen, setApptDropdownOpen] = useState(false)
+  const [staffDropdownOpen, setStaffDropdownOpen] = useState(false)
+  const apptDropdownRef = useRef<HTMLDivElement>(null)
+  const staffDropdownRef = useRef<HTMLDivElement>(null)
 
   const supabase = createClient()
 
@@ -77,6 +81,15 @@ export default function NewVentePage() {
       .limit(20)
       .then(({ data }) => setClientAppointments((data as unknown as AppointmentWithRelations[]) || []))
   }, [clientId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (apptDropdownRef.current && !apptDropdownRef.current.contains(e.target as Node)) setApptDropdownOpen(false)
+      if (staffDropdownRef.current && !staffDropdownRef.current.contains(e.target as Node)) setStaffDropdownOpen(false)
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const filteredProducts = products.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -276,23 +289,59 @@ export default function NewVentePage() {
           </div>
           <div>
             <label style={labelStyle}>Lier à un RDV (optionnel)</label>
-            <select value={appointmentId} onChange={e => setAppointmentId(e.target.value)} style={inputStyle}>
-              <option value="">— Vente indépendante —</option>
-              {displayedAppointments.map(a => (
-                <option key={a.id} value={a.id}>
-                  {a.date} à {a.start_time?.slice(0, 5)} — {(a.clients as any)?.name} — {(a.services as any)?.name}
-                </option>
-              ))}
-            </select>
+            <div ref={apptDropdownRef} style={{ position: 'relative' }}>
+              <button type="button" onClick={() => setApptDropdownOpen(o => !o)}
+                style={{ ...inputStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', textAlign: 'left' }}>
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {appointmentId
+                    ? (() => { const a = displayedAppointments.find(x => x.id === appointmentId); return a ? `${a.date} à ${(a.start_time as string)?.slice(0,5)} — ${(a.clients as any)?.name}` : '—' })()
+                    : '— Vente indépendante —'}
+                </span>
+                <ChevronDown size={14} style={{ flexShrink: 0, marginLeft: '8px', color: 'rgba(255,255,255,0.4)', transform: apptDropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+              </button>
+              {apptDropdownOpen && (
+                <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '200px', overflowY: 'auto' }}>
+                  <button type="button" onClick={() => { setAppointmentId(''); setApptDropdownOpen(false) }}
+                    style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: !appointmentId ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', borderRadius: '10px 10px 0 0' }}>
+                    — Vente indépendante —
+                  </button>
+                  {displayedAppointments.map((a, i) => (
+                    <button key={a.id} type="button"
+                      onClick={() => { setAppointmentId(a.id); setApptDropdownOpen(false) }}
+                      style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: appointmentId === a.id ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', color: appointmentId === a.id ? '#C9A96E' : 'rgba(255,255,255,0.85)', borderRadius: i === displayedAppointments.length - 1 ? '0 0 10px 10px' : '0' }}>
+                      {a.date} à {(a.start_time as string)?.slice(0, 5)} — {(a.clients as any)?.name} — {(a.services as any)?.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         <div>
           <label style={labelStyle}>Vendu par (optionnel)</label>
-          <select value={soldBy} onChange={e => setSoldBy(e.target.value)} style={inputStyle}>
-            <option value="">—</option>
-            {staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-          </select>
+          <div ref={staffDropdownRef} style={{ position: 'relative' }}>
+            <button type="button" onClick={() => setStaffDropdownOpen(o => !o)}
+              style={{ ...inputStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', textAlign: 'left' }}>
+              <span>{soldBy ? staff.find(s => s.id === soldBy)?.name ?? '—' : '—'}</span>
+              <ChevronDown size={14} style={{ flexShrink: 0, marginLeft: '8px', color: 'rgba(255,255,255,0.4)', transform: staffDropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+            </button>
+            {staffDropdownOpen && (
+              <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '200px', overflowY: 'auto' }}>
+                <button type="button" onClick={() => { setSoldBy(''); setStaffDropdownOpen(false) }}
+                  style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: !soldBy ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', borderRadius: '10px 10px 0 0' }}>
+                  —
+                </button>
+                {staff.map((s, i) => (
+                  <button key={s.id} type="button"
+                    onClick={() => { setSoldBy(s.id); setStaffDropdownOpen(false) }}
+                    style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: soldBy === s.id ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', color: soldBy === s.id ? '#C9A96E' : 'rgba(255,255,255,0.85)', borderRadius: i === staff.length - 1 ? '0 0 10px 10px' : '0' }}>
+                    {s.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         <div>
