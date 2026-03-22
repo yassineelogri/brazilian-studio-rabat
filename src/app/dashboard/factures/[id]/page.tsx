@@ -7,6 +7,8 @@ import { Download, Send, Trash2, CheckCircle, XCircle, Edit } from 'lucide-react
 import type { FactureWithRelations, StatusEvent } from '@/lib/supabase/types'
 import { LineItemsBuilder, LineItem } from '@/components/dashboard/LineItemsBuilder'
 
+export const dynamic = 'force-dynamic'
+
 const STATUS_LABELS: Record<string, string> = {
   draft: 'Brouillon', sent: 'Envoyé', paid: 'Payée', cancelled: 'Annulée',
 }

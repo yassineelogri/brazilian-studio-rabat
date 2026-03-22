@@ -6,6 +6,8 @@ import { Download } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import type { Facture } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 type FactureRow = Pick<Facture, 'id' | 'number' | 'status' | 'paid_at' | 'payment_method' | 'created_at'>
 
 const STATUS_LABELS: Record<string, string> = {

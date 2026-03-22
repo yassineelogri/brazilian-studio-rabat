@@ -3,7 +3,8 @@ import StatCard from '@/components/dashboard/StatCard'
 import Link from 'next/link'
 import { CalendarDays, Clock, TrendingUp, Users, Plus, ShoppingBag } from 'lucide-react'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
+
 
 export default async function DashboardPage() {
   const supabase = createServerSupabaseClient()

@@ -7,6 +7,8 @@ import {
 } from 'lucide-react'
 import type { FactureWithRelations } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 const STATUS_LABELS: Record<string, string> = {
   draft:     'Brouillon',
   sent:      'Envoyé',

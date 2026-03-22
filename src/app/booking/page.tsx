@@ -1,7 +1,8 @@
 import { createAnonSupabaseClient } from '@/lib/supabase/server'
 import BookingForm from '@/components/booking/BookingForm'
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
+
 
 export default async function BookingPage() {
   const supabase = createAnonSupabaseClient()

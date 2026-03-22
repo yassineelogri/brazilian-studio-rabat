@@ -9,6 +9,8 @@ import CalendarDay from '@/components/dashboard/CalendarDay'
 import CalendarWeek from '@/components/dashboard/CalendarWeek'
 import AppointmentSlideOver from '@/components/dashboard/AppointmentSlideOver'
 
+export const dynamic = 'force-dynamic'
+
 type View = 'day' | 'week'
 
 function getMondayOfWeek(date: Date) {

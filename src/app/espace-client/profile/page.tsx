@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 export default function ClientProfilePage() {
   const [profile, setProfile] = useState<{ id: string; name: string; phone: string; email: string | null } | null>(null)
   const [name, setName] = useState('')

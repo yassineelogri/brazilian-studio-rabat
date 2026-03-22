@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { canCancel } from '@/lib/client-portal-utils'
 import type { AppointmentStatus } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 interface TokenData {
   id: string
   date: string

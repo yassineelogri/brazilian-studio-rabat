@@ -6,6 +6,8 @@ import { Download } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import type { Devis } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 type DevisRow = Pick<Devis, 'id' | 'number' | 'status' | 'tva_rate' | 'valid_until' | 'created_at'>
 
 const STATUS_LABELS: Record<string, string> = {

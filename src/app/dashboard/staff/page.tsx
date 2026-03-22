@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { Users } from 'lucide-react'
 import type { Staff } from '@/lib/supabase/types'
+
+export const dynamic = 'force-dynamic'
 
 const ROLE_LABELS: Record<string, string> = {
   worker: 'Employée', manager: 'Gérante', secretary: 'Secrétaire'
@@ -21,28 +24,56 @@ export default function StaffPage() {
   }
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-xl font-semibold text-salon-dark mb-6">Staff</h1>
-      <div className="bg-white rounded-2xl border border-salon-rose/20 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-salon-cream text-left">
-            <tr>
-              <th className="px-4 py-3 text-xs font-medium text-salon-muted uppercase">Nom</th>
-              <th className="px-4 py-3 text-xs font-medium text-salon-muted uppercase">Rôle</th>
-              <th className="px-4 py-3 text-xs font-medium text-salon-muted uppercase">Statut</th>
+    <div style={{ maxWidth: '600px' }}>
+      {/* Header */}
+      <div style={{ marginBottom: '32px' }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.5)', fontWeight: 500 }}>
+          Gestion
+        </p>
+        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.95)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Users size={22} style={{ color: '#C9A96E' }} /> Staff
+        </h1>
+      </div>
+
+      <div style={{
+        background: 'rgba(255,255,255,0.06)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: '16px',
+        overflow: 'hidden',
+      }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+              <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>Nom</th>
+              <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>Rôle</th>
+              <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>Statut</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
-            {staff.map(s => (
-              <tr key={s.id}>
-                <td className="px-4 py-3 font-medium text-salon-dark">{s.name}</td>
-                <td className="px-4 py-3 text-sm text-salon-muted">{ROLE_LABELS[s.role] ?? s.role}</td>
-                <td className="px-4 py-3">
+          <tbody>
+            {staff.map((s, i) => (
+              <tr
+                key={s.id}
+                style={{
+                  borderBottom: i < staff.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                  opacity: s.is_active ? 1 : 0.5,
+                }}
+              >
+                <td style={{ padding: '14px 16px', fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{s.name}</td>
+                <td style={{ padding: '14px 16px', fontSize: '13px', color: 'rgba(255,255,255,0.45)' }}>{ROLE_LABELS[s.role] ?? s.role}</td>
+                <td style={{ padding: '14px 16px' }}>
                   <button
                     onClick={() => toggleActive(s.id, s.is_active)}
-                    className={`text-xs px-3 py-1 rounded-full font-medium transition ${
-                      s.is_active ? 'bg-green-100 text-green-700 hover:bg-red-50 hover:text-red-500' : 'bg-gray-100 text-gray-400 hover:bg-green-50 hover:text-green-600'
-                    }`}
+                    style={{
+                      fontSize: '11px',
+                      padding: '4px 12px',
+                      borderRadius: '20px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s',
+                      background: s.is_active ? 'rgba(74,222,128,0.12)' : 'rgba(156,163,175,0.12)',
+                      color: s.is_active ? '#4ADE80' : '#9CA3AF',
+                      border: s.is_active ? '1px solid rgba(74,222,128,0.25)' : '1px solid rgba(156,163,175,0.2)',
+                    }}
                   >
                     {s.is_active ? 'Active' : 'Inactive'}
                   </button>
