@@ -12,12 +12,15 @@ export default async function BookingPage() {
     .order('name')
 
   return (
-    <div className="min-h-screen bg-salon-cream py-12 px-4">
-      <div className="text-center mb-10">
-        <h1 className="text-3xl font-semibold text-salon-dark">Prendre rendez-vous</h1>
-        <p className="text-salon-muted mt-2">Brazilian Studio Rabat · Lun–Sam 10h00–20h00</p>
+    <div className="min-h-screen bg-salon-cream-light">
+      <div className="bg-gradient-to-br from-salon-dark to-salon-sidebar-bottom px-6 pt-10 pb-16 text-center">
+        <p className="text-xs text-salon-pink/60 tracking-[0.25em] uppercase mb-3">Brazilian Studio Rabat</p>
+        <h1 className="font-serif text-4xl text-salon-pink font-medium">Prendre rendez-vous</h1>
+        <p className="text-salon-pink/50 text-sm mt-2">Lun – Sam · 10h00 – 20h00</p>
       </div>
-      <BookingForm services={services ?? []} />
+      <div className="px-4 -mt-8 max-w-2xl mx-auto pb-12">
+        <BookingForm services={services ?? []} />
+      </div>
     </div>
   )
 }
