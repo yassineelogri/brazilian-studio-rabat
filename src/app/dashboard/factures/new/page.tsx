@@ -7,6 +7,8 @@ import { LineItemsBuilder, LineItem } from '@/components/dashboard/LineItemsBuil
 import { Book, UserPlus } from 'lucide-react'
 import type { FactureWithRelations } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 type ClientOption = { id: string; name: string; phone: string; email: string | null }
 type AppointmentOption = { id: string; date: string; start_time: string; services: string }
 

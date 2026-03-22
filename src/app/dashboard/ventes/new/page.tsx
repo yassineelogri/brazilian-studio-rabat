@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase/client'
 import { Product, AppointmentWithRelations } from '@/lib/supabase/types'
 import { ShoppingBag, Plus, Minus, Trash2, CheckCircle } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 interface SaleItem {
   product: Product
   quantity: number

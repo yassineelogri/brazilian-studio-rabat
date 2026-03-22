@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase/client'
 import { Product } from '@/lib/supabase/types'
 import { Package, Plus, AlertTriangle, Pencil, Trash2, ToggleLeft, ToggleRight } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 const inputStyle: React.CSSProperties = {
   width: '100%',
   background: 'rgba(255,255,255,0.07)',

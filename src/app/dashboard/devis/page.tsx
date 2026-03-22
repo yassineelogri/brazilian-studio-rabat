@@ -8,6 +8,8 @@ import {
 } from 'lucide-react'
 import type { DevisWithRelations } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 const STATUS_LABELS: Record<string, string> = {
   draft: 'Brouillon',
   sent: 'Envoyé',

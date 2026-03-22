@@ -7,6 +7,8 @@ import { Download, Send, ArrowRightLeft, Copy, Trash2, CheckCircle, XCircle, Edi
 import type { DevisWithRelations, StatusEvent } from '@/lib/supabase/types'
 import { LineItemsBuilder, LineItem } from '@/components/dashboard/LineItemsBuilder'
 
+export const dynamic = 'force-dynamic'
+
 const STATUS_LABELS: Record<string, string> = {
   draft: 'Brouillon', sent: 'Envoyé', accepted: 'Accepté', rejected: 'Refusé', expired: 'Expiré',
 }

@@ -8,6 +8,8 @@ import { Plus, LogOut, FileText, Receipt, User } from 'lucide-react'
 import type { AppointmentForClient, AppointmentStatus } from '@/lib/supabase/types'
 import { canCancel } from '@/lib/client-portal-utils'
 
+export const dynamic = 'force-dynamic'
+
 const STATUS_LABELS: Record<string, string> = {
   pending: 'En attente', confirmed: 'Confirmé',
   cancelled: 'Annulé', completed: 'Terminé', no_show: 'Absent',
