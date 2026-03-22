@@ -1,8 +1,11 @@
 "use client";
 import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 import styles from './WhatsAppButton.module.css';
 
 export default function WhatsAppButton() {
+  const pathname = usePathname();
+  if (pathname.startsWith('/dashboard') || pathname.startsWith('/login') || pathname.startsWith('/espace-client')) return null;
   return (
     <motion.a
       href="https://wa.me/212661215800?text=Bonjour%2C%20je%20souhaite%20prendre%20rendez-vous%20chez%20Brazilian%20Studio%20Rabat."
