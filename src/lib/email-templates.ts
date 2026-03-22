@@ -6,7 +6,7 @@ export function newBookingEmail(data: {
   startTime: string
   appointmentId: string
 }) {
-  const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/dashboard/calendar`
+  const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}/dashboard/calendar`
   return {
     subject: `🌸 Nouvelle réservation — ${data.clientName}`,
     html: `
@@ -148,7 +148,7 @@ export function bookingConfirmationEmail(data: {
   staffName: string | null
   token: string
 }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
   const portalUrl = `${siteUrl}/espace-client/acces/${data.token}`
   const formattedDate = new Date(data.date + 'T00:00:00').toLocaleDateString('fr-FR', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
