@@ -33,17 +33,17 @@ export default function LoginPage() {
   }
 
   const inputRestStyle = {
-    height: '52px',
+    height: '54px',
     borderRadius: '14px',
-    background: '#F9F7F4',
-    border: '1px solid rgba(0,0,0,0.06)',
+    background: '#FFFFFF',
+    border: '1px solid rgba(0,0,0,0.10)',
     color: '#1C1C1E',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+    boxShadow: '0 3px 14px rgba(0,0,0,0.09)',
   }
 
   const inputFocusStyle = {
-    border: '1px solid rgba(201,169,110,0.45)',
-    boxShadow: '0 0 0 4px rgba(198,169,107,0.15), 0 2px 8px rgba(0,0,0,0.04)',
+    border: '1px solid rgba(201,169,110,0.55)',
+    boxShadow: '0 0 0 4px rgba(198,169,107,0.18), 0 3px 14px rgba(0,0,0,0.08)',
     background: '#FFFFFF',
   }
 
@@ -76,7 +76,7 @@ export default function LoginPage() {
         <div
           className="rounded-2xl px-10 py-12"
           style={{
-            background: '#FFFFFF',
+            background: '#FDFAF7',
             boxShadow: '0 2px 4px rgba(0,0,0,0.02), 0 20px 40px rgba(0,0,0,0.08), 0 40px 80px rgba(0,0,0,0.04)',
           }}
         >
