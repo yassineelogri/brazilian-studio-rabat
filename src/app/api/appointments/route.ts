@@ -23,6 +23,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
 
+  // 1b. Validate date format and year range
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return NextResponse.json({ error: 'Invalid date format' }, { status: 400 })
+  }
+  const dateYear = parseInt(date.slice(0, 4))
+  if (dateYear < 2024 || dateYear > 2030) {
+    return NextResponse.json({ error: 'Invalid date: year out of range' }, { status: 400 })
+  }
+
   // 2. Validate date is not Sunday and not in the past
   const appointmentDate = new Date(date + 'T00:00:00')
   if (appointmentDate.getDay() === 0) {
