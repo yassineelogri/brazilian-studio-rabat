@@ -1,33 +1,49 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Plus, Search, Download, Send, CreditCard, Ban, Trash2, RefreshCw } from 'lucide-react'
+import {
+  Plus, Search, Download, Send, CreditCard, Ban, Trash2, RefreshCw, ChevronDown,
+} from 'lucide-react'
 import type { FactureWithRelations } from '@/lib/supabase/types'
 
 export const dynamic = 'force-dynamic'
 
 const STATUS_LABELS: Record<string, string> = {
-  draft: 'Brouillon', sent: 'Envoyé', paid: 'Payé', cancelled: 'Annulé',
+  draft:     'Brouillon',
+  sent:      'Envoyé',
+  paid:      'Payé',
+  cancelled: 'Annulé',
 }
-const STATUS_COLORS: Record<string, React.CSSProperties> = {
+
+const STATUS_STYLES: Record<string, React.CSSProperties> = {
   draft:     { background: 'rgba(156,163,175,0.15)', color: '#9CA3AF' },
   sent:      { background: 'rgba(96,165,250,0.15)',  color: '#60A5FA' },
   paid:      { background: 'rgba(74,222,128,0.15)',  color: '#4ADE80' },
   cancelled: { background: 'rgba(248,113,113,0.15)', color: '#F87171' },
 }
 
-interface Summary { subtotal_ht: number; tva_amount: number; total_ttc: number }
-interface PayModalState { factureId: string; totalTtc: number; paymentMethod: 'cash' | 'card' | 'transfer'; paidAmount: string }
-
 const inputStyle: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)',
-  borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '8px 12px', fontSize: '13px', outline: 'none',
+  background: 'rgba(255,255,255,0.07)',
+  border: '1px solid rgba(255,255,255,0.12)',
+  borderRadius: '10px',
+  color: 'rgba(255,255,255,0.9)',
+  padding: '8px 12px',
+  fontSize: '13px',
+  outline: 'none',
 }
-const th: React.CSSProperties = {
-  padding: '10px 16px', fontSize: '11px', fontWeight: 500, color: 'rgba(255,255,255,0.35)',
-  textTransform: 'uppercase', letterSpacing: '0.08em',
-  background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.06)',
+
+interface Summary {
+  subtotal_ht: number
+  tva_amount: number
+  total_ttc: number
+}
+
+interface PayModalState {
+  factureId: string
+  totalTtc: number
+  paymentMethod: 'cash' | 'card' | 'transfer'
+  paidAmount: string
 }
 
 export default function FacturesListPage() {
@@ -41,6 +57,10 @@ export default function FacturesListPage() {
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [payModal, setPayModal] = useState<PayModalState | null>(null)
+  const [statusOpen, setStatusOpen] = useState(false)
+  const [payMethodOpen, setPayMethodOpen] = useState(false)
+  const statusRef = useRef<HTMLDivElement>(null)
+  const payMethodRef = useRef<HTMLDivElement>(null)
 
   async function load() {
     setLoading(true)
@@ -59,6 +79,15 @@ export default function FacturesListPage() {
   }
 
   useEffect(() => { load() }, [search, statusFilter, dateFrom, dateTo])  // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    function h(e: MouseEvent) {
+      if (statusRef.current && !statusRef.current.contains(e.target as Node)) setStatusOpen(false)
+      if (payMethodRef.current && !payMethodRef.current.contains(e.target as Node)) setPayMethodOpen(false)
+    }
+    document.addEventListener('mousedown', h)
+    return () => document.removeEventListener('mousedown', h)
+  }, [])
 
   async function handleSend(id: string) {
     setActionLoading(id + '-send')
@@ -80,7 +109,8 @@ export default function FacturesListPage() {
     const { factureId, paymentMethod, paidAmount } = payModal
     setActionLoading(factureId + '-paid')
     const res = await fetch(`/api/factures/${factureId}/mark-paid`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ payment_method: paymentMethod, paid_amount: parseFloat(paidAmount) }),
     })
     if (!res.ok) setError('Erreur lors du marquage comme payé.')
@@ -93,7 +123,7 @@ export default function FacturesListPage() {
     if (!confirm(`Annuler la facture ${number} ?`)) return
     setActionLoading(id + '-cancel')
     const res = await fetch(`/api/factures/${id}/cancel`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
-    if (!res.ok) setError("Erreur lors de l'annulation.")
+    if (!res.ok) setError('Erreur lors de l\'annulation.')
     setActionLoading(null)
     await load()
   }
@@ -109,59 +139,77 @@ export default function FacturesListPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Facturation</p>
+          <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Finance</p>
           <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px' }}>Factures</h1>
         </div>
-        <Link href="/dashboard/factures/new" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', padding: '10px 18px', borderRadius: '12px', fontSize: '13px', fontWeight: 600, textDecoration: 'none' }}>
+        <Link href="/dashboard/factures/new"
+          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '12px', padding: '10px 18px', fontWeight: 600, textDecoration: 'none', fontSize: '13px' }}>
           <Plus size={14} /> Nouvelle facture
         </Link>
       </div>
 
       {error && (
-        <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.25)', color: '#F87171', padding: '10px 16px', borderRadius: '10px', fontSize: '13px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ background: 'rgba(248,113,113,0.12)', border: '1px solid rgba(248,113,113,0.25)', color: '#F87171', padding: '10px 16px', borderRadius: '12px', fontSize: '13px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span>{error}</span>
-          <button type="button" onClick={() => setError(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#F87171', fontSize: '16px', marginLeft: '16px' }}>✕</button>
+          <button type="button" onClick={() => setError(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#F87171', marginLeft: '12px', fontSize: '16px', lineHeight: 1 }}>✕</button>
         </div>
       )}
 
-      {/* Revenue summary */}
+      {/* Revenue summary cards */}
       {summary && !loading && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-          {[
-            { label: 'Total HT', value: summary.subtotal_ht.toFixed(2) + ' MAD', gold: false },
-            { label: 'Total TVA', value: summary.tva_amount.toFixed(2) + ' MAD', gold: false },
-            { label: 'Total TTC', value: summary.total_ttc.toFixed(2) + ' MAD', gold: true },
-          ].map(({ label, value, gold }) => (
-            <div key={label} style={{ background: gold ? 'rgba(201,169,110,0.08)' : 'rgba(255,255,255,0.06)', border: `1px solid ${gold ? 'rgba(201,169,110,0.2)' : 'rgba(255,255,255,0.08)'}`, borderRadius: '14px', padding: '16px 20px', textAlign: 'center' }}>
-              <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>{label}</p>
-              <p style={{ fontSize: '18px', fontWeight: gold ? 700 : 600, color: gold ? '#C9A96E' : 'rgba(255,255,255,0.9)' }}>{value}</p>
-            </div>
-          ))}
+          <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '20px', textAlign: 'center' }}>
+            <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '6px' }}>Total HT</p>
+            <p style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>{summary.subtotal_ht.toFixed(2)} MAD</p>
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '20px', textAlign: 'center' }}>
+            <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '6px' }}>Total TVA</p>
+            <p style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>{summary.tva_amount.toFixed(2)} MAD</p>
+          </div>
+          <div style={{ background: 'rgba(201,169,110,0.08)', border: '1px solid rgba(201,169,110,0.2)', borderRadius: '16px', padding: '20px', textAlign: 'center' }}>
+            <p style={{ fontSize: '10px', color: 'rgba(201,169,110,0.6)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '6px' }}>Total TTC</p>
+            <p style={{ fontSize: '18px', fontWeight: 700, color: '#C9A96E' }}>{summary.total_ttc.toFixed(2)} MAD</p>
+          </div>
         </div>
       )}
 
       {/* Filters */}
-      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
         <div style={{ position: 'relative' }}>
           <Search size={13} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)' }} />
           <input type="text" placeholder="Rechercher..." value={search} onChange={e => setSearch(e.target.value)}
-            style={{ ...inputStyle, paddingLeft: '30px', width: '200px' }} />
+            style={{ ...inputStyle, paddingLeft: '30px', width: '200px' }} title="Rechercher une facture" />
         </div>
-        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ ...inputStyle, width: '160px' }}>
-          <option value="">Tous les statuts</option>
-          {Object.entries(STATUS_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-        </select>
+        <div ref={statusRef} style={{ position: 'relative', width: '160px' }}>
+          <button type="button" onClick={() => setStatusOpen(o => !o)}
+            style={{ ...inputStyle, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
+            <span>{statusFilter ? STATUS_LABELS[statusFilter] : 'Tous les statuts'}</span>
+            <ChevronDown size={13} style={{ flexShrink: 0, marginLeft: '6px', color: 'rgba(255,255,255,0.4)', transform: statusOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+          </button>
+          {statusOpen && (
+            <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50 }}>
+              {[['', 'Tous les statuts'], ...Object.entries(STATUS_LABELS)].map(([v, l], i, arr) => (
+                <button key={v} type="button"
+                  onClick={() => { setStatusFilter(v); setStatusOpen(false) }}
+                  style={{ width: '100%', textAlign: 'left', padding: '9px 12px', fontSize: '13px', background: statusFilter === v ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: statusFilter === v ? '#C9A96E' : v === '' ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === arr.length - 1 ? '0 0 10px 10px' : '0' }}>
+                  {l}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
           <span>Du</span>
-          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={inputStyle} />
+          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={inputStyle} title="Date de début" />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
           <span>Au</span>
-          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={inputStyle} />
+          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={inputStyle} title="Date de fin" />
         </div>
-        <button type="button" onClick={load} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', padding: '8px 14px', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}>
+        <button type="button" onClick={load} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)', padding: '8px 14px', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}>
           <RefreshCw size={13} /> Actualiser
         </button>
       </div>
@@ -169,33 +217,44 @@ export default function FacturesListPage() {
       {/* Pay modal */}
       {payModal && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
-          <div style={{ background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', padding: '24px', width: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <h2 style={{ fontSize: '16px', fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>Marquer comme payé</h2>
+          <div style={{ background: '#1C1816', borderRadius: '20px', padding: '28px', width: '320px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <h2 style={{ fontSize: '18px', fontFamily: 'serif', fontWeight: 300, color: 'rgba(255,255,255,0.9)' }}>Marquer comme payé</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>Mode de paiement</label>
-                <select value={payModal.paymentMethod}
-                  onChange={e => setPayModal(prev => prev ? { ...prev, paymentMethod: e.target.value as 'cash' | 'card' | 'transfer' } : prev)}
-                  style={{ width: '100%', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '9px 12px', fontSize: '13px', outline: 'none' }}>
-                  <option value="cash">Espèces</option>
-                  <option value="card">Carte</option>
-                  <option value="transfer">Virement</option>
-                </select>
+                <label style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>Mode de paiement</label>
+                <div ref={payMethodRef} style={{ position: 'relative' }}>
+                  <button type="button" onClick={() => setPayMethodOpen(o => !o)}
+                    style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '8px 12px', fontSize: '13px', outline: 'none', cursor: 'pointer' }}>
+                    <span>{{ cash: 'Espèces', card: 'Carte', transfer: 'Virement' }[payModal.paymentMethod]}</span>
+                    <ChevronDown size={13} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.4)', transform: payMethodOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+                  </button>
+                  {payMethodOpen && (
+                    <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 60 }}>
+                      {(['cash', 'card', 'transfer'] as const).map((v, i) => (
+                        <button key={v} type="button"
+                          onClick={() => { setPayModal(prev => prev ? { ...prev, paymentMethod: v } : prev); setPayMethodOpen(false) }}
+                          style={{ width: '100%', textAlign: 'left', padding: '9px 12px', fontSize: '13px', background: payModal.paymentMethod === v ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: payModal.paymentMethod === v ? '#C9A96E' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === 2 ? '0 0 10px 10px' : '0' }}>
+                          {{ cash: 'Espèces', card: 'Carte', transfer: 'Virement' }[v]}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>Montant payé (MAD)</label>
-                <input type="number" min="0" step="0.01" value={payModal.paidAmount}
+                <label htmlFor="pay-amount" style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>Montant payé (MAD)</label>
+                <input id="pay-amount" type="number" min="0" step="0.01" value={payModal.paidAmount}
                   onChange={e => setPayModal(prev => prev ? { ...prev, paidAmount: e.target.value } : prev)}
-                  style={{ width: '100%', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '9px 12px', fontSize: '13px', outline: 'none' }} />
+                  style={{ width: '100%', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '8px 12px', fontSize: '13px', outline: 'none' }} />
               </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
               <button type="button" onClick={() => setPayModal(null)}
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', padding: '9px 16px', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}>
+                style={{ padding: '9px 18px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}>
                 Annuler
               </button>
               <button type="button" onClick={handleMarkPaid} disabled={!!actionLoading}
-                style={{ background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', padding: '9px 16px', borderRadius: '10px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+                style={{ padding: '9px 18px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '10px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
                 Confirmer
               </button>
             </div>
@@ -205,41 +264,38 @@ export default function FacturesListPage() {
 
       {/* Table */}
       {loading ? (
-        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>Chargement...</p>
+        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Chargement...</p>
       ) : factures.length === 0 ? (
-        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>Aucune facture trouvée.</p>
+        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Aucune facture trouvée.</p>
       ) : (
         <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
-              <tr>
-                <th style={{ ...th, textAlign: 'left' }}>Référence</th>
-                <th style={{ ...th, textAlign: 'left' }}>Client</th>
-                <th style={{ ...th, textAlign: 'left' }}>Date</th>
-                <th style={{ ...th, textAlign: 'right' }}>Total TTC</th>
-                <th style={{ ...th, textAlign: 'center' }}>Statut</th>
-                <th style={{ ...th, textAlign: 'right' }}>Actions</th>
+              <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                {['Référence', 'Client', 'Date', 'Total TTC', 'Statut', 'Actions'].map((h, i) => (
+                  <th key={h} style={{ padding: '12px 14px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', textAlign: i === 3 ? 'right' : i === 4 || i === 5 ? 'center' : 'left' }}>{h}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {factures.map(f => (
-                <tr key={f.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                  <td style={{ padding: '12px 16px' }}>
-                    <Link href={`/dashboard/factures/${f.id}`} style={{ fontFamily: 'monospace', color: '#C9A96E', textDecoration: 'none', fontSize: '13px', fontWeight: 500 }}>
+              {factures.map((f, i) => (
+                <tr key={f.id} style={{ borderBottom: i < factures.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+                  <td style={{ padding: '12px 14px' }}>
+                    <Link href={`/dashboard/factures/${f.id}`} style={{ fontFamily: 'monospace', color: '#C9A96E', textDecoration: 'none', fontSize: '13px' }}>
                       {f.number}
                     </Link>
                   </td>
-                  <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.8)' }}>{f.clients?.name}</td>
-                  <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.4)' }}>{new Date(f.created_at).toLocaleDateString('fr-FR')}</td>
-                  <td style={{ padding: '12px 16px', textAlign: 'right', fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{f.total_ttc.toFixed(2)} MAD</td>
-                  <td style={{ padding: '12px 16px', textAlign: 'center' }}>
-                    <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 500, ...(STATUS_COLORS[f.status] ?? {}) }}>
+                  <td style={{ padding: '12px 14px', color: 'rgba(255,255,255,0.85)' }}>{f.clients?.name}</td>
+                  <td style={{ padding: '12px 14px', color: 'rgba(255,255,255,0.4)' }}>{new Date(f.created_at).toLocaleDateString('fr-FR')}</td>
+                  <td style={{ padding: '12px 14px', textAlign: 'right', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>{f.total_ttc.toFixed(2)} MAD</td>
+                  <td style={{ padding: '12px 14px', textAlign: 'center' }}>
+                    <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, ...(STATUS_STYLES[f.status] ?? {}) }}>
                       {STATUS_LABELS[f.status] ?? f.status}
                     </span>
                   </td>
-                  <td style={{ padding: '12px 16px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px' }}>
-                      <a href={`/api/factures/${f.id}/pdf`} target="_blank" rel="noreferrer" title="Télécharger PDF" style={{ color: 'rgba(255,255,255,0.4)', display: 'flex' }}>
+                  <td style={{ padding: '12px 14px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+                      <a href={`/api/factures/${f.id}/pdf`} target="_blank" rel="noreferrer" title="Télécharger PDF" style={{ color: 'rgba(255,255,255,0.35)', display: 'flex' }}>
                         <Download size={14} />
                       </a>
                       {['draft', 'sent'].includes(f.status) && (
@@ -256,7 +312,7 @@ export default function FacturesListPage() {
                       )}
                       {['draft', 'sent'].includes(f.status) && (
                         <button type="button" onClick={() => handleCancel(f.id, f.number)} title="Annuler la facture" disabled={!!actionLoading}
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FB923C', padding: 0, display: 'flex' }}>
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#F87171', padding: 0, display: 'flex' }}>
                           <Ban size={14} />
                         </button>
                       )}

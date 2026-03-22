@@ -29,27 +29,26 @@ export default function CalendarDay({ date, appointments, onAppointmentClick, co
   }
 
   const dayAppts = appointments.filter(a => a.date === date)
-
   const busyHours = new Set(dayAppts.map(a => parseInt(a.start_time.split(':')[0], 10)))
 
   return (
-    <div className="flex">
+    <div style={{ display: 'flex' }}>
       {/* Timeline */}
-      <div className="flex-1 relative">
+      <div style={{ flex: 1, position: 'relative' }}>
         {/* Hour rows */}
         {hours.map(h => {
           const hasBusy = busyHours.has(h)
           return (
             <div key={h} style={{ height: HOUR_HEIGHT }}>
               {hasBusy ? (
-                <div className="flex items-start pt-1 gap-2">
-                  <span className="text-xs text-salon-rose/60 w-8 text-right flex-shrink-0">{h}h</span>
-                  <div className="flex-1 border-t border-salon-rose/15" />
+                <div style={{ display: 'flex', alignItems: 'flex-start', paddingTop: '4px', gap: '8px' }}>
+                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.2)', width: '32px', textAlign: 'right', flexShrink: 0, fontWeight: 500 }}>{h}h</span>
+                  <div style={{ flex: 1, borderTop: '1px solid rgba(255,255,255,0.06)' }} />
                 </div>
               ) : (
-                <div className="flex items-center gap-2 h-6">
-                  <span className="text-xs text-salon-rose/60 w-8 text-right flex-shrink-0">{h}h</span>
-                  <div className="flex-1 border-t border-salon-rose/15" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '24px' }}>
+                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.2)', width: '32px', textAlign: 'right', flexShrink: 0, fontWeight: 500 }}>{h}h</span>
+                  <div style={{ flex: 1, borderTop: '1px solid rgba(255,255,255,0.06)' }} />
                 </div>
               )}
             </div>

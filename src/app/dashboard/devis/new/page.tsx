@@ -8,6 +8,8 @@ import { Book, UserPlus, FileText } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
+export const dynamic = 'force-dynamic'
+
 type ClientOption = { id: string; name: string; phone: string; email: string | null }
 type AppointmentOption = { id: string; date: string; start_time: string; services: string }
 
