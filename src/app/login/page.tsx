@@ -32,6 +32,21 @@ export default function LoginPage() {
     router.refresh()
   }
 
+  const inputRestStyle = {
+    height: '52px',
+    borderRadius: '14px',
+    background: '#F9F7F4',
+    border: '1px solid rgba(0,0,0,0.06)',
+    color: '#1C1C1E',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+  }
+
+  const inputFocusStyle = {
+    border: '1px solid rgba(201,169,110,0.45)',
+    boxShadow: '0 0 0 4px rgba(198,169,107,0.15), 0 2px 8px rgba(0,0,0,0.04)',
+    background: '#FFFFFF',
+  }
+
   return (
     <div
       className="relative min-h-screen flex items-center justify-center px-4 py-12"
@@ -62,7 +77,7 @@ export default function LoginPage() {
           className="rounded-2xl px-10 py-12"
           style={{
             background: '#FFFFFF',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.02), 0 8px 32px rgba(0,0,0,0.06), 0 32px 64px rgba(0,0,0,0.05)',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.02), 0 20px 40px rgba(0,0,0,0.08), 0 40px 80px rgba(0,0,0,0.04)',
           }}
         >
           {/* Logo mark */}
@@ -92,7 +107,7 @@ export default function LoginPage() {
             {/* Brand name */}
             <p
               className="text-[10px] uppercase font-medium mb-3"
-              style={{ color: '#C9A96E', letterSpacing: '0.3em' }}
+              style={{ color: '#C9A96E', letterSpacing: '0.32em' }}
             >
               Brazilian Studio
             </p>
@@ -100,13 +115,13 @@ export default function LoginPage() {
             {/* Title */}
             <h1
               className="font-serif text-3xl font-normal text-center leading-tight"
-              style={{ color: '#1A1512', letterSpacing: '-0.01em' }}
+              style={{ color: '#1C1C1E', letterSpacing: '-0.01em' }}
             >
               Espace Privé
             </h1>
             <p
               className="text-sm text-center mt-2"
-              style={{ color: '#9B8E85', letterSpacing: '0.01em' }}
+              style={{ color: '#6E6E73', letterSpacing: '0.01em' }}
             >
               Réservé au personnel autorisé
             </p>
@@ -125,7 +140,7 @@ export default function LoginPage() {
               <label
                 htmlFor="email"
                 className="block text-[11px] font-medium mb-2 uppercase"
-                style={{ color: '#9B8E85', letterSpacing: '0.12em' }}
+                style={{ color: '#6E6E73', letterSpacing: '0.14em' }}
               >
                 Adresse email
               </label>
@@ -137,24 +152,13 @@ export default function LoginPage() {
                 required
                 autoComplete="email"
                 placeholder="vous@brazilianstudio.ma"
-                className="w-full px-5 text-sm transition-all duration-200 outline-none"
-                style={{
-                  height: '52px',
-                  borderRadius: '12px',
-                  background: '#F7F4F0',
-                  border: '1px solid transparent',
-                  color: '#1A1512',
-                  boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.04)',
-                }}
+                className="w-full px-5 text-sm transition-all duration-200 outline-none placeholder:text-[#B0A89E]"
+                style={inputRestStyle}
                 onFocus={e => {
-                  e.target.style.border = '1px solid rgba(201,169,110,0.4)'
-                  e.target.style.boxShadow = '0 0 0 3px rgba(201,169,110,0.08), inset 0 1px 3px rgba(0,0,0,0.02)'
-                  e.target.style.background = '#FFFFFF'
+                  Object.assign(e.target.style, inputFocusStyle)
                 }}
                 onBlur={e => {
-                  e.target.style.border = '1px solid transparent'
-                  e.target.style.boxShadow = 'inset 0 1px 3px rgba(0,0,0,0.04)'
-                  e.target.style.background = '#F7F4F0'
+                  Object.assign(e.target.style, inputRestStyle)
                 }}
               />
             </div>
@@ -164,7 +168,7 @@ export default function LoginPage() {
               <label
                 htmlFor="password"
                 className="block text-[11px] font-medium mb-2 uppercase"
-                style={{ color: '#9B8E85', letterSpacing: '0.12em' }}
+                style={{ color: '#6E6E73', letterSpacing: '0.14em' }}
               >
                 Mot de passe
               </label>
@@ -177,24 +181,13 @@ export default function LoginPage() {
                   required
                   autoComplete="current-password"
                   placeholder="••••••••"
-                  className="w-full px-5 pr-12 text-sm transition-all duration-200 outline-none"
-                  style={{
-                    height: '52px',
-                    borderRadius: '12px',
-                    background: '#F7F4F0',
-                    border: '1px solid transparent',
-                    color: '#1A1512',
-                    boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.04)',
-                  }}
+                  className="w-full px-5 pr-12 text-sm transition-all duration-200 outline-none placeholder:text-[#B0A89E]"
+                  style={inputRestStyle}
                   onFocus={e => {
-                    e.target.style.border = '1px solid rgba(201,169,110,0.4)'
-                    e.target.style.boxShadow = '0 0 0 3px rgba(201,169,110,0.08), inset 0 1px 3px rgba(0,0,0,0.02)'
-                    e.target.style.background = '#FFFFFF'
+                    Object.assign(e.target.style, inputFocusStyle)
                   }}
                   onBlur={e => {
-                    e.target.style.border = '1px solid transparent'
-                    e.target.style.boxShadow = 'inset 0 1px 3px rgba(0,0,0,0.04)'
-                    e.target.style.background = '#F7F4F0'
+                    Object.assign(e.target.style, inputRestStyle)
                   }}
                 />
                 <button
@@ -232,16 +225,19 @@ export default function LoginPage() {
             <motion.button
               type="submit"
               disabled={loading}
-              whileHover={{ scale: 1.005, boxShadow: '0 8px 32px rgba(26,21,18,0.22)' }}
-              whileTap={{ scale: 0.997 }}
-              transition={{ duration: 0.15 }}
-              className="w-full font-medium text-sm text-white transition-all duration-200 disabled:opacity-50"
+              whileHover={{
+                y: -1,
+                boxShadow: '0 10px 36px rgba(26,21,18,0.28)',
+              }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+              className="w-full font-medium text-sm text-white transition-colors duration-200 disabled:opacity-50"
               style={{
                 height: '52px',
-                borderRadius: '12px',
+                borderRadius: '14px',
                 background: 'linear-gradient(135deg, #1A1512 0%, #2D2420 100%)',
                 boxShadow: '0 4px 20px rgba(26,21,18,0.18)',
-                letterSpacing: '0.04em',
+                letterSpacing: '0.06em',
               }}
             >
               {loading ? 'Connexion...' : 'Accéder'}
