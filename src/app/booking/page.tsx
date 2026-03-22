@@ -13,13 +13,14 @@ export default async function BookingPage() {
     .order('name')
 
   return (
-    <div className="min-h-screen bg-salon-cream-light">
-      <div className="bg-gradient-to-br from-salon-dark to-salon-sidebar-bottom px-6 pt-10 pb-16 text-center">
-        <p className="text-xs text-salon-pink/60 tracking-[0.25em] uppercase mb-3">Brazilian Studio Rabat</p>
-        <h1 className="font-serif text-4xl text-salon-pink font-medium">Prendre rendez-vous</h1>
-        <p className="text-salon-pink/50 text-sm mt-2">Lun – Sam · 10h00 – 20h00</p>
+    <div style={{ minHeight: '100vh', background: '#141210' }}>
+      <div style={{ background: 'linear-gradient(135deg, #1C1816 0%, #141210 100%)', padding: '48px 24px 64px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: '16px', fontWeight: 700, color: '#1A1410', letterSpacing: '0.05em' }}>BS</div>
+        <p style={{ fontSize: '10px', color: 'rgba(201,169,110,0.6)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '12px' }}>Brazilian Studio Rabat</p>
+        <h1 style={{ fontFamily: 'serif', fontSize: '32px', fontWeight: 300, color: 'rgba(255,255,255,0.9)' }}>Prendre rendez-vous</h1>
+        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', marginTop: '8px' }}>Lun – Sam · 10h00 – 20h00</p>
       </div>
-      <div className="px-4 -mt-8 max-w-2xl mx-auto pb-12">
+      <div style={{ padding: '0 16px 48px', maxWidth: '640px', margin: '0 auto' }}>
         <BookingForm services={services ?? []} />
       </div>
     </div>

@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
-  Plus, Search, Download, Send, ArrowRightLeft, Copy, Trash2, RefreshCw
+  Plus, Search, Download, Send, ArrowRightLeft, Copy, Trash2, RefreshCw, ChevronDown
 } from 'lucide-react'
 import type { DevisWithRelations } from '@/lib/supabase/types'
 
@@ -46,6 +46,8 @@ export default function DevisListPage() {
   const [dateTo, setDateTo] = useState('')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [statusOpen, setStatusOpen] = useState(false)
+  const statusRef = useRef<HTMLDivElement>(null)
 
   async function load() {
     setLoading(true)
@@ -60,6 +62,12 @@ export default function DevisListPage() {
   }
 
   useEffect(() => { load() }, [search, statusFilter, dateFrom, dateTo])  // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    function h(e: MouseEvent) { if (statusRef.current && !statusRef.current.contains(e.target as Node)) setStatusOpen(false) }
+    document.addEventListener('mousedown', h)
+    return () => document.removeEventListener('mousedown', h)
+  }, [])
 
   async function handleSend(id: string) {
     setActionLoading(id + '-send')
@@ -136,12 +144,24 @@ export default function DevisListPage() {
             style={{ ...inputStyle, paddingLeft: '30px', width: '200px' }}
           />
         </div>
-        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ ...inputStyle, width: '160px' }}>
-          <option value="">Tous les statuts</option>
-          {Object.entries(STATUS_LABELS).map(([v, l]) => (
-            <option key={v} value={v}>{l}</option>
-          ))}
-        </select>
+        <div ref={statusRef} style={{ position: 'relative', width: '160px' }}>
+          <button type="button" onClick={() => setStatusOpen(o => !o)}
+            style={{ ...inputStyle, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
+            <span>{statusFilter ? STATUS_LABELS[statusFilter] : 'Tous les statuts'}</span>
+            <ChevronDown size={13} style={{ flexShrink: 0, marginLeft: '6px', color: 'rgba(255,255,255,0.4)', transform: statusOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+          </button>
+          {statusOpen && (
+            <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50 }}>
+              {[['', 'Tous les statuts'], ...Object.entries(STATUS_LABELS)].map(([v, l], i, arr) => (
+                <button key={v} type="button"
+                  onClick={() => { setStatusFilter(v); setStatusOpen(false) }}
+                  style={{ width: '100%', textAlign: 'left', padding: '9px 12px', fontSize: '13px', background: statusFilter === v ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: statusFilter === v ? '#C9A96E' : v === '' ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === arr.length - 1 ? '0 0 10px 10px' : '0' }}>
+                  {l}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
           <span>Du</span>
           <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={inputStyle} />
