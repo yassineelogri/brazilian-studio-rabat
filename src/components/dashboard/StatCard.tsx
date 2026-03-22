@@ -9,27 +9,93 @@ interface Props {
   iconColor?: string
 }
 
-export default function StatCard({ label, value, sub, accent = 'bg-salon-gold', icon: Icon, iconColor = 'text-salon-gold' }: Props) {
+export default function StatCard({ label, value, sub, icon: Icon }: Props) {
   return (
-    <div className="bg-white rounded-2xl border border-salon-rose/15 shadow-sm p-5 flex flex-col gap-3 relative overflow-hidden">
-      {/* Subtle bg decoration */}
-      <div className="absolute -right-3 -top-3 w-16 h-16 rounded-full bg-salon-cream opacity-60" />
+    <div
+      style={{
+        position: 'relative',
+        borderRadius: '20px',
+        padding: '24px',
+        background: 'rgba(255,255,255,0.04)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Subtle gold corner glow */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '-20px',
+          right: '-20px',
+          width: '80px',
+          height: '80px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
 
-      {/* Top row: accent + icon */}
-      <div className="flex items-start justify-between relative">
-        <div className={`h-1 w-8 rounded-full ${accent}`} />
+      {/* Top row: accent bar + icon */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '16px', position: 'relative' }}>
+        <div
+          style={{
+            height: '3px',
+            width: '28px',
+            borderRadius: '4px',
+            background: 'linear-gradient(90deg, #C9A96E, rgba(201,169,110,0.3))',
+          }}
+        />
         {Icon && (
-          <div className={`w-8 h-8 rounded-xl flex items-center justify-center bg-salon-cream ${iconColor}`}>
-            <Icon size={15} />
+          <div
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'rgba(201,169,110,0.1)',
+              border: '1px solid rgba(201,169,110,0.15)',
+              color: '#C9A96E',
+            }}
+          >
+            <Icon size={16} />
           </div>
         )}
       </div>
 
       {/* Value */}
-      <div className="relative">
-        <p className="font-serif text-3xl text-salon-dark leading-none">{value}</p>
-        <p className="text-[10px] text-salon-muted uppercase tracking-widest mt-1">{label}</p>
-        {sub && <p className="text-[11px] text-salon-muted/70 mt-0.5">{sub}</p>}
+      <div style={{ position: 'relative' }}>
+        <p
+          style={{
+            fontFamily: 'serif',
+            fontSize: '32px',
+            fontWeight: 300,
+            color: 'rgba(255,255,255,0.95)',
+            lineHeight: 1,
+            letterSpacing: '-0.02em',
+          }}
+        >
+          {value}
+        </p>
+        <p
+          style={{
+            fontSize: '10px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.16em',
+            fontWeight: 500,
+            color: 'rgba(201,169,110,0.6)',
+            marginTop: '8px',
+          }}
+        >
+          {label}
+        </p>
+        {sub && (
+          <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>
+            {sub}
+          </p>
+        )}
       </div>
     </div>
   )

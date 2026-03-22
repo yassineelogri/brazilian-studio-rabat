@@ -41,9 +41,7 @@ export default function CalendarPage() {
 
   const fetchAppointments = useCallback(async () => {
     try {
-      const res = await fetch(
-        `/api/appointments?from=${rangeStart}&to=${rangeEnd}`
-      )
+      const res = await fetch(`/api/appointments?from=${rangeStart}&to=${rangeEnd}`)
       if (!res.ok) {
         setFetchError('Impossible de charger les rendez-vous.')
         setAppointments([])
@@ -62,13 +60,10 @@ export default function CalendarPage() {
 
   useEffect(() => {
     fetchAppointments()
-
-    // Real-time subscription
     const channel = supabase
       .channel('calendar-appointments')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'appointments' }, fetchAppointments)
       .subscribe()
-
     return () => { supabase.removeChannel(channel) }
   }, [fetchAppointments])
 
@@ -90,10 +85,7 @@ export default function CalendarPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ appointment_id: appointmentId }),
       })
-      if (!res.ok) {
-        console.error('copyPrivateLink: server returned', res.status)
-        return
-      }
+      if (!res.ok) return
       const { url } = await res.json()
       await navigator.clipboard.writeText(url)
       clearTimeout(copiedTimerRef.current)
@@ -114,25 +106,55 @@ export default function CalendarPage() {
     <div>
       {/* Toolbar */}
       <motion.div
-        className="flex items-center justify-between mb-6"
+        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25 }}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Nav arrows */}
           <button
             onClick={() => navigate(-1)}
-            className="w-8 h-8 flex items-center justify-center rounded-xl border border-salon-rose/20 text-salon-muted hover:border-salon-gold hover:text-salon-gold transition-colors duration-150"
+            style={{
+              width: '34px',
+              height: '34px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '10px',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              color: 'rgba(255,255,255,0.5)',
+              cursor: 'pointer',
+              transition: 'all 0.15s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,169,110,0.1)'; e.currentTarget.style.color = '#C9A96E'; e.currentTarget.style.borderColor = 'rgba(201,169,110,0.2)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
           >
             <ChevronLeft size={15} />
           </button>
           <button
             onClick={() => navigate(1)}
-            className="w-8 h-8 flex items-center justify-center rounded-xl border border-salon-rose/20 text-salon-muted hover:border-salon-gold hover:text-salon-gold transition-colors duration-150"
+            style={{
+              width: '34px',
+              height: '34px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '10px',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              color: 'rgba(255,255,255,0.5)',
+              cursor: 'pointer',
+              transition: 'all 0.15s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,169,110,0.1)'; e.currentTarget.style.color = '#C9A96E'; e.currentTarget.style.borderColor = 'rgba(201,169,110,0.2)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
           >
             <ChevronRight size={15} />
           </button>
 
+          {/* Header label */}
           <div className="ml-1">
             <AnimatePresence mode="wait">
               <motion.div
@@ -144,11 +166,24 @@ export default function CalendarPage() {
               >
                 {view === 'day' ? (
                   <>
-                    <h1 className="font-serif text-xl text-salon-dark capitalize leading-tight">{headerLabel}</h1>
-                    <p className="text-[10px] text-salon-muted tracking-widest uppercase mt-0.5">
+                    <h1 style={{ fontFamily: 'serif', fontSize: '20px', color: 'rgba(255,255,255,0.9)', textTransform: 'capitalize', lineHeight: 1.2, fontWeight: 400 }}>
+                      {headerLabel}
+                    </h1>
+                    <p style={{ fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>
                       {appointments.length} rendez-vous
                       {pendingCount > 0 && (
-                        <span className="ml-1.5 bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-semibold">
+                        <span
+                          style={{
+                            marginLeft: '8px',
+                            padding: '1px 8px',
+                            borderRadius: '20px',
+                            fontSize: '10px',
+                            fontWeight: 600,
+                            background: 'rgba(251,191,36,0.12)',
+                            color: '#FBBF24',
+                            border: '1px solid rgba(251,191,36,0.2)',
+                          }}
+                        >
                           {pendingCount} en attente
                         </span>
                       )}
@@ -156,8 +191,10 @@ export default function CalendarPage() {
                   </>
                 ) : (
                   <>
-                    <h2 className="text-base font-semibold text-salon-dark capitalize leading-tight">{headerLabel}</h2>
-                    <p className="text-[10px] text-salon-muted tracking-widest uppercase mt-0.5">
+                    <h2 style={{ fontSize: '16px', fontWeight: 600, color: 'rgba(255,255,255,0.9)', textTransform: 'capitalize', lineHeight: 1.2 }}>
+                      {headerLabel}
+                    </h2>
+                    <p style={{ fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>
                       {appointments.length} rendez-vous cette semaine
                     </p>
                   </>
@@ -166,42 +203,90 @@ export default function CalendarPage() {
             </AnimatePresence>
           </div>
 
+          {/* Today button */}
           <button
             onClick={() => setCurrentDate(new Date())}
-            className="ml-1 text-[11px] text-salon-gold border border-salon-gold/30 hover:bg-salon-pink/30 px-2.5 py-1 rounded-lg transition-colors duration-150"
+            style={{
+              marginLeft: '4px',
+              fontSize: '11px',
+              padding: '5px 12px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              background: 'rgba(201,169,110,0.08)',
+              border: '1px solid rgba(201,169,110,0.2)',
+              color: '#C9A96E',
+              fontWeight: 500,
+              transition: 'all 0.15s',
+            }}
           >
             Aujourd&apos;hui
           </button>
         </div>
 
         {/* View toggle */}
-        <div className="flex gap-1 bg-salon-rose/10 p-1 rounded-xl">
+        <div
+          style={{
+            display: 'flex',
+            gap: '4px',
+            padding: '4px',
+            borderRadius: '12px',
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.06)',
+          }}
+        >
           {(['day', 'week'] as View[]).map(v => (
             <button
               key={v}
               onClick={() => setView(v)}
-              className={`relative px-3 py-1.5 text-xs font-medium rounded-lg transition-colors duration-150 ${
-                view === v ? 'text-white' : 'text-salon-muted hover:text-salon-dark'
-              }`}
+              className="relative"
+              style={{
+                padding: '6px 16px',
+                fontSize: '12px',
+                fontWeight: 500,
+                borderRadius: '8px',
+                cursor: 'pointer',
+                border: 'none',
+                background: 'transparent',
+                color: view === v ? '#C9A96E' : 'rgba(255,255,255,0.4)',
+                transition: 'color 0.15s',
+                position: 'relative',
+                zIndex: 1,
+              }}
             >
               {view === v && (
                 <motion.span
                   layoutId="view-pill"
-                  className="absolute inset-0 bg-gradient-to-br from-salon-dark to-salon-sidebar-bottom rounded-lg"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: '8px',
+                    background: 'rgba(201,169,110,0.12)',
+                    border: '1px solid rgba(201,169,110,0.2)',
+                    zIndex: -1,
+                  }}
                   transition={{ type: 'spring', damping: 25, stiffness: 350 }}
                 />
               )}
-              <span className="relative z-10">{v === 'day' ? 'Jour' : 'Semaine'}</span>
+              <span style={{ position: 'relative' }}>{v === 'day' ? 'Jour' : 'Semaine'}</span>
             </button>
           ))}
         </div>
       </motion.div>
 
+      {/* Error */}
       {fetchError && (
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-red-600 text-sm bg-red-50 px-3 py-2 rounded-xl mb-4"
+          style={{
+            fontSize: '13px',
+            padding: '10px 14px',
+            borderRadius: '12px',
+            marginBottom: '16px',
+            color: '#F87171',
+            background: 'rgba(239,68,68,0.08)',
+            border: '1px solid rgba(239,68,68,0.15)',
+          }}
         >
           {fetchError}
         </motion.p>
@@ -212,9 +297,9 @@ export default function CalendarPage() {
         <div className="grid grid-cols-6 gap-2">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="space-y-2">
-              <div className="h-16 bg-salon-rose/10 rounded-xl animate-pulse" />
-              <div className="h-16 bg-salon-rose/5 rounded-xl animate-pulse" style={{ animationDelay: `${i * 80}ms` }} />
-              <div className="h-12 bg-salon-rose/5 rounded-xl animate-pulse" style={{ animationDelay: `${i * 120}ms` }} />
+              <div style={{ height: '64px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 80}ms` }} />
+              <div style={{ height: '64px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 120}ms` }} />
+              <div style={{ height: '48px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 160}ms` }} />
             </div>
           ))}
         </div>
