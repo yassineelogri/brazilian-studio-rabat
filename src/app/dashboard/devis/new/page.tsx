@@ -79,7 +79,7 @@ export default function NewDevisPage() {
 
     supabase
       .from('appointments')
-      .select('id, date, start_time, services(name, price)')
+      .select('id, date, start_time, services(name)')
       .eq('client_id', clientId)
       .gte('date', fromDate)
       .order('date', { ascending: false })
@@ -111,7 +111,7 @@ export default function NewDevisPage() {
         id: crypto.randomUUID(),
         description: appt.services,
         quantity: 1,
-        unit_price: serviceFromCatalog?.price ?? 0,
+        unit_price: 0,
       }
       appendItemRef.current?.(newItem)
     }

@@ -13,6 +13,7 @@ interface SaleItem {
 export default function NewVentePage() {
   const [products, setProducts] = useState<Product[]>([])
   const [appointments, setAppointments] = useState<AppointmentWithRelations[]>([])
+  const [clientAppointments, setClientAppointments] = useState<AppointmentWithRelations[]>([])
   const [staff, setStaff] = useState<{ id: string; name: string }[]>([])
   const [search, setSearch] = useState('')
   const [items, setItems] = useState<SaleItem[]>([])
@@ -23,6 +24,11 @@ export default function NewVentePage() {
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  // Client state
+  const [clients, setClients] = useState<{ id: string; name: string; phone: string }[]>([])
+  const [clientSearch, setClientSearch] = useState('')
+  const [clientId, setClientId] = useState('')
+
   const supabase = createClient()
 
   useEffect(() => {
@@ -31,12 +37,38 @@ export default function NewVentePage() {
       .in('status', ['pending', 'confirmed']).order('date', { ascending: false }).limit(50)
       .then(({ data }) => setAppointments((data as unknown as AppointmentWithRelations[]) || []))
     supabase.from('staff').select('id, name').eq('is_active', true).then(({ data }) => setStaff(data || []))
-  }, [])
+    supabase.from('clients').select('id, name, phone').order('name').then(({ data }) => setClients(data || []))
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Load client-specific appointments when clientId changes
+  useEffect(() => {
+    setAppointmentId('')
+    setClientAppointments([])
+    if (!clientId) return
+    const threeMonthsAgo = new Date()
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3)
+    supabase
+      .from('appointments')
+      .select('*, clients(name, phone), services(name, color), staff(name)')
+      .eq('client_id', clientId)
+      .gte('date', threeMonthsAgo.toISOString().split('T')[0])
+      .order('date', { ascending: false })
+      .limit(20)
+      .then(({ data }) => setClientAppointments((data as unknown as AppointmentWithRelations[]) || []))
+  }, [clientId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const filteredProducts = products.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
     (p.brand && p.brand.toLowerCase().includes(search.toLowerCase()))
   )
+
+  const filteredClients = clients.filter(c =>
+    c.name.toLowerCase().includes(clientSearch.toLowerCase()) ||
+    c.phone.includes(clientSearch)
+  )
+
+  const selectedClient = clients.find(c => c.id === clientId)
+  const displayedAppointments = clientId ? clientAppointments : appointments
 
   function addItem(product: Product) {
     setItems(prev => {
@@ -91,6 +123,8 @@ export default function NewVentePage() {
     setAppointmentId('')
     setSoldBy('')
     setNotes('')
+    setClientId('')
+    setClientSearch('')
   }
 
   if (success) {
@@ -182,26 +216,59 @@ export default function NewVentePage() {
 
         {/* Optional fields */}
         <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-salon-dark">Filtrer par client (optionnel)</label>
+            {selectedClient ? (
+              <div className="flex items-center justify-between bg-salon-cream px-3 py-2 rounded-lg text-sm border border-salon-rose/20">
+                <span className="font-medium text-salon-dark">{selectedClient.name} — {selectedClient.phone}</span>
+                <button type="button" onClick={() => { setClientId(''); setClientSearch('') }} className="text-salon-muted hover:text-red-500 text-xs ml-2">✕</button>
+              </div>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="Rechercher un client..."
+                  value={clientSearch}
+                  onChange={e => setClientSearch(e.target.value)}
+                  className="w-full border border-salon-rose/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-salon-rose/50"
+                />
+                {clientSearch && (
+                  <div className="border border-salon-rose/20 rounded-lg mt-1 bg-white shadow-sm max-h-40 overflow-y-auto">
+                    {filteredClients.length === 0 ? (
+                      <p className="px-3 py-2 text-sm text-salon-muted">Aucun client trouvé</p>
+                    ) : filteredClients.map(c => (
+                      <button key={c.id} type="button"
+                        onClick={() => { setClientId(c.id); setClientSearch('') }}
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-salon-cream transition">
+                        {c.name} — {c.phone}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
           <div>
             <label className="block text-sm font-medium text-salon-dark mb-1">Lier à un RDV (optionnel)</label>
             <select value={appointmentId} onChange={e => setAppointmentId(e.target.value)}
               className="w-full border border-salon-rose/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-salon-rose/50">
               <option value="">— Vente indépendante —</option>
-              {appointments.map(a => (
+              {displayedAppointments.map(a => (
                 <option key={a.id} value={a.id}>
-                  {a.date} {a.start_time} — {(a.clients as any)?.name}
+                  {a.date} à {a.start_time?.slice(0, 5)} — {(a.clients as any)?.name} — {(a.services as any)?.name}
                 </option>
               ))}
             </select>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-salon-dark mb-1">Vendu par (optionnel)</label>
-            <select value={soldBy} onChange={e => setSoldBy(e.target.value)}
-              className="w-full border border-salon-rose/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-salon-rose/50">
-              <option value="">—</option>
-              {staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-            </select>
-          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-salon-dark mb-1">Vendu par (optionnel)</label>
+          <select value={soldBy} onChange={e => setSoldBy(e.target.value)}
+            className="w-full border border-salon-rose/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-salon-rose/50">
+            <option value="">—</option>
+            {staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+          </select>
         </div>
 
         <div>
