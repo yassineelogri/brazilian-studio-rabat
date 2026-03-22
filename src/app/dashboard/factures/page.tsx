@@ -13,11 +13,22 @@ const STATUS_LABELS: Record<string, string> = {
   paid:      'Payé',
   cancelled: 'Annulé',
 }
-const STATUS_COLORS: Record<string, string> = {
-  draft:     'bg-gray-100 text-gray-600',
-  sent:      'bg-blue-100 text-blue-700',
-  paid:      'bg-green-100 text-green-700',
-  cancelled: 'bg-red-100 text-red-700',
+
+const STATUS_STYLES: Record<string, React.CSSProperties> = {
+  draft:     { background: 'rgba(156,163,175,0.15)', color: '#9CA3AF' },
+  sent:      { background: 'rgba(96,165,250,0.15)',  color: '#60A5FA' },
+  paid:      { background: 'rgba(74,222,128,0.15)',  color: '#4ADE80' },
+  cancelled: { background: 'rgba(248,113,113,0.15)', color: '#F87171' },
+}
+
+const inputStyle: React.CSSProperties = {
+  background: 'rgba(255,255,255,0.07)',
+  border: '1px solid rgba(255,255,255,0.12)',
+  borderRadius: '10px',
+  color: 'rgba(255,255,255,0.9)',
+  padding: '8px 12px',
+  fontSize: '13px',
+  outline: 'none',
 }
 
 interface Summary {
@@ -65,11 +76,7 @@ export default function FacturesListPage() {
 
   async function handleSend(id: string) {
     setActionLoading(id + '-send')
-    const res = await fetch(`/api/factures/${id}/send`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: '{}',
-    })
+    const res = await fetch(`/api/factures/${id}/send`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
     if (!res.ok) {
       const body = await res.json()
       setError(body.error === 'no_email' ? "Ce client n'a pas d'adresse email." : "Erreur lors de l'envoi.")
@@ -79,12 +86,7 @@ export default function FacturesListPage() {
   }
 
   function openPayModal(facture: FactureWithRelations) {
-    setPayModal({
-      factureId: facture.id,
-      totalTtc: facture.total_ttc,
-      paymentMethod: 'cash',
-      paidAmount: facture.total_ttc.toFixed(2),
-    })
+    setPayModal({ factureId: facture.id, totalTtc: facture.total_ttc, paymentMethod: 'cash', paidAmount: facture.total_ttc.toFixed(2) })
   }
 
   async function handleMarkPaid() {
@@ -94,14 +96,9 @@ export default function FacturesListPage() {
     const res = await fetch(`/api/factures/${factureId}/mark-paid`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        payment_method: paymentMethod,
-        paid_amount: parseFloat(paidAmount),
-      }),
+      body: JSON.stringify({ payment_method: paymentMethod, paid_amount: parseFloat(paidAmount) }),
     })
-    if (!res.ok) {
-      setError('Erreur lors du marquage comme payé.')
-    }
+    if (!res.ok) setError('Erreur lors du marquage comme payé.')
     setPayModal(null)
     setActionLoading(null)
     await load()
@@ -110,14 +107,8 @@ export default function FacturesListPage() {
   async function handleCancel(id: string, number: string) {
     if (!confirm(`Annuler la facture ${number} ?`)) return
     setActionLoading(id + '-cancel')
-    const res = await fetch(`/api/factures/${id}/cancel`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: '{}',
-    })
-    if (!res.ok) {
-      setError('Erreur lors de l\'annulation.')
-    }
+    const res = await fetch(`/api/factures/${id}/cancel`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
+    if (!res.ok) setError('Erreur lors de l\'annulation.')
     setActionLoading(null)
     await load()
   }
@@ -126,152 +117,104 @@ export default function FacturesListPage() {
     if (!confirm(`Supprimer définitivement la facture ${number} ?`)) return
     setActionLoading(id + '-del')
     const res = await fetch(`/api/factures/${id}`, { method: 'DELETE' })
-    if (!res.ok) {
-      setError('Erreur lors de la suppression.')
-    }
+    if (!res.ok) setError('Erreur lors de la suppression.')
     setActionLoading(null)
     await load()
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-salon-dark">Factures</h1>
-        <Link href="/dashboard/factures/new" className="btn-primary flex items-center gap-2">
-          <Plus size={16} /> Nouvelle facture
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+        <div>
+          <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Finance</p>
+          <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px' }}>Factures</h1>
+        </div>
+        <Link href="/dashboard/factures/new"
+          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '12px', padding: '10px 18px', fontWeight: 600, textDecoration: 'none', fontSize: '13px' }}>
+          <Plus size={14} /> Nouvelle facture
         </Link>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg text-sm flex justify-between items-center">
+        <div style={{ background: 'rgba(248,113,113,0.12)', border: '1px solid rgba(248,113,113,0.25)', color: '#F87171', padding: '10px 16px', borderRadius: '12px', fontSize: '13px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span>{error}</span>
-          <button type="button" onClick={() => setError(null)} className="text-red-400 hover:text-red-600 ml-4">✕</button>
+          <button type="button" onClick={() => setError(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#F87171', marginLeft: '12px', fontSize: '16px', lineHeight: 1 }}>✕</button>
         </div>
       )}
 
-      {/* Revenue summary bar */}
+      {/* Revenue summary cards */}
       {summary && !loading && (
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-white border border-salon-rose/20 rounded-xl px-5 py-4 text-center">
-            <p className="text-xs text-salon-muted mb-1 uppercase tracking-wide">Total HT</p>
-            <p className="text-lg font-semibold text-salon-dark">{summary.subtotal_ht.toFixed(2)} MAD</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+          <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '20px', textAlign: 'center' }}>
+            <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '6px' }}>Total HT</p>
+            <p style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>{summary.subtotal_ht.toFixed(2)} MAD</p>
           </div>
-          <div className="bg-white border border-salon-rose/20 rounded-xl px-5 py-4 text-center">
-            <p className="text-xs text-salon-muted mb-1 uppercase tracking-wide">Total TVA</p>
-            <p className="text-lg font-semibold text-salon-dark">{summary.tva_amount.toFixed(2)} MAD</p>
+          <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '20px', textAlign: 'center' }}>
+            <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '6px' }}>Total TVA</p>
+            <p style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>{summary.tva_amount.toFixed(2)} MAD</p>
           </div>
-          <div className="bg-salon-pink/10 border border-salon-rose/30 rounded-xl px-5 py-4 text-center">
-            <p className="text-xs text-salon-muted mb-1 uppercase tracking-wide">Total TTC</p>
-            <p className="text-lg font-bold text-salon-pink">{summary.total_ttc.toFixed(2)} MAD</p>
+          <div style={{ background: 'rgba(201,169,110,0.08)', border: '1px solid rgba(201,169,110,0.2)', borderRadius: '16px', padding: '20px', textAlign: 'center' }}>
+            <p style={{ fontSize: '10px', color: 'rgba(201,169,110,0.6)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '6px' }}>Total TTC</p>
+            <p style={{ fontSize: '18px', fontWeight: 700, color: '#C9A96E' }}>{summary.total_ttc.toFixed(2)} MAD</p>
           </div>
         </div>
       )}
 
       {/* Filters */}
-      <div className="flex gap-3 flex-wrap">
-        <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-salon-muted" />
-          <input
-            type="text"
-            placeholder="Rechercher..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="input-field pl-8 w-56 text-sm"
-            title="Rechercher une facture"
-          />
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ position: 'relative' }}>
+          <Search size={13} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)' }} />
+          <input type="text" placeholder="Rechercher..." value={search} onChange={e => setSearch(e.target.value)}
+            style={{ ...inputStyle, paddingLeft: '30px', width: '200px' }} title="Rechercher une facture" />
         </div>
-        <select
-          value={statusFilter}
-          onChange={e => setStatusFilter(e.target.value)}
-          className="input-field text-sm w-40"
-          title="Filtrer par statut"
-        >
+        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ ...inputStyle, width: '160px' }} title="Filtrer par statut">
           <option value="">Tous les statuts</option>
-          {Object.entries(STATUS_LABELS).map(([v, l]) => (
-            <option key={v} value={v}>{l}</option>
-          ))}
+          {Object.entries(STATUS_LABELS).map(([v, l]) => (<option key={v} value={v}>{l}</option>))}
         </select>
-        <div className="flex items-center gap-1 text-sm text-salon-muted">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
           <span>Du</span>
-          <input
-            type="date"
-            value={dateFrom}
-            onChange={e => setDateFrom(e.target.value)}
-            className="input-field text-sm"
-            title="Date de début"
-          />
+          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={inputStyle} title="Date de début" />
         </div>
-        <div className="flex items-center gap-1 text-sm text-salon-muted">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
           <span>Au</span>
-          <input
-            type="date"
-            value={dateTo}
-            onChange={e => setDateTo(e.target.value)}
-            className="input-field text-sm"
-            title="Date de fin"
-          />
+          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={inputStyle} title="Date de fin" />
         </div>
-        <button type="button" onClick={load} className="btn-secondary flex items-center gap-1 text-sm">
-          <RefreshCw size={14} /> Actualiser
+        <button type="button" onClick={load} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)', padding: '8px 14px', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}>
+          <RefreshCw size={13} /> Actualiser
         </button>
       </div>
 
-      {/* Mark as Paid modal overlay */}
+      {/* Pay modal */}
       {payModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-xl shadow-lg p-6 w-80 space-y-4">
-            <h2 className="text-base font-semibold text-salon-dark">Marquer comme payé</h2>
-            <div className="space-y-3">
+        <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
+          <div style={{ background: '#1C1816', borderRadius: '20px', padding: '28px', width: '320px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <h2 style={{ fontSize: '18px', fontFamily: 'serif', fontWeight: 300, color: 'rgba(255,255,255,0.9)' }}>Marquer comme payé</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div>
-                <label htmlFor="pay-method" className="block text-xs text-salon-muted mb-1">
-                  Mode de paiement
-                </label>
-                <select
-                  id="pay-method"
-                  value={payModal.paymentMethod}
-                  onChange={e =>
-                    setPayModal(prev =>
-                      prev ? { ...prev, paymentMethod: e.target.value as 'cash' | 'card' | 'transfer' } : prev
-                    )
-                  }
-                  className="input-field text-sm w-full"
-                >
+                <label htmlFor="pay-method" style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>Mode de paiement</label>
+                <select id="pay-method" value={payModal.paymentMethod}
+                  onChange={e => setPayModal(prev => prev ? { ...prev, paymentMethod: e.target.value as 'cash' | 'card' | 'transfer' } : prev)}
+                  style={{ width: '100%', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '8px 12px', fontSize: '13px', outline: 'none' }}>
                   <option value="cash">Espèces</option>
                   <option value="card">Carte</option>
                   <option value="transfer">Virement</option>
                 </select>
               </div>
               <div>
-                <label htmlFor="pay-amount" className="block text-xs text-salon-muted mb-1">
-                  Montant payé (MAD)
-                </label>
-                <input
-                  id="pay-amount"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={payModal.paidAmount}
-                  onChange={e =>
-                    setPayModal(prev => prev ? { ...prev, paidAmount: e.target.value } : prev)
-                  }
-                  className="input-field text-sm w-full"
-                />
+                <label htmlFor="pay-amount" style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>Montant payé (MAD)</label>
+                <input id="pay-amount" type="number" min="0" step="0.01" value={payModal.paidAmount}
+                  onChange={e => setPayModal(prev => prev ? { ...prev, paidAmount: e.target.value } : prev)}
+                  style={{ width: '100%', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '8px 12px', fontSize: '13px', outline: 'none' }} />
               </div>
             </div>
-            <div className="flex justify-end gap-2 pt-1">
-              <button
-                type="button"
-                onClick={() => setPayModal(null)}
-                className="btn-secondary text-sm"
-              >
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <button type="button" onClick={() => setPayModal(null)}
+                style={{ padding: '9px 18px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}>
                 Annuler
               </button>
-              <button
-                type="button"
-                onClick={handleMarkPaid}
-                disabled={!!actionLoading}
-                className="btn-primary text-sm"
-              >
+              <button type="button" onClick={handleMarkPaid} disabled={!!actionLoading}
+                style={{ padding: '9px 18px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '10px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
                 Confirmer
               </button>
             </div>
@@ -281,99 +224,62 @@ export default function FacturesListPage() {
 
       {/* Table */}
       {loading ? (
-        <p className="text-salon-muted text-sm">Chargement...</p>
+        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Chargement...</p>
       ) : factures.length === 0 ? (
-        <p className="text-salon-muted text-sm">Aucune facture trouvée.</p>
+        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Aucune facture trouvée.</p>
       ) : (
-        <div className="bg-white rounded-xl border border-salon-rose/20 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-salon-cream border-b border-salon-rose/20">
-              <tr>
-                <th className="text-left px-4 py-3 text-salon-muted font-medium">Référence</th>
-                <th className="text-left px-4 py-3 text-salon-muted font-medium">Client</th>
-                <th className="text-left px-4 py-3 text-salon-muted font-medium">Date</th>
-                <th className="text-right px-4 py-3 text-salon-muted font-medium">Total TTC</th>
-                <th className="text-center px-4 py-3 text-salon-muted font-medium">Statut</th>
-                <th className="text-right px-4 py-3 text-salon-muted font-medium">Actions</th>
+        <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+            <thead>
+              <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                {['Référence', 'Client', 'Date', 'Total TTC', 'Statut', 'Actions'].map((h, i) => (
+                  <th key={h} style={{ padding: '12px 14px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', textAlign: i === 3 ? 'right' : i === 4 || i === 5 ? 'center' : 'left' }}>{h}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {factures.map(f => (
-                <tr key={f.id} className="border-b border-salon-rose/10 hover:bg-salon-cream/50">
-                  <td className="px-4 py-3">
-                    <Link href={`/dashboard/factures/${f.id}`} className="font-mono text-salon-pink hover:underline">
+              {factures.map((f, i) => (
+                <tr key={f.id} style={{ borderBottom: i < factures.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+                  <td style={{ padding: '12px 14px' }}>
+                    <Link href={`/dashboard/factures/${f.id}`} style={{ fontFamily: 'monospace', color: '#C9A96E', textDecoration: 'none', fontSize: '13px' }}>
                       {f.number}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-salon-dark">{f.clients?.name}</td>
-                  <td className="px-4 py-3 text-salon-muted">
-                    {new Date(f.created_at).toLocaleDateString('fr-FR')}
-                  </td>
-                  <td className="px-4 py-3 text-right font-medium text-salon-dark">
-                    {f.total_ttc.toFixed(2)} MAD
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[f.status] ?? ''}`}>
+                  <td style={{ padding: '12px 14px', color: 'rgba(255,255,255,0.85)' }}>{f.clients?.name}</td>
+                  <td style={{ padding: '12px 14px', color: 'rgba(255,255,255,0.4)' }}>{new Date(f.created_at).toLocaleDateString('fr-FR')}</td>
+                  <td style={{ padding: '12px 14px', textAlign: 'right', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>{f.total_ttc.toFixed(2)} MAD</td>
+                  <td style={{ padding: '12px 14px', textAlign: 'center' }}>
+                    <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, ...(STATUS_STYLES[f.status] ?? {}) }}>
                       {STATUS_LABELS[f.status] ?? f.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-2">
-                      {/* PDF download — all statuses */}
-                      <a
-                        href={`/api/factures/${f.id}/pdf`}
-                        target="_blank"
-                        rel="noreferrer"
-                        title="Télécharger PDF"
-                      >
-                        <Download size={15} className="text-salon-muted hover:text-salon-dark" />
+                  <td style={{ padding: '12px 14px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+                      <a href={`/api/factures/${f.id}/pdf`} target="_blank" rel="noreferrer" title="Télécharger PDF" style={{ color: 'rgba(255,255,255,0.35)', display: 'flex' }}>
+                        <Download size={14} />
                       </a>
-
-                      {/* Send / Resend — draft or sent */}
                       {['draft', 'sent'].includes(f.status) && (
-                        <button
-                          type="button"
-                          onClick={() => handleSend(f.id)}
-                          title="Envoyer par email"
-                          disabled={!!actionLoading}
-                        >
-                          <Send size={15} className="text-salon-muted hover:text-blue-600" />
+                        <button type="button" onClick={() => handleSend(f.id)} title="Envoyer par email" disabled={!!actionLoading}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#60A5FA', padding: 0, display: 'flex' }}>
+                          <Send size={14} />
                         </button>
                       )}
-
-                      {/* Mark as Paid — sent only */}
                       {f.status === 'sent' && (
-                        <button
-                          type="button"
-                          onClick={() => openPayModal(f)}
-                          title="Marquer comme payé"
-                          disabled={!!actionLoading}
-                        >
-                          <CreditCard size={15} className="text-salon-muted hover:text-green-600" />
+                        <button type="button" onClick={() => openPayModal(f)} title="Marquer comme payé" disabled={!!actionLoading}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#4ADE80', padding: 0, display: 'flex' }}>
+                          <CreditCard size={14} />
                         </button>
                       )}
-
-                      {/* Cancel — draft or sent */}
                       {['draft', 'sent'].includes(f.status) && (
-                        <button
-                          type="button"
-                          onClick={() => handleCancel(f.id, f.number)}
-                          title="Annuler la facture"
-                          disabled={!!actionLoading}
-                        >
-                          <Ban size={15} className="text-salon-muted hover:text-red-600" />
+                        <button type="button" onClick={() => handleCancel(f.id, f.number)} title="Annuler la facture" disabled={!!actionLoading}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#F87171', padding: 0, display: 'flex' }}>
+                          <Ban size={14} />
                         </button>
                       )}
-
-                      {/* Delete — draft only */}
                       {f.status === 'draft' && (
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(f.id, f.number)}
-                          title="Supprimer"
-                          disabled={!!actionLoading}
-                        >
-                          <Trash2 size={15} className="text-salon-muted hover:text-red-600" />
+                        <button type="button" onClick={() => handleDelete(f.id, f.number)} title="Supprimer" disabled={!!actionLoading}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#F87171', padding: 0, display: 'flex' }}>
+                          <Trash2 size={14} />
                         </button>
                       )}
                     </div>

@@ -15,12 +15,23 @@ const STATUS_LABELS: Record<string, string> = {
   rejected: 'Refusé',
   expired: 'Expiré',
 }
-const STATUS_COLORS: Record<string, string> = {
-  draft:    'bg-gray-100 text-gray-600',
-  sent:     'bg-blue-100 text-blue-700',
-  accepted: 'bg-green-100 text-green-700',
-  rejected: 'bg-red-100 text-red-700',
-  expired:  'bg-orange-100 text-orange-700',
+
+const STATUS_STYLES: Record<string, React.CSSProperties> = {
+  draft:    { background: 'rgba(156,163,175,0.15)', color: '#9CA3AF' },
+  sent:     { background: 'rgba(96,165,250,0.15)',  color: '#60A5FA' },
+  accepted: { background: 'rgba(74,222,128,0.15)',  color: '#4ADE80' },
+  rejected: { background: 'rgba(248,113,113,0.15)', color: '#F87171' },
+  expired:  { background: 'rgba(251,191,36,0.15)',  color: '#FBBF24' },
+}
+
+const inputStyle: React.CSSProperties = {
+  background: 'rgba(255,255,255,0.07)',
+  border: '1px solid rgba(255,255,255,0.12)',
+  borderRadius: '10px',
+  color: 'rgba(255,255,255,0.9)',
+  padding: '8px 12px',
+  fontSize: '13px',
+  outline: 'none',
 }
 
 export default function DevisListPage() {
@@ -42,9 +53,7 @@ export default function DevisListPage() {
     if (dateFrom) params.set('from', dateFrom)
     if (dateTo)   params.set('to', dateTo)
     const res = await fetch(`/api/devis?${params}`)
-    if (res.ok) {
-      setDevis(await res.json())
-    }
+    if (res.ok) setDevis(await res.json())
     setLoading(false)
   }
 
@@ -93,115 +102,113 @@ export default function DevisListPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-salon-dark">Devis</h1>
-        <Link href="/dashboard/devis/new" className="btn-primary flex items-center gap-2">
-          <Plus size={16} /> Nouveau devis
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+        <div>
+          <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Finance</p>
+          <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px' }}>Devis</h1>
+        </div>
+        <Link href="/dashboard/devis/new"
+          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '12px', padding: '10px 18px', fontWeight: 600, textDecoration: 'none', fontSize: '13px' }}>
+          <Plus size={14} /> Nouveau devis
         </Link>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg text-sm flex justify-between">
+        <div style={{ background: 'rgba(248,113,113,0.12)', border: '1px solid rgba(248,113,113,0.25)', color: '#F87171', padding: '10px 16px', borderRadius: '12px', fontSize: '13px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {error}
-          <button onClick={() => setError(null)} className="text-red-400 hover:text-red-600">✕</button>
+          <button onClick={() => setError(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#F87171', marginLeft: '12px', fontSize: '16px', lineHeight: 1 }}>✕</button>
         </div>
       )}
 
       {/* Filters */}
-      <div className="flex gap-3 flex-wrap">
-        <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-salon-muted" />
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ position: 'relative' }}>
+          <Search size={13} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)' }} />
           <input
             type="text"
             placeholder="Rechercher..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="input-field pl-8 w-56 text-sm"
+            style={{ ...inputStyle, paddingLeft: '30px', width: '200px' }}
           />
         </div>
-        <select
-          value={statusFilter}
-          onChange={e => setStatusFilter(e.target.value)}
-          className="input-field text-sm w-40"
-        >
+        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ ...inputStyle, width: '160px' }}>
           <option value="">Tous les statuts</option>
           {Object.entries(STATUS_LABELS).map(([v, l]) => (
             <option key={v} value={v}>{l}</option>
           ))}
         </select>
-        <div className="flex items-center gap-1 text-sm text-salon-muted">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
           <span>Du</span>
-          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="input-field text-sm" />
+          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={inputStyle} />
         </div>
-        <div className="flex items-center gap-1 text-sm text-salon-muted">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
           <span>Au</span>
-          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="input-field text-sm" />
+          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={inputStyle} />
         </div>
-        <button onClick={load} className="btn-secondary flex items-center gap-1 text-sm">
-          <RefreshCw size={14} /> Actualiser
+        <button onClick={load} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)', padding: '8px 14px', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}>
+          <RefreshCw size={13} /> Actualiser
         </button>
       </div>
 
       {/* Table */}
       {loading ? (
-        <p className="text-salon-muted text-sm">Chargement...</p>
+        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Chargement...</p>
       ) : devis.length === 0 ? (
-        <p className="text-salon-muted text-sm">Aucun devis trouvé.</p>
+        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Aucun devis trouvé.</p>
       ) : (
-        <div className="bg-white rounded-xl border border-salon-rose/20 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-salon-cream border-b border-salon-rose/20">
-              <tr>
-                <th className="text-left px-4 py-3 text-salon-muted font-medium">Référence</th>
-                <th className="text-left px-4 py-3 text-salon-muted font-medium">Client</th>
-                <th className="text-left px-4 py-3 text-salon-muted font-medium">Date</th>
-                <th className="text-right px-4 py-3 text-salon-muted font-medium">Total TTC</th>
-                <th className="text-center px-4 py-3 text-salon-muted font-medium">Statut</th>
-                <th className="text-right px-4 py-3 text-salon-muted font-medium">Actions</th>
+        <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+            <thead>
+              <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                {['Référence', 'Client', 'Date', 'Total TTC', 'Statut', 'Actions'].map((h, i) => (
+                  <th key={h} style={{ padding: '12px 14px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', textAlign: i === 3 ? 'right' : i === 4 || i === 5 ? 'center' : 'left' }}>{h}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {devis.map(d => (
-                <tr key={d.id} className="border-b border-salon-rose/10 hover:bg-salon-cream/50">
-                  <td className="px-4 py-3">
-                    <Link href={`/dashboard/devis/${d.id}`} className="font-mono text-salon-pink hover:underline">
+              {devis.map((d, i) => (
+                <tr key={d.id} style={{ borderBottom: i < devis.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+                  <td style={{ padding: '12px 14px' }}>
+                    <Link href={`/dashboard/devis/${d.id}`} style={{ fontFamily: 'monospace', color: '#C9A96E', textDecoration: 'none', fontSize: '13px' }}>
                       {d.number}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-salon-dark">{d.clients?.name}</td>
-                  <td className="px-4 py-3 text-salon-muted">
-                    {new Date(d.created_at).toLocaleDateString('fr-FR')}
-                  </td>
-                  <td className="px-4 py-3 text-right font-medium text-salon-dark">
-                    {d.total_ttc.toFixed(2)} MAD
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[d.status] ?? ''}`}>
+                  <td style={{ padding: '12px 14px', color: 'rgba(255,255,255,0.85)' }}>{d.clients?.name}</td>
+                  <td style={{ padding: '12px 14px', color: 'rgba(255,255,255,0.4)' }}>{new Date(d.created_at).toLocaleDateString('fr-FR')}</td>
+                  <td style={{ padding: '12px 14px', textAlign: 'right', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>{d.total_ttc.toFixed(2)} MAD</td>
+                  <td style={{ padding: '12px 14px', textAlign: 'center' }}>
+                    <span style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, ...(STATUS_STYLES[d.status] ?? {}) }}>
                       {STATUS_LABELS[d.status] ?? d.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-2">
-                      <a href={`/api/devis/${d.id}/pdf`} target="_blank" rel="noreferrer" title="Télécharger PDF">
-                        <Download size={15} className="text-salon-muted hover:text-salon-dark" />
+                  <td style={{ padding: '12px 14px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+                      <a href={`/api/devis/${d.id}/pdf`} target="_blank" rel="noreferrer" title="Télécharger PDF" style={{ color: 'rgba(255,255,255,0.35)', display: 'flex' }}>
+                        <Download size={14} />
                       </a>
                       {['draft', 'sent'].includes(d.status) && (
-                        <button onClick={() => handleSend(d.id)} title="Envoyer par email" disabled={!!actionLoading}>
-                          <Send size={15} className="text-salon-muted hover:text-blue-600" />
+                        <button onClick={() => handleSend(d.id)} title="Envoyer par email" disabled={!!actionLoading}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#60A5FA', padding: 0, display: 'flex' }}>
+                          <Send size={14} />
                         </button>
                       )}
                       {['draft', 'sent'].includes(d.status) && (
-                        <button onClick={() => handleConvert(d.id)} title="Convertir en facture" disabled={!!actionLoading}>
-                          <ArrowRightLeft size={15} className="text-salon-muted hover:text-green-600" />
+                        <button onClick={() => handleConvert(d.id)} title="Convertir en facture" disabled={!!actionLoading}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#4ADE80', padding: 0, display: 'flex' }}>
+                          <ArrowRightLeft size={14} />
                         </button>
                       )}
-                      <button onClick={() => handleDuplicate(d.id)} title="Dupliquer" disabled={!!actionLoading}>
-                        <Copy size={15} className="text-salon-muted hover:text-salon-dark" />
+                      <button onClick={() => handleDuplicate(d.id)} title="Dupliquer" disabled={!!actionLoading}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.35)', padding: 0, display: 'flex' }}>
+                        <Copy size={14} />
                       </button>
                       {d.status === 'draft' && (
-                        <button onClick={() => handleDelete(d.id, d.number)} title="Supprimer" disabled={!!actionLoading}>
-                          <Trash2 size={15} className="text-salon-muted hover:text-red-600" />
+                        <button onClick={() => handleDelete(d.id, d.number)} title="Supprimer" disabled={!!actionLoading}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#F87171', padding: 0, display: 'flex' }}>
+                          <Trash2 size={14} />
                         </button>
                       )}
                     </div>

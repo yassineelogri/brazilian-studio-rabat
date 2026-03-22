@@ -10,6 +10,27 @@ interface SaleItem {
   quantity: number
 }
 
+const inputStyle: React.CSSProperties = {
+  width: '100%',
+  background: 'rgba(255,255,255,0.07)',
+  border: '1px solid rgba(255,255,255,0.12)',
+  borderRadius: '10px',
+  color: 'rgba(255,255,255,0.9)',
+  padding: '8px 12px',
+  fontSize: '13px',
+  outline: 'none',
+}
+
+const labelStyle: React.CSSProperties = {
+  display: 'block',
+  fontSize: '11px',
+  fontWeight: 500,
+  color: 'rgba(255,255,255,0.4)',
+  textTransform: 'uppercase',
+  letterSpacing: '0.1em',
+  marginBottom: '6px',
+}
+
 export default function NewVentePage() {
   const [products, setProducts] = useState<Product[]>([])
   const [appointments, setAppointments] = useState<AppointmentWithRelations[]>([])
@@ -24,7 +45,6 @@ export default function NewVentePage() {
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  // Client state
   const [clients, setClients] = useState<{ id: string; name: string; phone: string }[]>([])
   const [clientSearch, setClientSearch] = useState('')
   const [clientId, setClientId] = useState('')
@@ -40,7 +60,6 @@ export default function NewVentePage() {
     supabase.from('clients').select('id, name, phone').order('name').then(({ data }) => setClients(data || []))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Load client-specific appointments when clientId changes
   useEffect(() => {
     setAppointmentId('')
     setClientAppointments([])
@@ -129,10 +148,13 @@ export default function NewVentePage() {
 
   if (success) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 gap-4">
-        <CheckCircle size={48} className="text-green-500" />
-        <p className="text-lg font-medium text-salon-dark">Vente enregistrée !</p>
-        <button onClick={() => setSuccess(false)} className="bg-salon-gold text-white px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition">
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 0', gap: '16px' }}>
+        <CheckCircle size={48} style={{ color: '#4ADE80' }} />
+        <p style={{ fontSize: '18px', fontFamily: 'serif', fontWeight: 300, color: 'rgba(255,255,255,0.9)' }}>Vente enregistrée !</p>
+        <button
+          onClick={() => setSuccess(false)}
+          style={{ background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', padding: '10px 24px', borderRadius: '12px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '14px' }}
+        >
           Nouvelle vente
         </button>
       </div>
@@ -140,30 +162,34 @@ export default function NewVentePage() {
   }
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-xl font-semibold text-salon-dark flex items-center gap-2 mb-6">
-        <ShoppingBag size={20} /> Enregistrer une vente
-      </h1>
+    <div style={{ maxWidth: '680px' }}>
+      {/* Header */}
+      <div style={{ marginBottom: '32px' }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Commerce</p>
+        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <ShoppingBag size={22} style={{ color: '#C9A96E' }} /> Enregistrer une vente
+        </h1>
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {/* Product search */}
         <div>
-          <label className="block text-sm font-medium text-salon-dark mb-2">Rechercher un produit</label>
+          <label style={labelStyle}>Rechercher un produit</label>
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Nom ou marque..."
-            className="w-full border border-salon-rose/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-salon-rose/50"
+            style={inputStyle}
           />
           {search && (
-            <div className="border border-salon-rose/20 rounded-lg mt-1 bg-white shadow-sm max-h-48 overflow-y-auto">
+            <div style={{ background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', marginTop: '4px', maxHeight: '200px', overflowY: 'auto' }}>
               {filteredProducts.length === 0 ? (
-                <p className="px-3 py-2 text-sm text-salon-muted">Aucun produit trouvé</p>
+                <p style={{ padding: '10px 12px', fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>Aucun produit trouvé</p>
               ) : filteredProducts.map(p => (
                 <button key={p.id} type="button" onClick={() => addItem(p)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-salon-cream text-left transition">
-                  <span className="font-medium">{p.name} {p.brand && <span className="text-salon-muted">— {p.brand}</span>}</span>
-                  <span className="text-salon-muted">Stock: {p.stock_quantity} | {p.selling_price.toFixed(2)} DH</span>
+                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)', textAlign: 'left' }}>
+                  <span style={{ fontWeight: 500 }}>{p.name} {p.brand && <span style={{ color: 'rgba(255,255,255,0.4)' }}>— {p.brand}</span>}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>Stock: {p.stock_quantity} | {p.selling_price.toFixed(2)} DH</span>
                 </button>
               ))}
             </div>
@@ -172,41 +198,39 @@ export default function NewVentePage() {
 
         {/* Items list */}
         {items.length > 0 && (
-          <div className="bg-white rounded-xl border border-salon-rose/20 overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-salon-cream text-salon-muted text-xs uppercase tracking-wide">
-                <tr>
-                  <th className="text-left px-4 py-3">Produit</th>
-                  <th className="text-right px-4 py-3">Prix</th>
-                  <th className="text-center px-4 py-3">Qté</th>
-                  <th className="text-right px-4 py-3">Total</th>
-                  <th className="px-4 py-3"></th>
+          <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                  {['Produit', 'Prix', 'Qté', 'Total', ''].map((h, i) => (
+                    <th key={i} style={{ padding: '10px 14px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', textAlign: i === 1 || i === 3 ? 'right' : i === 2 ? 'center' : 'left' }}>{h}</th>
+                  ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-salon-rose/10">
-                {items.map(({ product, quantity }) => (
-                  <tr key={product.id}>
-                    <td className="px-4 py-3 font-medium text-salon-dark">{product.name}</td>
-                    <td className="px-4 py-3 text-right text-salon-muted">{product.selling_price.toFixed(2)} DH</td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center justify-center gap-2">
-                        <button type="button" onClick={() => updateQty(product.id, -1)} className="text-salon-muted hover:text-salon-dark"><Minus size={12} /></button>
-                        <span className="w-6 text-center font-medium">{quantity}</span>
+              <tbody>
+                {items.map(({ product, quantity }, i) => (
+                  <tr key={product.id} style={{ borderBottom: i < items.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+                    <td style={{ padding: '10px 14px', fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{product.name}</td>
+                    <td style={{ padding: '10px 14px', textAlign: 'right', color: 'rgba(255,255,255,0.4)' }}>{product.selling_price.toFixed(2)} DH</td>
+                    <td style={{ padding: '10px 14px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                        <button type="button" onClick={() => updateQty(product.id, -1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: 0 }}><Minus size={12} /></button>
+                        <span style={{ width: '24px', textAlign: 'center', fontWeight: 600, color: 'rgba(255,255,255,0.9)' }}>{quantity}</span>
                         <button type="button" onClick={() => updateQty(product.id, 1)} disabled={quantity >= product.stock_quantity}
-                          className="text-salon-muted hover:text-salon-dark disabled:opacity-30"><Plus size={12} /></button>
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: quantity >= product.stock_quantity ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.4)', padding: 0 }}><Plus size={12} /></button>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-right font-medium">{(product.selling_price * quantity).toFixed(2)} DH</td>
-                    <td className="px-4 py-3 text-center">
-                      <button type="button" onClick={() => removeItem(product.id)} className="text-salon-muted hover:text-red-500 transition"><Trash2 size={14} /></button>
+                    <td style={{ padding: '10px 14px', textAlign: 'right', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>{(product.selling_price * quantity).toFixed(2)} DH</td>
+                    <td style={{ padding: '10px 14px', textAlign: 'center' }}>
+                      <button type="button" onClick={() => removeItem(product.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,113,113,0.6)', padding: 0 }}><Trash2 size={14} /></button>
                     </td>
                   </tr>
                 ))}
               </tbody>
               <tfoot>
-                <tr className="bg-salon-cream">
-                  <td colSpan={3} className="px-4 py-3 text-right font-semibold text-salon-dark">Total</td>
-                  <td className="px-4 py-3 text-right font-bold text-salon-dark">{total.toFixed(2)} DH</td>
+                <tr style={{ background: 'rgba(255,255,255,0.04)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                  <td colSpan={3} style={{ padding: '10px 14px', textAlign: 'right', fontWeight: 600, color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>Total</td>
+                  <td style={{ padding: '10px 14px', textAlign: 'right', fontWeight: 700, color: '#C9A96E' }}>{total.toFixed(2)} DH</td>
                   <td></td>
                 </tr>
               </tfoot>
@@ -215,13 +239,13 @@ export default function NewVentePage() {
         )}
 
         {/* Optional fields */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-salon-dark">Filtrer par client (optionnel)</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div>
+            <label style={labelStyle}>Filtrer par client (optionnel)</label>
             {selectedClient ? (
-              <div className="flex items-center justify-between bg-salon-cream px-3 py-2 rounded-lg text-sm border border-salon-rose/20">
-                <span className="font-medium text-salon-dark">{selectedClient.name} — {selectedClient.phone}</span>
-                <button type="button" onClick={() => { setClientId(''); setClientSearch('') }} className="text-salon-muted hover:text-red-500 text-xs ml-2">✕</button>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '8px 12px', fontSize: '13px' }}>
+                <span style={{ color: 'rgba(255,255,255,0.85)', fontWeight: 500 }}>{selectedClient.name} — {selectedClient.phone}</span>
+                <button type="button" onClick={() => { setClientId(''); setClientSearch('') }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#F87171', fontSize: '12px', padding: 0, marginLeft: '8px' }}>✕</button>
               </div>
             ) : (
               <>
@@ -230,16 +254,16 @@ export default function NewVentePage() {
                   placeholder="Rechercher un client..."
                   value={clientSearch}
                   onChange={e => setClientSearch(e.target.value)}
-                  className="w-full border border-salon-rose/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-salon-rose/50"
+                  style={inputStyle}
                 />
                 {clientSearch && (
-                  <div className="border border-salon-rose/20 rounded-lg mt-1 bg-white shadow-sm max-h-40 overflow-y-auto">
+                  <div style={{ background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', marginTop: '4px', maxHeight: '160px', overflowY: 'auto' }}>
                     {filteredClients.length === 0 ? (
-                      <p className="px-3 py-2 text-sm text-salon-muted">Aucun client trouvé</p>
+                      <p style={{ padding: '10px 12px', fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>Aucun client trouvé</p>
                     ) : filteredClients.map(c => (
                       <button key={c.id} type="button"
                         onClick={() => { setClientId(c.id); setClientSearch('') }}
-                        className="w-full text-left px-3 py-2 text-sm hover:bg-salon-cream transition">
+                        style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.85)' }}>
                         {c.name} — {c.phone}
                       </button>
                     ))}
@@ -249,9 +273,8 @@ export default function NewVentePage() {
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-salon-dark mb-1">Lier à un RDV (optionnel)</label>
-            <select value={appointmentId} onChange={e => setAppointmentId(e.target.value)}
-              className="w-full border border-salon-rose/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-salon-rose/50">
+            <label style={labelStyle}>Lier à un RDV (optionnel)</label>
+            <select value={appointmentId} onChange={e => setAppointmentId(e.target.value)} style={inputStyle}>
               <option value="">— Vente indépendante —</option>
               {displayedAppointments.map(a => (
                 <option key={a.id} value={a.id}>
@@ -263,24 +286,28 @@ export default function NewVentePage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-salon-dark mb-1">Vendu par (optionnel)</label>
-          <select value={soldBy} onChange={e => setSoldBy(e.target.value)}
-            className="w-full border border-salon-rose/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-salon-rose/50">
+          <label style={labelStyle}>Vendu par (optionnel)</label>
+          <select value={soldBy} onChange={e => setSoldBy(e.target.value)} style={inputStyle}>
             <option value="">—</option>
             {staff.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
           </select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-salon-dark mb-1">Notes (optionnel)</label>
+          <label style={labelStyle}>Notes (optionnel)</label>
           <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2}
-            className="w-full border border-salon-rose/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-salon-rose/50" />
+            style={{ ...inputStyle, resize: 'vertical' }} />
         </div>
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p style={{ color: '#F87171', fontSize: '13px' }}>{error}</p>}
 
         <button type="submit" disabled={loading || items.length === 0}
-          className="w-full bg-salon-gold text-white py-3 rounded-lg font-medium hover:opacity-90 transition disabled:opacity-50">
+          style={{
+            width: '100%', padding: '14px',
+            background: loading || items.length === 0 ? 'rgba(201,169,110,0.3)' : 'linear-gradient(135deg, #C9A96E, #B8944F)',
+            color: '#1A1410', borderRadius: '12px', fontWeight: 700, border: 'none',
+            cursor: loading || items.length === 0 ? 'not-allowed' : 'pointer', fontSize: '14px',
+          }}>
           {loading ? 'Enregistrement...' : `Enregistrer la vente — ${total.toFixed(2)} DH`}
         </button>
       </form>
