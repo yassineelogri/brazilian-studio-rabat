@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { Plus, Search, Download, Send, ArrowRightLeft, Copy, Trash2, RefreshCw } from 'lucide-react'
 import type { DevisWithRelations } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 const STATUS_LABELS: Record<string, string> = {
   draft: 'Brouillon', sent: 'Envoyé', accepted: 'Accepté', rejected: 'Refusé', expired: 'Expiré',
 }

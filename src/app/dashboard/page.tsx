@@ -3,6 +3,8 @@ import StatCard from '@/components/dashboard/StatCard'
 import Link from 'next/link'
 import { CalendarDays, Clock, TrendingUp, Users } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export const revalidate = 60 // refresh stats every minute
 
 export default async function DashboardPage() {

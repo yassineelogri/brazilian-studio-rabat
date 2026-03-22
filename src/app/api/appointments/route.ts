@@ -3,6 +3,8 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { resend, NOTIFY_EMAILS } from '@/lib/resend'
 import { newBookingEmail, bookingConfirmationEmail } from '@/lib/email-templates'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const rangeStart = searchParams.get('from')

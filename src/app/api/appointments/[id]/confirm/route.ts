@@ -4,6 +4,8 @@ import type { AppointmentWithRelations, AppointmentStatus } from '@/lib/supabase
 import { resend } from '@/lib/resend'
 import { confirmationEmail } from '@/lib/email-templates'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(_: NextRequest, { params }: { params: { id: string } }) {
   const supabase = createServerSupabaseClient()
 

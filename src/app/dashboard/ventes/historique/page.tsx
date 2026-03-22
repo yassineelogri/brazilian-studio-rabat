@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { BarChart2, Download } from 'lucide-react'
 import { ProductSaleWithRelations } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 const inputStyle: React.CSSProperties = {
   background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)',
   borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '8px 12px',

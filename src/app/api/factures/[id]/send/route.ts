@@ -7,6 +7,8 @@ import { DocumentTemplate } from '@/components/pdf/DocumentTemplate'
 import { resend } from '@/lib/resend'
 import { factureEmail } from '@/lib/email-templates'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const staff = await requireStaff()
