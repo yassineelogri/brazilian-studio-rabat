@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 
-
 interface Props {
   date: string
   durationMinutes: number
@@ -40,7 +39,6 @@ export default function TimeStep({ date, durationMinutes, selectedTime, onSelect
     if (date) fetchBooked()
   }, [date])
 
-  // Generate candidate slots: 10:00 to last slot where slot + duration ≤ 20:00
   const slots: string[] = []
   const lastStart = 20 * 60 - durationMinutes
   for (let m = 10 * 60; m <= lastStart; m += 30) {
@@ -50,41 +48,40 @@ export default function TimeStep({ date, durationMinutes, selectedTime, onSelect
   function isAvailable(slotStart: string) {
     const slotStartM = timeToMinutes(slotStart)
     const slotEndM = slotStartM + durationMinutes
-    const overlapCount = bookedSlots.filter(b => {
+    return bookedSlots.filter(b => {
       const bStart = timeToMinutes(b.start_time)
       const bEnd = timeToMinutes(b.end_time)
       return bStart < slotEndM && bEnd > slotStartM
-    }).length
-    return overlapCount < 2
+    }).length < 2
   }
 
   if (loading) {
     return (
       <div>
-        <h2 className="text-xl font-semibold text-salon-dark mb-4">Choisissez un horaire</h2>
-        <p className="text-salon-muted text-sm">Chargement des disponibilités...</p>
+        <h2 style={{ fontFamily: 'serif', fontSize: '22px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginBottom: '12px', marginTop: '32px' }}>Choisissez un horaire</h2>
+        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>Chargement des disponibilités...</p>
       </div>
     )
   }
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-salon-dark mb-4">Choisissez un horaire</h2>
-      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+      <h2 style={{ fontFamily: 'serif', fontSize: '22px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginBottom: '16px', marginTop: '32px' }}>Choisissez un horaire</h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
         {slots.map(slot => {
           const available = isAvailable(slot)
+          const selected = selectedTime === slot
           return (
             <button
               key={slot}
               disabled={!available}
               onClick={() => onSelect(slot)}
-              className={`py-2.5 rounded-lg text-sm font-medium transition ${
-                selectedTime === slot
-                  ? 'bg-salon-gold text-white'
-                  : available
-                    ? 'bg-white border border-gray-200 text-salon-dark hover:border-salon-gold'
-                    : 'bg-gray-50 text-gray-300 cursor-not-allowed border border-gray-100'
-              }`}
+              style={{
+                padding: '10px 0', borderRadius: '10px', fontSize: '13px', fontWeight: 500, cursor: available ? 'pointer' : 'not-allowed',
+                background: selected ? 'linear-gradient(135deg, #C9A96E, #B8944F)' : available ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
+                border: selected ? 'none' : available ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(255,255,255,0.04)',
+                color: selected ? '#1A1410' : available ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.2)',
+              }}
             >
               {slot}
             </button>
@@ -92,7 +89,7 @@ export default function TimeStep({ date, durationMinutes, selectedTime, onSelect
         })}
       </div>
       {slots.every(s => !isAvailable(s)) && (
-        <p className="text-sm text-salon-muted mt-4 text-center">
+        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', marginTop: '16px', textAlign: 'center' }}>
           Aucun créneau disponible ce jour. Veuillez choisir une autre date.
         </p>
       )}

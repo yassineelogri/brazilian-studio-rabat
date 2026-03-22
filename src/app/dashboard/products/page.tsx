@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Product } from '@/lib/supabase/types'
-import { Package, Plus, AlertTriangle, Pencil, Trash2, ToggleLeft, ToggleRight } from 'lucide-react'
+import { Package, Plus, AlertTriangle, Pencil, Trash2, ToggleLeft, ToggleRight, X } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -210,9 +210,15 @@ export default function ProductsPage() {
       {showForm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 50, display: 'flex', justifyContent: 'flex-end' }}>
           <div style={{ background: '#1C1816', width: '100%', maxWidth: '420px', height: '100%', overflowY: 'auto', padding: '28px 24px', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
-            <h2 style={{ fontSize: '20px', fontFamily: 'serif', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginBottom: '24px' }}>
-              {editProduct ? 'Modifier le produit' : 'Ajouter un produit'}
-            </h2>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+              <h2 style={{ fontSize: '20px', fontFamily: 'serif', fontWeight: 300, color: 'rgba(255,255,255,0.9)' }}>
+                {editProduct ? 'Modifier le produit' : 'Ajouter un produit'}
+              </h2>
+              <button type="button" onClick={() => { setShowForm(false); setEditProduct(null) }}
+                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '6px', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center' }}>
+                <X size={16} />
+              </button>
+            </div>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
                 <label style={labelStyle}>Nom *</label>

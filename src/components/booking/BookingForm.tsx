@@ -13,6 +13,23 @@ interface Props {
   services: Service[]
 }
 
+const STEP_LABELS = ['Service', 'Date', 'Heure', 'Vous']
+
+const btnPrimary: React.CSSProperties = {
+  flex: 1, padding: '12px',
+  background: 'linear-gradient(135deg, #C9A96E, #B8944F)',
+  color: '#1A1410', borderRadius: '12px',
+  fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '14px',
+}
+
+const btnSecondary: React.CSSProperties = {
+  flex: 1, padding: '12px',
+  background: 'rgba(255,255,255,0.06)',
+  border: '1px solid rgba(255,255,255,0.1)',
+  color: 'rgba(255,255,255,0.6)', borderRadius: '12px',
+  fontSize: '14px', cursor: 'pointer',
+}
+
 export default function BookingForm({ services }: Props) {
   const [step, setStep] = useState<Step>('service')
   const [selectedService, setSelectedService] = useState<Service | null>(null)
@@ -43,15 +60,8 @@ export default function BookingForm({ services }: Props) {
 
     setSubmitting(false)
 
-    if (res.status === 409) {
-      setConflictError(true)
-      setStep('time')
-      return
-    }
-    if (!res.ok) {
-      setStep('error')
-      return
-    }
+    if (res.status === 409) { setConflictError(true); setStep('time'); return }
+    if (!res.ok) { setStep('error'); return }
     setStep('success')
   }
 
@@ -66,17 +76,17 @@ export default function BookingForm({ services }: Props) {
 
   if (step === 'success') {
     return (
-      <div className="text-center py-10">
-        <div className="w-16 h-16 rounded-full bg-salon-pink flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-salon-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div style={{ textAlign: 'center', padding: '48px 0' }}>
+        <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(74,222,128,0.15)', border: '1px solid rgba(74,222,128,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#4ADE80" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h2 className="text-2xl font-semibold text-salon-dark mb-2">Merci !</h2>
-        <p className="text-salon-muted max-w-sm mx-auto">
+        <h2 style={{ fontFamily: 'serif', fontSize: '26px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginBottom: '10px' }}>Merci !</h2>
+        <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', maxWidth: '320px', margin: '0 auto 24px', lineHeight: '1.6' }}>
           Nous avons bien reçu votre demande. Nous vous confirmerons votre rendez-vous sous peu.
         </p>
-        <button onClick={reset} className="mt-6 text-salon-gold underline text-sm">
+        <button onClick={reset} style={{ background: 'none', border: 'none', color: '#C9A96E', fontSize: '14px', cursor: 'pointer', textDecoration: 'underline' }}>
           Prendre un autre rendez-vous
         </button>
       </div>
@@ -85,64 +95,53 @@ export default function BookingForm({ services }: Props) {
 
   if (step === 'error') {
     return (
-      <div className="text-center py-10">
-        <p className="text-red-500 mb-4">Une erreur est survenue. Veuillez réessayer.</p>
-        <button onClick={() => setStep('info')} className="text-salon-gold underline text-sm">Réessayer</button>
+      <div style={{ textAlign: 'center', padding: '48px 0' }}>
+        <p style={{ color: '#F87171', marginBottom: '16px', fontSize: '14px' }}>Une erreur est survenue. Veuillez réessayer.</p>
+        <button onClick={() => setStep('info')} style={{ background: 'none', border: 'none', color: '#C9A96E', fontSize: '14px', cursor: 'pointer', textDecoration: 'underline' }}>Réessayer</button>
       </div>
     )
   }
 
-  const STEP_LABELS = ['Service', 'Date', 'Heure', 'Vous']
-
   return (
-    <div className="max-w-2xl mx-auto">
+    <div style={{ maxWidth: '640px', margin: '0 auto' }}>
       {/* Step indicator */}
-      <div className="flex items-start mb-8">
+      <div style={{ display: 'flex', alignItems: 'flex-start', padding: '28px 0 0' }}>
         {[1, 2, 3, 4].map((n, i) => (
-          <div key={n} className="flex items-center flex-1 last:flex-none">
-            <div className="flex flex-col items-center gap-1 flex-shrink-0">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-colors duration-200 ${
-                n < stepNumber[step] ? 'bg-salon-gold text-white' :
-                n === stepNumber[step] ? 'bg-salon-dark text-salon-pink ring-2 ring-salon-gold/40 ring-offset-2' :
-                'bg-salon-rose/20 text-salon-muted'
-              }`}>
+          <div key={n} style={{ display: 'flex', alignItems: 'center', flex: i < 3 ? 1 : 'none' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+              <div style={{
+                width: '32px', height: '32px', borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '12px', fontWeight: 600,
+                background: n < stepNumber[step] ? 'linear-gradient(135deg, #C9A96E, #B8944F)' : n === stepNumber[step] ? 'rgba(201,169,110,0.15)' : 'rgba(255,255,255,0.06)',
+                border: n === stepNumber[step] ? '1px solid rgba(201,169,110,0.4)' : '1px solid transparent',
+                color: n < stepNumber[step] ? '#1A1410' : n === stepNumber[step] ? '#C9A96E' : 'rgba(255,255,255,0.3)',
+              }}>
                 {n < stepNumber[step] ? '✓' : n}
               </div>
-              <span className={`text-[10px] tracking-wide hidden sm:block ${n <= stepNumber[step] ? 'text-salon-dark font-medium' : 'text-salon-muted'}`}>
+              <span style={{ fontSize: '10px', letterSpacing: '0.05em', color: n <= stepNumber[step] ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.2)' }}>
                 {STEP_LABELS[i]}
               </span>
             </div>
             {i < 3 && (
-              <div className={`flex-1 h-px mx-2 mb-5 transition-colors duration-300 ${n < stepNumber[step] ? 'bg-salon-gold' : 'bg-salon-rose/20'}`} />
+              <div style={{ flex: 1, height: '1px', margin: '0 8px 16px', background: n < stepNumber[step] ? 'rgba(201,169,110,0.4)' : 'rgba(255,255,255,0.08)' }} />
             )}
           </div>
         ))}
       </div>
 
       {/* Step content */}
-      <div className="bg-white rounded-2xl shadow-card border border-salon-rose/20 p-6 sm:p-8">
+      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', padding: '24px', marginTop: '8px' }}>
         {step === 'service' && (
-          <ServiceStep
-            services={services}
-            selectedId={selectedService?.id ?? null}
-            onSelect={s => { setSelectedService(s); setStep('date') }}
-          />
+          <ServiceStep services={services} selectedId={selectedService?.id ?? null} onSelect={s => { setSelectedService(s); setStep('date') }} />
         )}
 
         {step === 'date' && (
           <>
             <DateStep selectedDate={selectedDate} onChange={setSelectedDate} />
-            <div className="flex gap-3 mt-6">
-              <button onClick={() => setStep('service')} className="flex-1 py-2.5 border border-gray-200 rounded-lg text-sm text-salon-muted hover:border-salon-gold transition">
-                Retour
-              </button>
-              <button
-                onClick={() => setStep('time')}
-                disabled={!selectedDate}
-                className="flex-1 py-2.5 bg-salon-gold text-white rounded-lg text-sm font-medium disabled:opacity-50 hover:bg-salon-dark transition"
-              >
-                Continuer
-              </button>
+            <div style={{ display: 'flex', gap: '10px', marginTop: '24px' }}>
+              <button onClick={() => setStep('service')} style={btnSecondary}>Retour</button>
+              <button onClick={() => setStep('time')} disabled={!selectedDate} style={{ ...btnPrimary, opacity: !selectedDate ? 0.4 : 1, cursor: !selectedDate ? 'not-allowed' : 'pointer' }}>Continuer</button>
             </div>
           </>
         )}
@@ -150,34 +149,22 @@ export default function BookingForm({ services }: Props) {
         {step === 'time' && (
           <>
             {conflictError && (
-              <p className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded-lg mb-4">
+              <p style={{ fontSize: '13px', color: '#F87171', background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.2)', padding: '10px 14px', borderRadius: '10px', marginBottom: '16px' }}>
                 Ce créneau n&apos;est plus disponible. Veuillez en choisir un autre.
               </p>
             )}
-            <TimeStep
-              date={selectedDate}
-              durationMinutes={selectedService?.min_duration ?? 60}
-              selectedTime={selectedTime}
-              onSelect={t => { setSelectedTime(t); setStep('info') }}
-            />
-            <button onClick={() => setStep('date')} className="mt-4 text-salon-muted text-sm underline">
-              Retour
-            </button>
+            <TimeStep date={selectedDate} durationMinutes={selectedService?.min_duration ?? 60} selectedTime={selectedTime} onSelect={t => { setSelectedTime(t); setStep('info') }} />
+            <button onClick={() => setStep('date')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '13px', cursor: 'pointer', marginTop: '16px', textDecoration: 'underline' }}>Retour</button>
           </>
         )}
 
         {step === 'info' && (
           <>
             <ClientInfoStep info={clientInfo} onChange={setClientInfo} />
-            <div className="flex gap-3 mt-6">
-              <button onClick={() => setStep('time')} className="flex-1 py-2.5 border border-gray-200 rounded-lg text-sm text-salon-muted hover:border-salon-gold transition">
-                Retour
-              </button>
-              <button
-                onClick={handleSubmit}
-                disabled={submitting || !clientInfo.name || !clientInfo.phone}
-                className="flex-1 py-2.5 bg-salon-gold text-white rounded-lg text-sm font-medium disabled:opacity-50 hover:bg-salon-dark transition"
-              >
+            <div style={{ display: 'flex', gap: '10px', marginTop: '24px' }}>
+              <button onClick={() => setStep('time')} style={btnSecondary}>Retour</button>
+              <button onClick={handleSubmit} disabled={submitting || !clientInfo.name || !clientInfo.phone}
+                style={{ ...btnPrimary, opacity: submitting || !clientInfo.name || !clientInfo.phone ? 0.5 : 1, cursor: submitting || !clientInfo.name || !clientInfo.phone ? 'not-allowed' : 'pointer' }}>
                 {submitting ? 'Envoi...' : 'Confirmer le rendez-vous'}
               </button>
             </div>

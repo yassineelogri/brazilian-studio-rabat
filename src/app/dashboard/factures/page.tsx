@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import {
-  Plus, Search, Download, Send, CreditCard, Ban, Trash2, RefreshCw,
+  Plus, Search, Download, Send, CreditCard, Ban, Trash2, RefreshCw, ChevronDown,
 } from 'lucide-react'
 import type { FactureWithRelations } from '@/lib/supabase/types'
 
@@ -57,6 +57,10 @@ export default function FacturesListPage() {
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [payModal, setPayModal] = useState<PayModalState | null>(null)
+  const [statusOpen, setStatusOpen] = useState(false)
+  const [payMethodOpen, setPayMethodOpen] = useState(false)
+  const statusRef = useRef<HTMLDivElement>(null)
+  const payMethodRef = useRef<HTMLDivElement>(null)
 
   async function load() {
     setLoading(true)
@@ -75,6 +79,15 @@ export default function FacturesListPage() {
   }
 
   useEffect(() => { load() }, [search, statusFilter, dateFrom, dateTo])  // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    function h(e: MouseEvent) {
+      if (statusRef.current && !statusRef.current.contains(e.target as Node)) setStatusOpen(false)
+      if (payMethodRef.current && !payMethodRef.current.contains(e.target as Node)) setPayMethodOpen(false)
+    }
+    document.addEventListener('mousedown', h)
+    return () => document.removeEventListener('mousedown', h)
+  }, [])
 
   async function handleSend(id: string) {
     setActionLoading(id + '-send')
@@ -170,10 +183,24 @@ export default function FacturesListPage() {
           <input type="text" placeholder="Rechercher..." value={search} onChange={e => setSearch(e.target.value)}
             style={{ ...inputStyle, paddingLeft: '30px', width: '200px' }} title="Rechercher une facture" />
         </div>
-        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ ...inputStyle, width: '160px' }} title="Filtrer par statut">
-          <option value="">Tous les statuts</option>
-          {Object.entries(STATUS_LABELS).map(([v, l]) => (<option key={v} value={v}>{l}</option>))}
-        </select>
+        <div ref={statusRef} style={{ position: 'relative', width: '160px' }}>
+          <button type="button" onClick={() => setStatusOpen(o => !o)}
+            style={{ ...inputStyle, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}>
+            <span>{statusFilter ? STATUS_LABELS[statusFilter] : 'Tous les statuts'}</span>
+            <ChevronDown size={13} style={{ flexShrink: 0, marginLeft: '6px', color: 'rgba(255,255,255,0.4)', transform: statusOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+          </button>
+          {statusOpen && (
+            <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50 }}>
+              {[['', 'Tous les statuts'], ...Object.entries(STATUS_LABELS)].map(([v, l], i, arr) => (
+                <button key={v} type="button"
+                  onClick={() => { setStatusFilter(v); setStatusOpen(false) }}
+                  style={{ width: '100%', textAlign: 'left', padding: '9px 12px', fontSize: '13px', background: statusFilter === v ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: statusFilter === v ? '#C9A96E' : v === '' ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === arr.length - 1 ? '0 0 10px 10px' : '0' }}>
+                  {l}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>
           <span>Du</span>
           <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={inputStyle} title="Date de début" />
@@ -194,14 +221,25 @@ export default function FacturesListPage() {
             <h2 style={{ fontSize: '18px', fontFamily: 'serif', fontWeight: 300, color: 'rgba(255,255,255,0.9)' }}>Marquer comme payé</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div>
-                <label htmlFor="pay-method" style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>Mode de paiement</label>
-                <select id="pay-method" value={payModal.paymentMethod}
-                  onChange={e => setPayModal(prev => prev ? { ...prev, paymentMethod: e.target.value as 'cash' | 'card' | 'transfer' } : prev)}
-                  style={{ width: '100%', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '8px 12px', fontSize: '13px', outline: 'none' }}>
-                  <option value="cash">Espèces</option>
-                  <option value="card">Carte</option>
-                  <option value="transfer">Virement</option>
-                </select>
+                <label style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>Mode de paiement</label>
+                <div ref={payMethodRef} style={{ position: 'relative' }}>
+                  <button type="button" onClick={() => setPayMethodOpen(o => !o)}
+                    style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '8px 12px', fontSize: '13px', outline: 'none', cursor: 'pointer' }}>
+                    <span>{{ cash: 'Espèces', card: 'Carte', transfer: 'Virement' }[payModal.paymentMethod]}</span>
+                    <ChevronDown size={13} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.4)', transform: payMethodOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+                  </button>
+                  {payMethodOpen && (
+                    <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 60 }}>
+                      {(['cash', 'card', 'transfer'] as const).map((v, i) => (
+                        <button key={v} type="button"
+                          onClick={() => { setPayModal(prev => prev ? { ...prev, paymentMethod: v } : prev); setPayMethodOpen(false) }}
+                          style={{ width: '100%', textAlign: 'left', padding: '9px 12px', fontSize: '13px', background: payModal.paymentMethod === v ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: payModal.paymentMethod === v ? '#C9A96E' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === 2 ? '0 0 10px 10px' : '0' }}>
+                          {{ cash: 'Espèces', card: 'Carte', transfer: 'Virement' }[v]}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
               <div>
                 <label htmlFor="pay-amount" style={{ display: 'block', fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>Montant payé (MAD)</label>
