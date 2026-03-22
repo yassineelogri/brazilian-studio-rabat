@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
 import { motion } from 'framer-motion'
+import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -28,64 +28,63 @@ export default function LoginPage() {
       return
     }
 
-    router.push('/dashboard/calendar')
+    router.push('/dashboard')
     router.refresh()
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
 
-      {/* LEFT PANEL (desktop) / TOP HEADER (mobile) */}
-      <div className="relative md:w-2/5 bg-gradient-to-br from-salon-dark to-salon-sidebar-bottom flex flex-col items-center justify-center pt-12 pb-10 md:py-0 md:min-h-screen overflow-hidden">
-        {/* Decorative circles */}
-        <div className="absolute bottom-16 right-0 w-48 h-48 rounded-full bg-salon-rose/5 translate-x-1/2 pointer-events-none" />
-        <div className="absolute top-10 left-6 w-32 h-32 rounded-full bg-salon-gold/8 -translate-x-1/2 pointer-events-none" />
-        <div className="absolute top-1/2 right-4 w-24 h-24 rounded-full bg-salon-pink/5 translate-y-8 pointer-events-none" />
+      {/* Full-screen background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-salon-sidebar-bottom via-salon-dark to-[#2a1215]" />
 
-        {/* Brand */}
-        <div className="relative z-10 flex flex-col items-center text-center px-8">
-          <div className="w-14 h-14 rounded-full bg-salon-rose/20 flex items-center justify-center ring-1 ring-salon-rose/30">
-            <span className="font-serif text-xl font-bold text-salon-pink leading-none">BS</span>
-          </div>
-          <h1 className="font-serif text-3xl text-salon-pink mt-4 leading-snug">Brazilian Studio</h1>
-          <p className="text-sm text-salon-pink/60 tracking-[0.3em] uppercase mt-1">Rabat</p>
+      {/* Blurred orbs */}
+      <div className="absolute top-[-10%] left-[-5%] w-96 h-96 rounded-full bg-salon-rose/20 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-5%] w-80 h-80 rounded-full bg-salon-gold/15 blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-salon-pink/5 blur-[140px] pointer-events-none" />
 
-          {/* Decorative rule with gold dots */}
-          <div className="flex items-center gap-2 mt-4">
-            <div className="h-px w-12 bg-salon-gold/30" />
-            <div className="flex gap-1">
-              <span className="w-1 h-1 rounded-full bg-salon-gold/60" />
-              <span className="w-1.5 h-1.5 rounded-full bg-salon-gold/80" />
-              <span className="w-1 h-1 rounded-full bg-salon-gold/60" />
-            </div>
-            <div className="h-px w-12 bg-salon-gold/30" />
-          </div>
-        </div>
+      {/* Dot grid */}
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(circle, #F8D7DA 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+        }}
+      />
 
-        {/* Quote — larger and more prominent */}
-        <p className="relative z-10 italic text-salon-pink/60 text-base px-10 text-center mt-8 md:absolute md:bottom-10 md:left-0 md:right-0 md:mt-0 leading-relaxed">
-          &ldquo;L&rsquo;art de vous sublimer&rdquo;
-        </p>
-      </div>
-
-      {/* RIGHT PANEL (desktop) / CARD SHEET (mobile) */}
-      <div className="md:flex-1 bg-salon-cream-light flex items-center justify-center p-6 md:p-8 -mt-4 rounded-t-3xl md:mt-0 md:rounded-none flex-1">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-          className="bg-white rounded-2xl shadow-card border border-salon-rose/20 w-full max-w-sm overflow-hidden"
+      {/* Glass card */}
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+        className="relative z-10 w-full max-w-sm mx-4"
+      >
+        <div
+          className="rounded-3xl border border-white/10 backdrop-blur-2xl shadow-2xl overflow-hidden"
+          style={{ background: 'rgba(255,255,255,0.07)' }}
         >
-          {/* Premium gradient bar at top */}
-          <div className="h-1 w-full rounded-t-2xl bg-gradient-to-r from-salon-pink/30 to-transparent" />
+          {/* Top shimmer */}
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-salon-rose/60 to-transparent" />
 
-          <div className="p-8">
-            <h2 className="font-serif text-2xl text-salon-dark mb-1">Espace staff</h2>
-            <p className="text-sm text-salon-muted mb-6">Connectez-vous pour continuer</p>
+          <div className="px-8 pt-8 pb-9">
+            {/* Logo */}
+            <div className="flex flex-col items-center mb-7">
+              <div className="w-14 h-14 rounded-2xl border border-white/15 flex items-center justify-center mb-4"
+                style={{ background: 'rgba(255,255,255,0.1)' }}>
+                <span className="font-serif italic text-salon-pink text-xl font-bold">BS</span>
+              </div>
+              <h1 className="font-serif text-2xl text-white text-center">Bienvenue</h1>
+              <p className="text-sm text-white/45 mt-1 text-center">
+                Connectez-vous à votre espace staff
+              </p>
+            </div>
 
+            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-salon-dark mb-1">Email</label>
+                <label htmlFor="email" className="block text-[11px] font-medium text-white/50 mb-1.5 uppercase tracking-wider">
+                  Email
+                </label>
                 <input
                   id="email"
                   type="email"
@@ -94,12 +93,15 @@ export default function LoginPage() {
                   required
                   autoComplete="email"
                   placeholder="vous@brazilianstudio.ma"
-                  className="w-full h-11 px-4 border border-salon-rose/30 rounded-lg text-salon-dark placeholder:text-salon-muted/50 focus:outline-none focus:border-salon-gold focus:ring-2 focus:ring-salon-gold/20 transition-colors duration-200"
+                  className="w-full h-11 px-4 rounded-xl text-sm text-white placeholder:text-white/20 border border-white/10 focus:outline-none focus:border-salon-rose/50 focus:ring-1 focus:ring-salon-rose/20 transition-all duration-200"
+                  style={{ background: 'rgba(255,255,255,0.06)' }}
                 />
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-salon-dark mb-1">Mot de passe</label>
+                <label htmlFor="password" className="block text-[11px] font-medium text-white/50 mb-1.5 uppercase tracking-wider">
+                  Mot de passe
+                </label>
                 <div className="relative">
                   <input
                     id="password"
@@ -109,34 +111,53 @@ export default function LoginPage() {
                     required
                     autoComplete="current-password"
                     placeholder="••••••••"
-                    className="w-full h-11 px-4 pr-11 border border-salon-rose/30 rounded-lg text-salon-dark placeholder:text-salon-muted/50 focus:outline-none focus:border-salon-gold focus:ring-2 focus:ring-salon-gold/20 transition-colors duration-200"
+                    className="w-full h-11 px-4 pr-11 rounded-xl text-sm text-white placeholder:text-white/20 border border-white/10 focus:outline-none focus:border-salon-rose/50 focus:ring-1 focus:ring-salon-rose/20 transition-all duration-200"
+                    style={{ background: 'rgba(255,255,255,0.06)' }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(v => !v)}
-                    aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
-                    className="absolute inset-y-0 right-0 flex items-center px-3 text-salon-muted/60 hover:text-salon-gold transition-colors duration-200"
+                    aria-label={showPassword ? 'Masquer' : 'Afficher'}
+                    className="absolute inset-y-0 right-0 flex items-center px-3 text-white/30 hover:text-white/60 transition-colors"
                   >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
               </div>
 
               {error && (
-                <p role="alert" className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  role="alert"
+                  className="text-xs text-red-300 bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg"
+                >
+                  {error}
+                </motion.p>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-11 bg-gradient-to-r from-salon-dark to-salon-sidebar-bottom text-white rounded-lg font-medium hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 cursor-pointer"
+                className="w-full h-11 rounded-xl font-medium text-sm text-white transition-all duration-200 disabled:opacity-50 mt-2 hover:opacity-90 active:scale-[0.98]"
+                style={{
+                  background: 'linear-gradient(135deg, #6B3A3F 0%, #4A2528 100%)',
+                  boxShadow: '0 4px 24px rgba(107,58,63,0.5)',
+                }}
               >
-                {loading ? 'Connexion en cours...' : 'Se connecter'}
+                {loading ? 'Connexion...' : 'Se connecter'}
               </button>
             </form>
+
+            <p className="text-center text-[11px] text-white/20 mt-6 italic">
+              &ldquo;L&apos;art de vous sublimer&rdquo; — Brazilian Studio Rabat
+            </p>
           </div>
-        </motion.div>
-      </div>
+
+          {/* Bottom shimmer */}
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-salon-gold/40 to-transparent" />
+        </div>
+      </motion.div>
     </div>
   )
 }
