@@ -170,6 +170,8 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                     flexDirection: 'column',
                     gap: '6px',
                     background: isToday ? 'rgba(201,169,110,0.02)' : 'transparent',
+                    overflow: 'hidden',
+                    minWidth: 0,
                   }}
                 >
                   {hourAppts.map((appt, ai) => (

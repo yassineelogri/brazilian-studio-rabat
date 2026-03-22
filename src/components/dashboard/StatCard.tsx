@@ -16,9 +16,9 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
         position: 'relative',
         borderRadius: '20px',
         padding: '24px',
-        background: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)',
+        background: 'rgba(255,255,255,0.09)',
+        border: '1px solid rgba(255,255,255,0.13)',
+        boxShadow: '0 2px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
         overflow: 'hidden',
       }}
     >
@@ -85,7 +85,7 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
             textTransform: 'uppercase',
             letterSpacing: '0.16em',
             fontWeight: 500,
-            color: 'rgba(201,169,110,0.6)',
+            color: 'rgba(201,169,110,0.85)',
             marginTop: '8px',
           }}
         >

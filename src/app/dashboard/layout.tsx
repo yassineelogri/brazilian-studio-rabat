@@ -48,6 +48,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
+    <>
+    <style>{`
+      @media (min-width: 768px) {
+        .dash-main { margin-left: 68px; padding: 24px; padding-top: 24px; }
+      }
+      @media (min-width: 768px) {
+        .dash-sidebar:hover ~ .dash-main { margin-left: 224px; }
+      }
+    `}</style>
     <div style={{ minHeight: '100vh', background: '#141210' }}>
       {/* Mobile backdrop */}
       {mobileOpen && (
@@ -60,7 +69,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* ── Sidebar ── */}
       <aside
-        className={`peer group fixed left-0 top-0 h-full z-40
+        className={`dash-sidebar peer group fixed left-0 top-0 h-full z-40
                      w-[68px] hover:w-56
                      transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
                      flex flex-col overflow-hidden
@@ -220,11 +229,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* ── Main content ── */}
       <main
-        className="ml-0 md:ml-[68px] md:peer-hover:ml-56 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] min-h-screen p-4 md:p-6 pt-16 md:pt-6"
+        className="dash-main min-h-screen p-4 pt-16 transition-all duration-300"
         style={{ background: '#141210' }}
       >
         {children}
       </main>
     </div>
+    </>
   )
 }

@@ -147,8 +147,8 @@ export default async function DashboardPage() {
                 style={{
                   borderRadius: '16px',
                   padding: '14px 16px',
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  background: 'rgba(255,255,255,0.08)',
+                  border: '1px solid rgba(255,255,255,0.10)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px',
