@@ -6,6 +6,8 @@ import { createClient } from '@/lib/supabase/client'
 import { LineItemsBuilder, LineItem } from '@/components/dashboard/LineItemsBuilder'
 import { Book, UserPlus, FileText } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 type ClientOption = { id: string; name: string; phone: string; email: string | null }
 type AppointmentOption = { id: string; date: string; start_time: string; services: string }
 

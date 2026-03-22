@@ -6,6 +6,8 @@ import { supabase } from '@/lib/supabase/client'
 import { CalendarDays } from 'lucide-react'
 import type { Service, Staff } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 const inputStyle: React.CSSProperties = {
   width: '100%',
   background: 'rgba(255,255,255,0.07)',

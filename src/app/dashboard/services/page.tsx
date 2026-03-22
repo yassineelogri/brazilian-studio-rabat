@@ -5,6 +5,8 @@ import { supabase } from '@/lib/supabase/client'
 import { Scissors } from 'lucide-react'
 import type { Service } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([])
   const [editing, setEditing] = useState<string | null>(null)

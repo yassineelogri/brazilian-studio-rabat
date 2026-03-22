@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { Plus, Search, Download, Send, CreditCard, Ban, Trash2, RefreshCw } from 'lucide-react'
 import type { FactureWithRelations } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 const STATUS_LABELS: Record<string, string> = {
   draft: 'Brouillon', sent: 'Envoyé', paid: 'Payé', cancelled: 'Annulé',
 }

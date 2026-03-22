@@ -5,6 +5,8 @@ import { supabase } from '@/lib/supabase/client'
 import { Users } from 'lucide-react'
 import type { Staff } from '@/lib/supabase/types'
 
+export const dynamic = 'force-dynamic'
+
 const ROLE_LABELS: Record<string, string> = {
   worker: 'Employée', manager: 'Gérante', secretary: 'Secrétaire'
 }

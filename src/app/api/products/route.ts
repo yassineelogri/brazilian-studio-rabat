@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient, createSessionSupabaseClient } from '@/lib/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 // Helper: verify caller is an authenticated staff member
 async function requireStaff() {
   const session = await createSessionSupabaseClient()

@@ -1,3 +1,4 @@
+import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { requireClient } from '@/lib/api-helpers'
 

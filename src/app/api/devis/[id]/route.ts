@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { requireStaff, computeTotals, projectDevisStatus } from '@/lib/api-helpers'
 
+export const dynamic = 'force-dynamic'
+
 async function fetchDevisWithItems(supabase: ReturnType<typeof createServerSupabaseClient>, id: string) {
   const { data, error } = await supabase
     .from('devis')

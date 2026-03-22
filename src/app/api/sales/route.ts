@@ -3,6 +3,8 @@ import { createServerSupabaseClient, createSessionSupabaseClient } from '@/lib/s
 import { resend, NOTIFY_EMAILS } from '@/lib/resend'
 import { lowStockEmail } from '@/lib/email-templates'
 
+export const dynamic = 'force-dynamic'
+
 async function requireStaff() {
   const session = await createSessionSupabaseClient()
   const { data: { user } } = await session.auth.getUser()
