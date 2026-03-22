@@ -3,6 +3,35 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { resend, NOTIFY_EMAILS } from '@/lib/resend'
 import { newBookingEmail, bookingConfirmationEmail } from '@/lib/email-templates'
 
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const rangeStart = searchParams.get('from')
+  const rangeEnd   = searchParams.get('to')
+
+  if (!rangeStart || !rangeEnd) {
+    return NextResponse.json({ error: 'Missing from/to params' }, { status: 400 })
+  }
+
+  const supabase = createServerSupabaseClient()
+  const { data, error } = await supabase
+    .from('appointments')
+    .select(`
+      *,
+      clients(name, phone, email),
+      services(name, color),
+      staff(name)
+    `)
+    .gte('date', rangeStart)
+    .lte('date', rangeEnd)
+    .order('start_time')
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  return NextResponse.json(data ?? [])
+}
+
 function timeToMinutes(time: string): number {
   const [h, m] = time.split(':').map(Number)
   return h * 60 + m
