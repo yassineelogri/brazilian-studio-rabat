@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerSupabaseClient, createAnonSupabaseClient } from '@/lib/supabase/server'
+import { createServerSupabaseClient, createSessionSupabaseClient } from '@/lib/supabase/server'
 
 async function requireStaff() {
-  const anon = createAnonSupabaseClient()
-  const { data: { user } } = await anon.auth.getUser()
+  const session = await createSessionSupabaseClient()
+  const { data: { user } } = await session.auth.getUser()
   if (!user) return null
   const supabase = createServerSupabaseClient()
   const { data } = await supabase.from('staff').select('id').eq('auth_user_id', user.id).eq('is_active', true).single()
