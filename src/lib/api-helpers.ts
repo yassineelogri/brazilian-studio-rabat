@@ -1,13 +1,13 @@
-import { createAnonSupabaseClient, createServerSupabaseClient } from '@/lib/supabase/server'
+import { createSessionSupabaseClient, createServerSupabaseClient } from '@/lib/supabase/server'
 
 /**
  * Verify the caller is an authenticated, active staff member.
  * Returns { id } or null.
- * V3 API routes import from here instead of duplicating this logic.
+ * Uses cookie-aware session client so the JWT is read from browser cookies.
  */
 export async function requireStaff(): Promise<{ id: string } | null> {
-  const anon = createAnonSupabaseClient()
-  const { data: { user } } = await anon.auth.getUser()
+  const session = await createSessionSupabaseClient()
+  const { data: { user } } = await session.auth.getUser()
   if (!user) return null
   const supabase = createServerSupabaseClient()
   const { data } = await supabase
@@ -30,8 +30,8 @@ export async function requireClient(): Promise<{
   phone: string
   email: string | null
 } | null> {
-  const anon = createAnonSupabaseClient()
-  const { data: { user } } = await anon.auth.getUser()
+  const session = await createSessionSupabaseClient()
+  const { data: { user } } = await session.auth.getUser()
   if (!user) return null
   const supabase = createServerSupabaseClient()
   const { data } = await supabase
