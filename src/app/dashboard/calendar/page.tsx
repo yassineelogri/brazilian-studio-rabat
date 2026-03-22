@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import type { AppointmentWithRelations } from '@/lib/supabase/types'
@@ -113,61 +114,116 @@ export default function CalendarPage() {
     return () => clearTimeout(copiedTimerRef.current)
   }, [])
 
+  const pendingCount = appointments.filter((a: AppointmentWithRelations) => a.status === 'pending').length
+
   return (
     <div>
       {/* Toolbar */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2 rounded-lg hover:bg-gray-100 transition">
-            <ChevronLeft size={16} />
-          </button>
-          {view === 'day' ? (
-            <div>
-              <h1 className="heading-serif text-2xl">{headerLabel}</h1>
-              <p className="text-xs text-salon-muted tracking-widest uppercase mt-0.5">
-                {appointments.length} RENDEZ-VOUS
-                {appointments.filter((a: AppointmentWithRelations) => a.status === 'pending').length > 0
-                  ? ` · ${appointments.filter((a: AppointmentWithRelations) => a.status === 'pending').length} EN ATTENTE`
-                  : ''}
-              </p>
-            </div>
-          ) : (
-            <h2 className="text-base font-semibold text-salon-dark capitalize">{headerLabel}</h2>
-          )}
-          <button onClick={() => navigate(1)} className="p-2 rounded-lg hover:bg-gray-100 transition">
-            <ChevronRight size={16} />
+      <motion.div
+        className="flex items-center justify-between mb-6"
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25 }}
+      >
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-8 h-8 flex items-center justify-center rounded-xl border border-salon-rose/20 text-salon-muted hover:border-salon-gold hover:text-salon-gold transition-colors duration-150"
+          >
+            <ChevronLeft size={15} />
           </button>
           <button
-            onClick={() => setCurrentDate(new Date())}
-            className="ml-2 text-xs text-salon-gold underline"
+            onClick={() => navigate(1)}
+            className="w-8 h-8 flex items-center justify-center rounded-xl border border-salon-rose/20 text-salon-muted hover:border-salon-gold hover:text-salon-gold transition-colors duration-150"
           >
-            Aujourd'hui
+            <ChevronRight size={15} />
+          </button>
+
+          <div className="ml-1">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={headerLabel}
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.18 }}
+              >
+                {view === 'day' ? (
+                  <>
+                    <h1 className="font-serif text-xl text-salon-dark capitalize leading-tight">{headerLabel}</h1>
+                    <p className="text-[10px] text-salon-muted tracking-widest uppercase mt-0.5">
+                      {appointments.length} rendez-vous
+                      {pendingCount > 0 && (
+                        <span className="ml-1.5 bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-semibold">
+                          {pendingCount} en attente
+                        </span>
+                      )}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-base font-semibold text-salon-dark capitalize leading-tight">{headerLabel}</h2>
+                    <p className="text-[10px] text-salon-muted tracking-widest uppercase mt-0.5">
+                      {appointments.length} rendez-vous cette semaine
+                    </p>
+                  </>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <button
+            onClick={() => setCurrentDate(new Date())}
+            className="ml-1 text-[11px] text-salon-gold border border-salon-gold/30 hover:bg-salon-pink/30 px-2.5 py-1 rounded-lg transition-colors duration-150"
+          >
+            Aujourd&apos;hui
           </button>
         </div>
 
         {/* View toggle */}
-        <div className="flex gap-1">
+        <div className="flex gap-1 bg-salon-rose/10 p-1 rounded-xl">
           {(['day', 'week'] as View[]).map(v => (
             <button
               key={v}
               onClick={() => setView(v)}
-              className={view === v
-                ? 'bg-gradient-to-br from-salon-dark to-salon-sidebar-bottom text-white rounded-lg px-3 py-1.5 text-xs font-semibold'
-                : 'border border-salon-rose/40 text-salon-muted rounded-lg px-3 py-1.5 text-xs hover:bg-salon-cream'}
+              className={`relative px-3 py-1.5 text-xs font-medium rounded-lg transition-colors duration-150 ${
+                view === v ? 'text-white' : 'text-salon-muted hover:text-salon-dark'
+              }`}
             >
-              {v === 'day' ? 'Jour' : 'Semaine'}
+              {view === v && (
+                <motion.span
+                  layoutId="view-pill"
+                  className="absolute inset-0 bg-gradient-to-br from-salon-dark to-salon-sidebar-bottom rounded-lg"
+                  transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+                />
+              )}
+              <span className="relative z-10">{v === 'day' ? 'Jour' : 'Semaine'}</span>
             </button>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {fetchError && (
-        <p className="text-red-600 text-sm px-2 py-1">{fetchError}</p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-red-600 text-sm bg-red-50 px-3 py-2 rounded-xl mb-4"
+        >
+          {fetchError}
+        </motion.p>
       )}
 
       {/* Calendar */}
       {loading ? (
-        <p className="text-salon-muted text-sm">Chargement...</p>
+        <div className="grid grid-cols-6 gap-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="space-y-2">
+              <div className="h-16 bg-salon-rose/10 rounded-xl animate-pulse" />
+              <div className="h-16 bg-salon-rose/5 rounded-xl animate-pulse" style={{ animationDelay: `${i * 80}ms` }} />
+              <div className="h-12 bg-salon-rose/5 rounded-xl animate-pulse" style={{ animationDelay: `${i * 120}ms` }} />
+            </div>
+          ))}
+        </div>
       ) : view === 'day' ? (
         <CalendarDay
           date={formatDate(currentDate)}
