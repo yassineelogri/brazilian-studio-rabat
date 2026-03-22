@@ -67,7 +67,11 @@ export default function BookingForm({ services }: Props) {
   if (step === 'success') {
     return (
       <div className="text-center py-10">
-        <div className="text-5xl mb-4">🌸</div>
+        <div className="w-16 h-16 rounded-full bg-salon-pink flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-salon-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
         <h2 className="text-2xl font-semibold text-salon-dark mb-2">Merci !</h2>
         <p className="text-salon-muted max-w-sm mx-auto">
           Nous avons bien reçu votre demande. Nous vous confirmerons votre rendez-vous sous peu.
@@ -88,24 +92,35 @@ export default function BookingForm({ services }: Props) {
     )
   }
 
+  const STEP_LABELS = ['Service', 'Date', 'Heure', 'Vous']
+
   return (
-    <div className="max-w-lg mx-auto">
+    <div className="max-w-2xl mx-auto">
       {/* Step indicator */}
-      <div className="flex items-center mb-8">
+      <div className="flex items-start mb-8">
         {[1, 2, 3, 4].map((n, i) => (
           <div key={n} className="flex items-center flex-1 last:flex-none">
-            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${
-              n <= stepNumber[step] ? 'bg-salon-gold text-white' : 'bg-gray-100 text-gray-400'
-            }`}>
-              {n}
+            <div className="flex flex-col items-center gap-1 flex-shrink-0">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-colors duration-200 ${
+                n < stepNumber[step] ? 'bg-salon-gold text-white' :
+                n === stepNumber[step] ? 'bg-salon-dark text-salon-pink ring-2 ring-salon-gold/40 ring-offset-2' :
+                'bg-salon-rose/20 text-salon-muted'
+              }`}>
+                {n < stepNumber[step] ? '✓' : n}
+              </div>
+              <span className={`text-[10px] tracking-wide hidden sm:block ${n <= stepNumber[step] ? 'text-salon-dark font-medium' : 'text-salon-muted'}`}>
+                {STEP_LABELS[i]}
+              </span>
             </div>
-            {i < 3 && <div className={`flex-1 h-px mx-2 ${n < stepNumber[step] ? 'bg-salon-gold' : 'bg-gray-200'}`} />}
+            {i < 3 && (
+              <div className={`flex-1 h-px mx-2 mb-5 transition-colors duration-300 ${n < stepNumber[step] ? 'bg-salon-gold' : 'bg-salon-rose/20'}`} />
+            )}
           </div>
         ))}
       </div>
 
       {/* Step content */}
-      <div className="bg-white rounded-2xl shadow-sm border border-salon-rose/20 p-6">
+      <div className="bg-white rounded-2xl shadow-card border border-salon-rose/20 p-6 sm:p-8">
         {step === 'service' && (
           <ServiceStep
             services={services}

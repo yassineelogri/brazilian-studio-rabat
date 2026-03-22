@@ -56,7 +56,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                           bg-gradient-to-br from-salon-pink to-salon-gold">
             <span className="font-serif italic text-white text-sm font-semibold">BS</span>
           </div>
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap overflow-hidden">
+          <div className="w-0 max-w-0 group-hover:w-auto group-hover:max-w-xs opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap overflow-hidden">
             <p className="font-serif italic text-salon-pink text-xs leading-tight">Brazilian Studio</p>
             <p className="text-salon-pink/50 text-[9px] tracking-widest">RABAT ✦</p>
           </div>
@@ -79,7 +79,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                               : 'text-white/60 hover:bg-white/10 hover:text-white'}`}>
                 <Icon size={18} className="flex-shrink-0" />
                 <span className="text-xs font-medium whitespace-nowrap overflow-hidden
-                                 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                 w-0 max-w-0 group-hover:w-auto group-hover:max-w-xs
+                                 opacity-0 group-hover:opacity-100 transition-all duration-200">
                   {label}
                 </span>
                 {badge === 'pending' && <PendingBadge />}
@@ -100,7 +101,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                        transition-all duration-150">
             <LogOut size={18} className="flex-shrink-0" />
             <span className="text-xs font-medium whitespace-nowrap overflow-hidden
-                             opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                             w-0 max-w-0 group-hover:w-auto group-hover:max-w-xs
+                             opacity-0 group-hover:opacity-100 transition-all duration-200">
               Déconnexion
             </span>
           </button>
