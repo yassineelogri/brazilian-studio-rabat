@@ -68,6 +68,13 @@ export interface BookingToken {
   created_at: string
 }
 
+export interface Reminder {
+  id: string
+  appointment_id: string
+  type: '24h' | '2h'
+  sent_at: string
+}
+
 export interface AppointmentForClient {
   id: string
   date: string
@@ -218,6 +225,7 @@ export type Database = {
       factures:      { Row: Facture;     Insert: Omit<Facture, 'id' | 'created_at'>;       Update: Partial<Omit<Facture, 'id'>>;      Relationships: DBRelationship[] }
       facture_items: { Row: FactureItem; Insert: Omit<FactureItem, 'id'>;                  Update: Partial<Omit<FactureItem, 'id'>>; Relationships: DBRelationship[] }
       booking_tokens: { Row: BookingToken; Insert: Omit<BookingToken, 'id' | 'token' | 'created_at'>; Update: Partial<Omit<BookingToken, 'id' | 'token'>>; Relationships: DBRelationship[] }
+      reminders: { Row: Reminder; Insert: Omit<Reminder, 'id' | 'sent_at'>; Update: Partial<Omit<Reminder, 'id'>>; Relationships: DBRelationship[] }
     }
     Views: Record<string, { Row: Record<string, unknown>; Relationships: DBRelationship[] }>
     Functions: Record<string, { Args: Record<string, unknown>; Returns: unknown }>
