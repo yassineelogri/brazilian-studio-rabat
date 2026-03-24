@@ -4,7 +4,6 @@ export type CreatedBy = 'client' | 'staff'
 export type NotificationType = 'new_booking' | 'confirmed' | 'cancelled'
 
 export interface Staff {
-  [key: string]: unknown
   id: string
   name: string
   role: StaffRole
@@ -14,7 +13,6 @@ export interface Staff {
 }
 
 export interface Service {
-  [key: string]: unknown
   id: string
   name: string
   description: string | null
@@ -25,7 +23,6 @@ export interface Service {
 }
 
 export interface Client {
-  [key: string]: unknown
   id: string
   name: string
   phone: string
@@ -35,7 +32,6 @@ export interface Client {
 }
 
 export interface Appointment {
-  [key: string]: unknown
   id: string
   client_id: string
   service_id: string
@@ -89,7 +85,6 @@ export interface AppointmentForClient {
 }
 
 export interface Notification {
-  [key: string]: unknown
   id: string
   appointment_id: string
   type: NotificationType
@@ -98,7 +93,6 @@ export interface Notification {
 }
 
 export interface Product {
-  [key: string]: unknown
   id: string
   name: string
   brand: string | null
@@ -111,7 +105,6 @@ export interface Product {
 }
 
 export interface ProductSale {
-  [key: string]: unknown
   id: string
   product_id: string
   appointment_id: string | null
@@ -141,7 +134,6 @@ export interface StatusEvent {
 }
 
 export interface DevisItem {
-  [key: string]: unknown
   id: string
   devis_id: string
   description: string
@@ -151,7 +143,6 @@ export interface DevisItem {
 }
 
 export interface Devis {
-  [key: string]: unknown
   id: string
   number: string
   client_id: string
@@ -173,7 +164,6 @@ export interface DevisWithRelations extends Devis {
 }
 
 export interface FactureItem {
-  [key: string]: unknown
   id: string
   facture_id: string
   description: string
@@ -183,7 +173,6 @@ export interface FactureItem {
 }
 
 export interface Facture {
-  [key: string]: unknown
   id: string
   number: string
   client_id: string
@@ -209,23 +198,27 @@ export interface FactureWithRelations extends Facture {
 
 type DBRelationship = { foreignKeyName: string; columns: string[]; isOneToOne?: boolean; referencedRelation: string; referencedColumns: string[] }
 
+// Helper: make a type compatible with Record<string, unknown> for Supabase generics
+type Insertable<T> = T & Record<string, unknown>
+type Updatable<T> = T & Record<string, unknown>
+
 export type Database = {
-  __InternalSupabase: { PostgrestVersion: '11' }
+  __InternalSupabase: { PostgrestVersion: '12' }
   public: {
     Tables: {
-      staff:         { Row: Staff;        Insert: Omit<Staff, 'id' | 'created_at'>;                       Update: Partial<Omit<Staff, 'id'>>;         Relationships: DBRelationship[] }
-      services:      { Row: Service;      Insert: Omit<Service, 'id'>;                                    Update: Partial<Omit<Service, 'id'>>;       Relationships: DBRelationship[] }
-      clients:       { Row: Client;       Insert: Omit<Client, 'id' | 'created_at'>;                      Update: Partial<Omit<Client, 'id'>>;        Relationships: DBRelationship[] }
-      appointments:  { Row: Appointment;  Insert: Omit<Appointment, 'id' | 'created_at' | 'updated_at'>; Update: Partial<Omit<Appointment, 'id'>>;   Relationships: DBRelationship[] }
-      notifications: { Row: Notification; Insert: Omit<Notification, 'id' | 'created_at'>;               Update: Partial<Omit<Notification, 'id'>>;  Relationships: DBRelationship[] }
-      products:      { Row: Product;      Insert: Omit<Product, 'id' | 'created_at'>;                     Update: Partial<Omit<Product, 'id'>>;       Relationships: DBRelationship[] }
-      product_sales: { Row: ProductSale;  Insert: Omit<ProductSale, 'id'>;                                 Update: Partial<Omit<ProductSale, 'id'>>;   Relationships: DBRelationship[] }
-      devis:         { Row: Devis;       Insert: Omit<Devis, 'id' | 'created_at'>;        Update: Partial<Omit<Devis, 'id'>>;        Relationships: DBRelationship[] }
-      devis_items:   { Row: DevisItem;   Insert: Omit<DevisItem, 'id'>;                    Update: Partial<Omit<DevisItem, 'id'>>;    Relationships: DBRelationship[] }
-      factures:      { Row: Facture;     Insert: Omit<Facture, 'id' | 'created_at'>;       Update: Partial<Omit<Facture, 'id'>>;      Relationships: DBRelationship[] }
-      facture_items: { Row: FactureItem; Insert: Omit<FactureItem, 'id'>;                  Update: Partial<Omit<FactureItem, 'id'>>; Relationships: DBRelationship[] }
-      booking_tokens: { Row: BookingToken; Insert: Omit<BookingToken, 'id' | 'token' | 'created_at'>; Update: Partial<Omit<BookingToken, 'id' | 'token'>>; Relationships: DBRelationship[] }
-      reminders: { Row: Reminder; Insert: Omit<Reminder, 'id' | 'sent_at'>; Update: Partial<Omit<Reminder, 'id'>>; Relationships: DBRelationship[] }
+      staff:         { Row: Staff & Record<string, unknown>;        Insert: Insertable<Partial<Omit<Staff, 'id' | 'created_at'>>>;                       Update: Updatable<Partial<Omit<Staff, 'id'>>>;         Relationships: DBRelationship[] }
+      services:      { Row: Service & Record<string, unknown>;      Insert: Insertable<Partial<Omit<Service, 'id'>>>;                                    Update: Updatable<Partial<Omit<Service, 'id'>>>;       Relationships: DBRelationship[] }
+      clients:       { Row: Client & Record<string, unknown>;       Insert: Insertable<Partial<Omit<Client, 'id' | 'created_at'>>>;                      Update: Updatable<Partial<Omit<Client, 'id'>>>;        Relationships: DBRelationship[] }
+      appointments:  { Row: Appointment & Record<string, unknown>;  Insert: Insertable<Partial<Omit<Appointment, 'id' | 'created_at' | 'updated_at'>>>; Update: Updatable<Partial<Omit<Appointment, 'id'>>>;   Relationships: DBRelationship[] }
+      notifications: { Row: Notification & Record<string, unknown>; Insert: Insertable<Partial<Omit<Notification, 'id' | 'created_at'>>>;               Update: Updatable<Partial<Omit<Notification, 'id'>>>;  Relationships: DBRelationship[] }
+      products:      { Row: Product & Record<string, unknown>;      Insert: Insertable<Partial<Omit<Product, 'id' | 'created_at'>>>;                     Update: Updatable<Partial<Omit<Product, 'id'>>>;       Relationships: DBRelationship[] }
+      product_sales: { Row: ProductSale & Record<string, unknown>;  Insert: Insertable<Partial<Omit<ProductSale, 'id'>>>;                                 Update: Updatable<Partial<Omit<ProductSale, 'id'>>>;   Relationships: DBRelationship[] }
+      devis:         { Row: Devis & Record<string, unknown>;       Insert: Insertable<Partial<Omit<Devis, 'id' | 'created_at'>>>;        Update: Updatable<Partial<Omit<Devis, 'id'>>>;        Relationships: DBRelationship[] }
+      devis_items:   { Row: DevisItem & Record<string, unknown>;   Insert: Insertable<Partial<Omit<DevisItem, 'id'>>>;                    Update: Updatable<Partial<Omit<DevisItem, 'id'>>>;    Relationships: DBRelationship[] }
+      factures:      { Row: Facture & Record<string, unknown>;     Insert: Insertable<Partial<Omit<Facture, 'id' | 'created_at'>>>;       Update: Updatable<Partial<Omit<Facture, 'id'>>>;      Relationships: DBRelationship[] }
+      facture_items: { Row: FactureItem & Record<string, unknown>; Insert: Insertable<Partial<Omit<FactureItem, 'id'>>>;                  Update: Updatable<Partial<Omit<FactureItem, 'id'>>>; Relationships: DBRelationship[] }
+      booking_tokens: { Row: BookingToken & Record<string, unknown>; Insert: Insertable<Partial<Omit<BookingToken, 'id' | 'token' | 'created_at'>>>; Update: Updatable<Partial<Omit<BookingToken, 'id' | 'token'>>>; Relationships: DBRelationship[] }
+      reminders: { Row: Reminder & Record<string, unknown>; Insert: Insertable<Partial<Omit<Reminder, 'id' | 'sent_at'>>>; Update: Updatable<Partial<Omit<Reminder, 'id'>>>; Relationships: DBRelationship[] }
     }
     Views: Record<string, { Row: Record<string, unknown>; Relationships: DBRelationship[] }>
     Functions: Record<string, { Args: Record<string, unknown>; Returns: unknown }>
