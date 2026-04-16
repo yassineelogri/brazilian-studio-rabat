@@ -3,7 +3,7 @@ interface Props {
   onChange: (date: string) => void
 }
 
-const inputStyle: React.CSSProperties = {
+const inputStyle = {
   width: '100%', padding: '10px 14px',
   background: 'rgba(255,255,255,0.07)',
   border: '1px solid rgba(255,255,255,0.12)',
@@ -14,7 +14,8 @@ const inputStyle: React.CSSProperties = {
 }
 
 export default function DateStep({ selectedDate, onChange }: Props) {
-  const today = new Date().toISOString().split('T')[0]
+  const d = new Date()
+  const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
   function isSunday(dateStr: string) {
     if (!dateStr) return false
