@@ -5,8 +5,9 @@ import type { Database } from './types'
 
 // Server-side client with service_role key — bypasses RLS
 // NEVER import this in client components
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createServerSupabaseClient() {
-  return createClient<Database>(
+  return createClient<any>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )

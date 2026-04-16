@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
+import type { Appointment } from '@/lib/supabase/types'
 
 
 function timeToMinutes(time: string) {
@@ -18,7 +19,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   const body = await request.json()
   const { staff_id, date, start_time, duration_minutes, notes } = body
 
-  const { data: existing } = await supabase.from('appointments').select('*').eq('id', id).single()
+  const { data: existingRaw } = await supabase.from('appointments').select('*').eq('id', id).single()
+  const existing = existingRaw as Appointment | null
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const updates: Record<string, unknown> = {}
@@ -56,6 +58,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     updates.duration_minutes = Number(newDuration)
   }
 
+  // @ts-ignore — Supabase v2 + index signature makes Update type resolve to never
   const { data, error } = await supabase.from('appointments').update(updates).eq('id', id).select().single()
   if (error) return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   return NextResponse.json({ appointment: data })

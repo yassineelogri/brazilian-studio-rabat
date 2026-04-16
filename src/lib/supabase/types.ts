@@ -4,7 +4,6 @@ export type CreatedBy = 'client' | 'staff'
 export type NotificationType = 'new_booking' | 'confirmed' | 'cancelled'
 
 export interface Staff {
-  [key: string]: unknown
   id: string
   name: string
   role: StaffRole
@@ -14,7 +13,6 @@ export interface Staff {
 }
 
 export interface Service {
-  [key: string]: unknown
   id: string
   name: string
   description: string | null
@@ -25,7 +23,6 @@ export interface Service {
 }
 
 export interface Client {
-  [key: string]: unknown
   id: string
   name: string
   phone: string
@@ -35,7 +32,6 @@ export interface Client {
 }
 
 export interface Appointment {
-  [key: string]: unknown
   id: string
   client_id: string
   service_id: string
@@ -59,7 +55,6 @@ export interface AppointmentWithRelations extends Appointment {
 }
 
 export interface BookingToken {
-  [key: string]: unknown
   id: string
   token: string
   client_id: string
@@ -89,7 +84,6 @@ export interface AppointmentForClient {
 }
 
 export interface Notification {
-  [key: string]: unknown
   id: string
   appointment_id: string
   type: NotificationType
@@ -98,7 +92,6 @@ export interface Notification {
 }
 
 export interface Product {
-  [key: string]: unknown
   id: string
   name: string
   brand: string | null
@@ -111,7 +104,6 @@ export interface Product {
 }
 
 export interface ProductSale {
-  [key: string]: unknown
   id: string
   product_id: string
   appointment_id: string | null
@@ -141,7 +133,6 @@ export interface StatusEvent {
 }
 
 export interface DevisItem {
-  [key: string]: unknown
   id: string
   devis_id: string
   description: string
@@ -151,7 +142,6 @@ export interface DevisItem {
 }
 
 export interface Devis {
-  [key: string]: unknown
   id: string
   number: string
   client_id: string
@@ -173,7 +163,6 @@ export interface DevisWithRelations extends Devis {
 }
 
 export interface FactureItem {
-  [key: string]: unknown
   id: string
   facture_id: string
   description: string
@@ -183,7 +172,6 @@ export interface FactureItem {
 }
 
 export interface Facture {
-  [key: string]: unknown
   id: string
   number: string
   client_id: string
@@ -210,7 +198,6 @@ export interface FactureWithRelations extends Facture {
 type DBRelationship = { foreignKeyName: string; columns: string[]; isOneToOne?: boolean; referencedRelation: string; referencedColumns: string[] }
 
 export type Database = {
-  __InternalSupabase: { PostgrestVersion: '11' }
   public: {
     Tables: {
       staff:         { Row: Staff;        Insert: Omit<Staff, 'id' | 'created_at'>;                       Update: Partial<Omit<Staff, 'id'>>;         Relationships: DBRelationship[] }

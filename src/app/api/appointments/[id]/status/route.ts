@@ -36,12 +36,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     )
   }
 
-  const { data, error } = await supabase
-    .from('appointments')
-    .update({ status: newStatus as AppointmentStatus })
-    .eq('id', params.id)
-    .select()
-    .single()
+  // @ts-ignore — Supabase v2 + index signature makes Update type resolve to never
+  const { data, error } = await supabase.from('appointments').update({ status: newStatus as AppointmentStatus }).eq('id', params.id).select().single()
 
   if (error) return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
 

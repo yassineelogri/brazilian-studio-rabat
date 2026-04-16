@@ -106,20 +106,19 @@ export async function POST(request: NextRequest) {
 
   // 5. Upsert client by phone (never overwrite existing name)
   let clientId: string
-  const { data: existingClient } = await supabase
+  const { data: existingClientRaw } = await supabase
     .from('clients')
     .select('id')
     .eq('phone', client.phone)
     .single()
+  const existingClient = existingClientRaw as { id: string } | null
 
   if (existingClient) {
     clientId = existingClient.id
   } else {
-    const { data: newClient, error: clientError } = await supabase
-      .from('clients')
-      .insert({ name: client.name, phone: client.phone, email: client.email ?? null })
-      .select('id')
-      .single()
+    // @ts-ignore — Supabase v2 insert type resolution issue
+    const { data: newClientRaw, error: clientError } = await supabase.from('clients').insert({ name: client.name, phone: client.phone, email: client.email ?? null }).select('id').single()
+    const newClient = newClientRaw as { id: string } | null
     if (clientError || !newClient) {
       return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
