@@ -232,6 +232,7 @@ function ItemRow({ item, onUpdate, onDelete }: {
   const [editing, setEditing] = useState(false)
   const [name, setName] = useState(item.name)
   const [price, setPrice] = useState(String(item.price))
+  const [priceMax, setPriceMax] = useState(item.price_max != null ? String(item.price_max) : '')
   const [origPrice, setOrigPrice] = useState(item.original_price != null ? String(item.original_price) : '')
   const [fromPrice, setFromPrice] = useState(item.is_from_price)
   const [saving, setSaving] = useState(false)
@@ -243,6 +244,7 @@ function ItemRow({ item, onUpdate, onDelete }: {
     const body: Record<string, unknown> = {
       name: name.trim(),
       price: Number(price),
+      price_max: priceMax.trim() !== '' ? Number(priceMax) : null,
       original_price: origPrice.trim() !== '' ? Number(origPrice) : null,
       is_from_price: fromPrice,
     }
@@ -269,7 +271,8 @@ function ItemRow({ item, onUpdate, onDelete }: {
     return (
       <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap', padding: '8px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px' }}>
         <input value={name} onChange={e => setName(e.target.value)} placeholder="Nom" style={{ ...input, flex: '2 1 140px', minWidth: '120px' }} />
-        <input type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="Prix (DH)" style={{ ...input, width: '90px', flexShrink: 0 }} />
+        <input type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="Prix min (DH)" style={{ ...input, width: '90px', flexShrink: 0 }} />
+        <input type="number" value={priceMax} onChange={e => setPriceMax(e.target.value)} placeholder="Prix max (DH)" style={{ ...input, width: '100px', flexShrink: 0 }} />
         <input type="number" value={origPrice} onChange={e => setOrigPrice(e.target.value)} placeholder="Ancien prix (promo)" style={{ ...input, width: '130px', flexShrink: 0 }} />
         <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer', fontSize: '12px', color: 'rgba(255,255,255,0.5)', flexShrink: 0 }}>
           <input type="checkbox" checked={fromPrice} onChange={e => setFromPrice(e.target.checked)} style={{ accentColor: gold, width: '14px', height: '14px' }} />
@@ -289,12 +292,12 @@ function ItemRow({ item, onUpdate, onDelete }: {
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '10px', background: 'rgba(234,88,12,0.15)', color: '#FB923C', border: '1px solid rgba(234,88,12,0.25)', borderRadius: '4px', padding: '1px 6px', fontWeight: 600, letterSpacing: '0.05em' }}>PROMO</span>
             <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', textDecoration: 'line-through' }}>{item.original_price}DH</span>
-            <span style={{ fontSize: '13px', color: '#4ADE80', fontWeight: 600 }}>{item.is_from_price ? 'à partir de ' : ''}{item.price}DH</span>
+            <span style={{ fontSize: '13px', color: '#4ADE80', fontWeight: 600 }}>{item.is_from_price ? 'à partir de ' : ''}{item.price}{item.price_max ? ` / ${item.price_max}` : ''}DH</span>
           </div>
         ) : (
           <span style={{ fontSize: '13px', color: gold, fontWeight: 500 }}>
             {item.is_from_price && <span style={{ fontSize: '11px', color: 'rgba(201,169,110,0.6)', marginRight: '2px' }}>à partir de </span>}
-            {item.price}DH
+            {item.price}{item.price_max ? ` / ${item.price_max}` : ''}DH
           </span>
         )}
         <button onClick={() => setEditing(true)} style={{ fontSize: '12px', color: gold, background: 'none', border: 'none', cursor: 'pointer', padding: '0 4px' }}>Modifier</button>

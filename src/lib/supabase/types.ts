@@ -135,6 +135,7 @@ export interface PricingItem {
   category_id: string
   name: string
   price: number
+  price_max: number | null
   original_price: number | null
   sort_order: number
   is_active: boolean
