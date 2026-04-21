@@ -122,6 +122,28 @@ export interface ProductSaleWithRelations extends ProductSale {
   margin_total: number
 }
 
+export interface PricingCategory {
+  id: string
+  name: string
+  image_url: string | null
+  sort_order: number
+  is_active: boolean
+}
+
+export interface PricingItem {
+  id: string
+  category_id: string
+  name: string
+  price: number
+  original_price: number | null
+  sort_order: number
+  is_active: boolean
+}
+
+export interface PricingCategoryWithItems extends PricingCategory {
+  items: PricingItem[]
+}
+
 export type DevisStatus = 'draft' | 'sent' | 'accepted' | 'rejected' | 'expired'
 export type FactureStatus = 'draft' | 'sent' | 'paid' | 'cancelled'
 export type PaymentMethod = 'cash' | 'card' | 'transfer'
@@ -213,6 +235,8 @@ export type Database = {
       facture_items: { Row: FactureItem; Insert: Omit<FactureItem, 'id'>;                  Update: Partial<Omit<FactureItem, 'id'>>; Relationships: DBRelationship[] }
       booking_tokens: { Row: BookingToken; Insert: Omit<BookingToken, 'id' | 'token' | 'created_at'>; Update: Partial<Omit<BookingToken, 'id' | 'token'>>; Relationships: DBRelationship[] }
       reminders: { Row: Reminder; Insert: Omit<Reminder, 'id' | 'sent_at'>; Update: Partial<Omit<Reminder, 'id'>>; Relationships: DBRelationship[] }
+      pricing_categories: { Row: PricingCategory; Insert: Omit<PricingCategory, 'id'>; Update: Partial<Omit<PricingCategory, 'id'>>; Relationships: DBRelationship[] }
+      pricing_items: { Row: PricingItem; Insert: Omit<PricingItem, 'id'>; Update: Partial<Omit<PricingItem, 'id'>>; Relationships: DBRelationship[] }
     }
     Views: Record<string, { Row: Record<string, unknown>; Relationships: DBRelationship[] }>
     Functions: Record<string, { Args: Record<string, unknown>; Returns: unknown }>

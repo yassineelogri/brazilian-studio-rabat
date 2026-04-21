@@ -1,98 +1,36 @@
 "use client";
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Phone, MessageCircle } from 'lucide-react';
 import styles from './ServicesPage.module.css';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import type { PricingCategory, PricingItem } from '@/lib/supabase/types';
 
-const pricingData = [
-  {
-    category: "Hair & Coloration",
-    image: "/hair_coloration.webp",
-    items: [
-      { name: "Brushing", price: "50DH" },
-      { name: "Shampoing + Brushing", price: "70DH" },
-      { name: "Brushing Wavy", price: "70DH" },
-      { name: "Coupe + Brushing", price: "150DH" },
-      { name: "Égalisation Pointes", price: "50DH" },
-      { name: "Coloration", price: "300DH" },
-      { name: "Balayage", price: "800DH" },
-      { name: "Les Mèches", price: "700DH" }
-    ]
-  },
-  {
-    category: "Lissage & Soin Capillaire",
-    image: "/smooth_hair.webp",
-    items: [
-      { name: "Lissage Goldery & More", price: "1500DH" },
-      { name: "Lissage Cadiveu", price: "1300DH" },
-      { name: "Lissage Brazilian", price: "500DH" },
-      { name: "Soins (Inovatis, Nashi, Olaplex...)", price: "200DH" }
-    ]
-  },
-  {
-    category: "Nail Services",
-    image: "/russian_manicure.webp",
-    items: [
-      { name: "Pose Permanente", price: "50DH" },
-      { name: "BIAB", price: "100DH" },
-      { name: "Manicure Russe", price: "200DH" },
-      { name: "Dépose", price: "50DH" },
-      { name: "Manicure Classique", price: "30DH" },
-      { name: "Manicure Spa", price: "50DH" },
-      { name: "Pedicure Russe", price: "250DH" },
-      { name: "Pedicure Classique", price: "80DH" },
-      { name: "Pedicure Spa", price: "100DH" },
-      { name: "Faux Ongles + Permanente", price: "200DH" },
-      { name: "Gel Extension", price: "250DH" },
-      { name: "Remplissage", price: "350DH" },
-      { name: "Nail Art", price: "20DH" }
-    ]
-  },
-  {
-    category: "Lashes & Soin de Visage",
-    image: "/lash_extensions.webp",
-    items: [
-      { name: "Cils Classique", price: "70DH" },
-      { name: "Cils 1D", price: "400DH" },
-      { name: "Cils 2D", price: "500DH" },
-      { name: "Cils 3D", price: "600DH" },
-      { name: "Méga Volume", price: "300DH" },
-      { name: "Effet", price: "100DH" },
-      { name: "Soin de Visage Express", price: "100DH" },
-      { name: "Soin de Visage Profond", price: "200DH" },
-      { name: "Soin Hydrafacial", price: "400DH" },
-      { name: "Micro-Needling", price: "800DH" },
-      { name: "Brow Lift", price: "200DH" },
-      { name: "Lash Lift", price: "250DH" }
-    ]
-  },
-  {
-    category: "Makeup",
-    image: "/makeup_artistry.webp",
-    items: [
-      { name: "Makeup Invitee", price: "300DH" },
-      { name: "Makeup du Jour", price: "200DH" },
-      { name: "Pack Makeup Mariee", price: "1600DH" }
-    ]
-  },
-  {
-    category: "Epilation",
-    image: "/epilation_waxing.webp",
-    items: [
-      { name: "Duvet", price: "15DH" },
-      { name: "Sourcil", price: "30DH" },
-      { name: "Visage", price: "50DH" },
-      { name: "Aisselle", price: "30DH" },
-      { name: "Demi Bras / Bras Entier", price: "30/50DH" },
-      { name: "Demi Jambes / Jambes Entières", price: "40/70DH" },
-      { name: "Bord Maillot / Maillot", price: "50DH" },
-      { name: "Corps Complet", price: "100DH" }
-    ]
-  }
-];
+type CategoryWithItems = PricingCategory & { items: PricingItem[] }
 
 export default function ServicesPage() {
+  const [categories, setCategories] = useState<CategoryWithItems[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/pricing/categories').then(r => r.json()),
+      fetch('/api/pricing/items').then(r => r.json()),
+    ]).then(([cats, items]: [PricingCategory[], PricingItem[]]) => {
+      const merged: CategoryWithItems[] = cats
+        .filter(c => c.is_active)
+        .map(c => ({
+          ...c,
+          items: items
+            .filter(i => i.category_id === c.id && i.is_active)
+            .sort((a, b) => a.sort_order - b.sort_order),
+        }))
+      setCategories(merged)
+      setLoading(false)
+    })
+  }, [])
+
   return (
     <>
       <Navigation />
@@ -123,9 +61,11 @@ export default function ServicesPage() {
 
         {/* Menu Container */}
         <div className={styles.menuContainer}>
-          {pricingData.map((category, index) => (
+          {loading ? (
+            <p style={{ textAlign: 'center', color: 'rgba(0,0,0,0.35)', padding: '40px 0' }}>Chargement...</p>
+          ) : categories.map((category, index) => (
             <motion.section
-              key={category.category}
+              key={category.id}
               className={styles.categorySection}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -133,27 +73,40 @@ export default function ServicesPage() {
               transition={{ duration: 0.6, delay: index * 0.08 }}
             >
               <div className={styles.categoryHeader}>
-                <img src={category.image} alt={category.category} className={styles.categoryCircle} loading="lazy" decoding="async" />
+                {category.image_url && (
+                  <img src={category.image_url} alt={category.name} className={styles.categoryCircle} loading="lazy" decoding="async" />
+                )}
                 <div>
                   <div className={styles.categoryRule} />
-                  <h2 className={styles.categoryTitle}>{category.category}</h2>
+                  <h2 className={styles.categoryTitle}>{category.name}</h2>
                 </div>
               </div>
               <div className={styles.priceGrid}>
-                {category.items.map((item, itemIndex) => (
-                  <motion.div
-                    key={item.name}
-                    className={styles.priceRow}
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: itemIndex * 0.02 }}
-                  >
-                    <span className={styles.itemName}>{item.name}</span>
-                    <div className={styles.dots} />
-                    <span className={styles.itemPrice}>{item.price}</span>
-                  </motion.div>
-                ))}
+                {category.items.map((item, itemIndex) => {
+                  const isPromo = item.original_price != null && item.original_price > item.price
+                  return (
+                    <motion.div
+                      key={item.id}
+                      className={styles.priceRow}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: itemIndex * 0.02 }}
+                    >
+                      <span className={styles.itemName}>{item.name}</span>
+                      <div className={styles.dots} />
+                      {isPromo ? (
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                          <span style={{ fontSize: '10px', background: 'rgba(220,38,38,0.1)', color: '#DC2626', border: '1px solid rgba(220,38,38,0.2)', borderRadius: '4px', padding: '1px 5px', fontWeight: 700, letterSpacing: '0.05em' }}>PROMO</span>
+                          <span style={{ textDecoration: 'line-through', color: 'rgba(0,0,0,0.35)', fontSize: '13px' }}>{item.original_price}DH</span>
+                          <span style={{ color: '#DC2626', fontWeight: 700, fontSize: '15px' }}>{item.price}DH</span>
+                        </span>
+                      ) : (
+                        <span className={styles.itemPrice}>{item.price}DH</span>
+                      )}
+                    </motion.div>
+                  )
+                })}
               </div>
             </motion.section>
           ))}
