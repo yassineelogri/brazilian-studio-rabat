@@ -138,6 +138,7 @@ export interface PricingItem {
   original_price: number | null
   sort_order: number
   is_active: boolean
+  is_from_price: boolean
 }
 
 export interface PricingCategoryWithItems extends PricingCategory {

@@ -99,10 +99,12 @@ export default function ServicesPage() {
                         <span style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
                           <span style={{ fontSize: '10px', background: 'rgba(220,38,38,0.1)', color: '#DC2626', border: '1px solid rgba(220,38,38,0.2)', borderRadius: '4px', padding: '1px 5px', fontWeight: 700, letterSpacing: '0.05em' }}>PROMO</span>
                           <span style={{ textDecoration: 'line-through', color: 'rgba(0,0,0,0.35)', fontSize: '13px' }}>{item.original_price}DH</span>
-                          <span style={{ color: '#DC2626', fontWeight: 700, fontSize: '15px' }}>{item.price}DH</span>
+                          <span style={{ color: '#DC2626', fontWeight: 700, fontSize: '15px' }}>{item.is_from_price ? 'à partir de ' : ''}{item.price}DH</span>
                         </span>
                       ) : (
-                        <span className={styles.itemPrice}>{item.price}DH</span>
+                        <span className={styles.itemPrice}>
+                          {item.is_from_price ? <span style={{ fontSize: '12px', fontStyle: 'italic', opacity: 0.7 }}>à partir de </span> : null}{item.price}DH
+                        </span>
                       )}
                     </motion.div>
                   )
