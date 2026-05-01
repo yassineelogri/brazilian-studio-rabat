@@ -1,71 +1,114 @@
 import React from 'react'
-import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer'
+import path from 'path'
+import { Document, Page, View, Text, Image, StyleSheet } from '@react-pdf/renderer'
 import type { DevisWithRelations, FactureWithRelations } from '@/lib/supabase/types'
+import { SALON } from '@/lib/salon-info'
 
-const PINK = '#B76E79'
-const DARK = '#1a1a1a'
-const GRAY = '#666666'
-const LIGHT = '#f8f4f4'
+const GOLD  = '#C9A96E'
+const DARK  = '#1a1a1a'
+const GRAY  = '#666666'
+const LIGHT = '#f9f6f2'
+const LINE  = '#e8e0d6'
+
+const LOGO_PATH = path.join(process.cwd(), 'public', 'logo-black.png')
 
 const styles = StyleSheet.create({
   page: {
     fontFamily: 'Helvetica',
     fontSize: 9,
     color: DARK,
-    paddingTop: 40,
-    paddingBottom: 50,
+    paddingTop: 36,
+    paddingBottom: 52,
     paddingHorizontal: 40,
+    backgroundColor: '#ffffff',
   },
-  // ---- Header ----
-  title: { fontSize: 20, fontFamily: 'Helvetica-Bold', color: PINK, marginBottom: 16 },
-  headerRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
-  headerLeft: { flex: 1 },
-  headerRight: { flex: 1, alignItems: 'flex-end' },
-  companyName: { fontFamily: 'Helvetica-Bold', fontSize: 11, marginBottom: 3 },
-  companyLine: { color: GRAY, marginBottom: 2 },
+
+  // ── Header ──────────────────────────────────────────────
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 24,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: LINE,
+  },
+  logo: {
+    width: 110,
+    height: 48,
+    objectFit: 'contain',
+  },
+  headerRight: {
+    alignItems: 'flex-end',
+  },
+  docType: {
+    fontSize: 22,
+    fontFamily: 'Helvetica-Bold',
+    color: GOLD,
+    marginBottom: 4,
+    letterSpacing: 2,
+  },
+  refRow: { flexDirection: 'row', gap: 6, marginTop: 3 },
   refLabel: { color: GRAY },
-  refValue: { fontFamily: 'Helvetica-Bold', fontSize: 10 },
-  // ---- Client section ----
-  clientBox: {
+  refValue: { fontFamily: 'Helvetica-Bold' },
+
+  // ── Salon + Client ───────────────────────────────────────
+  partiesRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+    gap: 16,
+  },
+  partyBox: {
+    flex: 1,
     backgroundColor: LIGHT,
     padding: 10,
-    marginBottom: 20,
     borderRadius: 3,
+    borderLeftWidth: 2,
+    borderLeftColor: GOLD,
   },
-  clientLabel: { color: GRAY, marginBottom: 3 },
-  clientName: { fontFamily: 'Helvetica-Bold', fontSize: 10 },
-  clientLine: { color: GRAY },
-  // ---- Table ----
+  partyLabel: {
+    fontSize: 7,
+    fontFamily: 'Helvetica-Bold',
+    color: GOLD,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 5,
+  },
+  partyName: { fontFamily: 'Helvetica-Bold', fontSize: 10, marginBottom: 2 },
+  partyLine: { color: GRAY, marginBottom: 1 },
+
+  // ── Table ────────────────────────────────────────────────
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: PINK,
-    padding: 6,
-    marginBottom: 0,
+    backgroundColor: GOLD,
+    padding: '5 8',
   },
   tableRow: {
     flexDirection: 'row',
-    padding: 6,
+    padding: '6 8',
     borderBottomWidth: 0.5,
-    borderBottomColor: '#e8dede',
+    borderBottomColor: LINE,
   },
   tableRowAlt: {
     flexDirection: 'row',
-    padding: 6,
+    padding: '6 8',
     backgroundColor: LIGHT,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#e8dede',
+    borderBottomColor: LINE,
   },
-  thText: { color: 'white', fontFamily: 'Helvetica-Bold' },
-  colDesc: { flex: 4 },
-  colQty: { flex: 1, textAlign: 'center' },
+  thText: { color: 'white', fontFamily: 'Helvetica-Bold', fontSize: 8 },
+  colDesc:  { flex: 4 },
+  colQty:   { flex: 1, textAlign: 'center' },
   colPrice: { flex: 2, textAlign: 'right' },
-  colTva: { flex: 1, textAlign: 'center' },
+  colTva:   { flex: 1, textAlign: 'center' },
   colTotal: { flex: 2, textAlign: 'right' },
-  // ---- Totals ----
-  totalsSection: { alignItems: 'flex-end', marginTop: 12, marginBottom: 16 },
+
+  // ── Totals ───────────────────────────────────────────────
+  totalsSection: { alignItems: 'flex-end', marginTop: 14, marginBottom: 16 },
   totalsRow: {
     flexDirection: 'row',
-    width: 240,
+    width: 260,
     justifyContent: 'space-between',
     marginBottom: 4,
   },
@@ -73,25 +116,27 @@ const styles = StyleSheet.create({
   totalsValue: {},
   totalsTTCRow: {
     flexDirection: 'row',
-    width: 240,
+    width: 260,
     justifyContent: 'space-between',
-    marginTop: 4,
-    paddingTop: 6,
-    borderTopWidth: 1,
-    borderTopColor: PINK,
+    marginTop: 6,
+    paddingTop: 7,
+    borderTopWidth: 1.5,
+    borderTopColor: GOLD,
   },
-  totalsTTCLabel: { fontFamily: 'Helvetica-Bold', fontSize: 11, color: PINK },
-  totalsTTCValue: { fontFamily: 'Helvetica-Bold', fontSize: 11, color: PINK },
-  // ---- Notes / info ----
-  notesBox: {
+  totalsTTCLabel: { fontFamily: 'Helvetica-Bold', fontSize: 11, color: GOLD },
+  totalsTTCValue: { fontFamily: 'Helvetica-Bold', fontSize: 11, color: GOLD },
+
+  // ── Info box (notes / validity / payment) ────────────────
+  infoBox: {
     backgroundColor: LIGHT,
     padding: 10,
-    marginBottom: 16,
+    marginBottom: 14,
     borderRadius: 3,
   },
-  notesLabel: { fontFamily: 'Helvetica-Bold', marginBottom: 4 },
-  notesText: { color: GRAY },
-  // ---- Footer ----
+  infoLabel: { fontFamily: 'Helvetica-Bold', marginBottom: 4, color: DARK },
+  infoText:  { color: GRAY },
+
+  // ── Footer ───────────────────────────────────────────────
   footer: {
     position: 'absolute',
     bottom: 20,
@@ -100,10 +145,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderTopWidth: 0.5,
-    borderTopColor: '#e8dede',
-    paddingTop: 8,
+    borderTopColor: LINE,
+    paddingTop: 7,
   },
-  footerText: { color: GRAY, fontSize: 8 },
+  footerText: { color: GRAY, fontSize: 7.5 },
 })
 
 function fmtAmount(n: number) {
@@ -115,19 +160,12 @@ function fmtDate(iso: string) {
 }
 
 const STATUS_LABELS: Record<string, string> = {
-  draft: 'Brouillon',
-  sent: 'Envoyé',
-  accepted: 'Accepté',
-  rejected: 'Refusé',
-  expired: 'Expiré',
-  paid: 'Payée',
-  cancelled: 'Annulée',
+  draft: 'Brouillon', sent: 'Envoyé', accepted: 'Accepté',
+  rejected: 'Refusé', expired: 'Expiré', paid: 'Payée', cancelled: 'Annulée',
 }
 
 const PAYMENT_LABELS: Record<string, string> = {
-  cash: 'Espèces',
-  card: 'Carte bancaire',
-  transfer: 'Virement',
+  cash: 'Espèces', card: 'Carte bancaire', transfer: 'Virement',
 }
 
 interface Props {
@@ -138,42 +176,62 @@ interface Props {
 export function DocumentTemplate({ doc, type }: Props) {
   const isFacture = type === 'facture'
   const facture = isFacture ? (doc as FactureWithRelations) : null
-  const devis = !isFacture ? (doc as DevisWithRelations) : null
+  const devis   = !isFacture ? (doc as DevisWithRelations) : null
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Title */}
-        <Text style={styles.title}>{isFacture ? 'FACTURE' : 'DEVIS'}</Text>
 
-        {/* Header: company left, ref right */}
+        {/* ── Header: logo left / doc type + ref right ── */}
         <View style={styles.headerRow}>
-          <View style={styles.headerLeft}>
-            <Text style={styles.companyName}>Brazilian Studio Rabat</Text>
-            <Text style={styles.companyLine}>Rabat, Maroc</Text>
-            <Text style={styles.companyLine}>Tél: +212 600 000 000</Text>
-            <Text style={styles.companyLine}>ICE: 000000000000000</Text>
-            <Text style={styles.companyLine}>IF: 00000000</Text>
-          </View>
+          <Image src={LOGO_PATH} style={styles.logo} />
           <View style={styles.headerRight}>
-            <Text style={styles.refLabel}>Référence</Text>
-            <Text style={styles.refValue}>{doc.number}</Text>
-            <Text style={{ ...styles.refLabel, marginTop: 6 }}>Date</Text>
-            <Text>{fmtDate(doc.created_at)}</Text>
-            <Text style={{ ...styles.refLabel, marginTop: 6 }}>Statut</Text>
-            <Text>{STATUS_LABELS[doc.status] ?? doc.status}</Text>
+            <Text style={styles.docType}>{isFacture ? 'FACTURE' : 'DEVIS'}</Text>
+            <View style={styles.refRow}>
+              <Text style={styles.refLabel}>Réf :</Text>
+              <Text style={styles.refValue}>{doc.number}</Text>
+            </View>
+            <View style={styles.refRow}>
+              <Text style={styles.refLabel}>Date :</Text>
+              <Text>{fmtDate(doc.created_at)}</Text>
+            </View>
+            <View style={styles.refRow}>
+              <Text style={styles.refLabel}>Statut :</Text>
+              <Text style={{ fontFamily: 'Helvetica-Bold' }}>{STATUS_LABELS[doc.status] ?? doc.status}</Text>
+            </View>
+            {devis?.valid_until && (
+              <View style={styles.refRow}>
+                <Text style={styles.refLabel}>Valable jusqu'au :</Text>
+                <Text>{fmtDate(devis.valid_until)}</Text>
+              </View>
+            )}
           </View>
         </View>
 
-        {/* Client */}
-        <View style={styles.clientBox}>
-          <Text style={styles.clientLabel}>Client</Text>
-          <Text style={styles.clientName}>{doc.clients.name}</Text>
-          {doc.clients.phone ? <Text style={styles.clientLine}>{doc.clients.phone}</Text> : null}
-          {doc.clients.email ? <Text style={styles.clientLine}>{doc.clients.email}</Text> : null}
+        {/* ── Salon + Client side by side ── */}
+        <View style={styles.partiesRow}>
+          {/* Salon */}
+          <View style={styles.partyBox}>
+            <Text style={styles.partyLabel}>Émetteur</Text>
+            <Text style={styles.partyName}>{SALON.name}</Text>
+            <Text style={styles.partyLine}>{SALON.address}</Text>
+            <Text style={styles.partyLine}>Tél : {SALON.phone}</Text>
+            {SALON.email ? <Text style={styles.partyLine}>{SALON.email}</Text> : null}
+            {SALON.ice   ? <Text style={styles.partyLine}>ICE : {SALON.ice}</Text> : null}
+            {SALON.if_   ? <Text style={styles.partyLine}>IF : {SALON.if_}</Text>  : null}
+            {SALON.rc    ? <Text style={styles.partyLine}>RC : {SALON.rc}</Text>   : null}
+          </View>
+
+          {/* Client */}
+          <View style={styles.partyBox}>
+            <Text style={styles.partyLabel}>Client</Text>
+            <Text style={styles.partyName}>{doc.clients.name}</Text>
+            {doc.clients.phone ? <Text style={styles.partyLine}>Tél : {doc.clients.phone}</Text> : null}
+            {doc.clients.email ? <Text style={styles.partyLine}>{doc.clients.email}</Text> : null}
+          </View>
         </View>
 
-        {/* Items table */}
+        {/* ── Items table ── */}
         <View style={styles.tableHeader}>
           <Text style={{ ...styles.thText, ...styles.colDesc }}>Description</Text>
           <Text style={{ ...styles.thText, ...styles.colQty }}>Qté</Text>
@@ -191,7 +249,7 @@ export function DocumentTemplate({ doc, type }: Props) {
           </View>
         ))}
 
-        {/* Totals */}
+        {/* ── Totals ── */}
         <View style={styles.totalsSection}>
           <View style={styles.totalsRow}>
             <Text style={styles.totalsLabel}>Sous-total HT</Text>
@@ -207,23 +265,19 @@ export function DocumentTemplate({ doc, type }: Props) {
           </View>
         </View>
 
-        {/* Notes / devis validity / facture payment */}
-        {(doc.notes || devis?.valid_until || facture?.paid_at) ? (
-          <View style={styles.notesBox}>
+        {/* ── Info box: notes / payment ── */}
+        {(doc.notes || facture?.paid_at) ? (
+          <View style={styles.infoBox}>
             {doc.notes ? (
               <>
-                <Text style={styles.notesLabel}>Notes</Text>
-                <Text style={styles.notesText}>{doc.notes}</Text>
+                <Text style={styles.infoLabel}>Notes</Text>
+                <Text style={styles.infoText}>{doc.notes}</Text>
               </>
             ) : null}
-            {devis?.valid_until ? (
-              <Text style={{ ...styles.notesText, marginTop: doc.notes ? 8 : 0 }}>
-                Ce devis est valable jusqu&apos;au {fmtDate(devis.valid_until)}.
-              </Text>
-            ) : null}
             {facture?.paid_at ? (
-              <Text style={{ ...styles.notesText, marginTop: doc.notes ? 8 : 0 }}>
-                Payée le {fmtDate(facture.paid_at)}
+              <Text style={{ ...styles.infoText, marginTop: doc.notes ? 8 : 0 }}>
+                {'Payée le '}
+                {fmtDate(facture.paid_at)}
                 {facture.payment_method ? ` — ${PAYMENT_LABELS[facture.payment_method] ?? facture.payment_method}` : ''}
                 {facture.paid_amount != null ? ` — ${fmtAmount(Number(facture.paid_amount))}` : ''}
               </Text>
@@ -231,11 +285,12 @@ export function DocumentTemplate({ doc, type }: Props) {
           </View>
         ) : null}
 
-        {/* Footer */}
+        {/* ── Footer ── */}
         <View style={styles.footer} fixed>
-          <Text style={styles.footerText}>Merci de votre confiance — Brazilian Studio Rabat</Text>
+          <Text style={styles.footerText}>Merci de votre confiance — {SALON.name} — {SALON.phone}</Text>
           <Text style={styles.footerText}>{doc.number}</Text>
         </View>
+
       </Page>
     </Document>
   )
