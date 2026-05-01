@@ -6,18 +6,7 @@ import { requireStaff, computeTotals, projectDevisStatus } from '@/lib/api-helpe
 import { renderToBuffer } from '@react-pdf/renderer'
 import React from 'react'
 import { DocumentTemplate } from '@/components/pdf/DocumentTemplate'
-
-async function fetchLogoBase64(request: NextRequest): Promise<string | null> {
-  try {
-    const origin = new URL(request.url).origin
-    const res = await fetch(`${origin}/logo-black.png`)
-    if (!res.ok) return null
-    const buf = await res.arrayBuffer()
-    return `data:image/png;base64,${Buffer.from(buf).toString('base64')}`
-  } catch {
-    return null
-  }
-}
+import LOGO_BASE64 from '@/lib/logo-base64'
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -42,7 +31,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       ...totals,
       clients: (devis as any).clients,
     }
-    const logoBase64 = await fetchLogoBase64(request)
+    const logoBase64 = LOGO_BASE64
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const buffer = await renderToBuffer(

@@ -149,7 +149,9 @@ const styles = StyleSheet.create({
 })
 
 function fmtAmount(n: number) {
-  return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MAD'
+  const [int, dec] = n.toFixed(2).split('.')
+  const intFormatted = int.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+  return `${intFormatted},${dec} MAD`
 }
 
 function fmtDate(iso: string) {
