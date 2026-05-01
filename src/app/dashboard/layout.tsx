@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Calendar, Plus, Users, Scissors, LogOut, Package, ShoppingBag, FileText, Receipt, Home, ChevronUp, X, Tag } from 'lucide-react'
+import { Calendar, Plus, Users, UserCog, Scissors, LogOut, Package, ShoppingBag, FileText, Receipt, Home, ChevronUp, X, Tag } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import PendingBadge from '@/components/dashboard/PendingBadge'
 import LowStockBadge from '@/components/dashboard/LowStockBadge'
@@ -28,10 +28,11 @@ const navGroups = [
   {
     label: 'Gestion',
     items: [
+      { href: '/dashboard/clients', label: 'Clients', icon: Users, badge: null },
       { href: '/dashboard/products', label: 'Produits', icon: Package, badge: 'lowstock' as const },
       { href: '/dashboard/services', label: 'Prestations', icon: Scissors, badge: null },
       { href: '/dashboard/pricing', label: 'Tarifs', icon: Tag, badge: null },
-      { href: '/dashboard/staff', label: 'Staff', icon: Users, badge: null },
+      { href: '/dashboard/staff', label: 'Staff', icon: UserCog, badge: null },
     ]
   },
 ]
@@ -60,9 +61,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const allSecondaryItems = [
     { href: '/dashboard/ventes/new', label: 'Ventes', icon: ShoppingBag, badge: null },
     { href: '/dashboard/products', label: 'Produits', icon: Package, badge: 'lowstock' as const },
+    { href: '/dashboard/clients', label: 'Clients', icon: Users, badge: null },
     { href: '/dashboard/services', label: 'Prestations', icon: Scissors, badge: null },
     { href: '/dashboard/pricing', label: 'Tarifs', icon: Tag, badge: null },
-    { href: '/dashboard/staff', label: 'Staff', icon: Users, badge: null },
+    { href: '/dashboard/staff', label: 'Staff', icon: UserCog, badge: null },
   ]
 
   return (
