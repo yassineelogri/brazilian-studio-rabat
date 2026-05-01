@@ -303,11 +303,11 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
               </div>
               <div>
                 <label style={labelStyle}>Mode de paiement</label>
-                <select value={editPaymentMode} onChange={e => setEditPaymentMode(e.target.value)} style={inputStyle}>
-                  <option value="">— Non spécifié —</option>
-                  <option value="cash">Espèces / Cash</option>
-                  <option value="cheque">Chèque</option>
-                  <option value="card">Carte de crédit</option>
+                <select value={editPaymentMode} onChange={e => setEditPaymentMode(e.target.value)} style={{ ...inputStyle, colorScheme: 'dark' }}>
+                  <option value="" style={{ background: '#1C1816', color: '#fff' }}>— Non spécifié —</option>
+                  <option value="cash" style={{ background: '#1C1816', color: '#fff' }}>Espèces / Cash</option>
+                  <option value="cheque" style={{ background: '#1C1816', color: '#fff' }}>Chèque</option>
+                  <option value="card" style={{ background: '#1C1816', color: '#fff' }}>Carte de crédit</option>
                 </select>
               </div>
             </div>

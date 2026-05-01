@@ -259,11 +259,11 @@ export default function NewDevisPage() {
             </div>
             <div>
               <label style={labelStyle}>Mode de paiement</label>
-              <select value={paymentMode} onChange={e => { setPaymentMode(e.target.value); triggerAutoSave() }} style={inputStyle}>
-                <option value="">— Non spécifié —</option>
-                <option value="cash">Espèces / Cash</option>
-                <option value="cheque">Chèque</option>
-                <option value="card">Carte de crédit</option>
+              <select value={paymentMode} onChange={e => { setPaymentMode(e.target.value); triggerAutoSave() }} style={{ ...inputStyle, colorScheme: 'dark' }}>
+                <option value="" style={{ background: '#1C1816', color: '#fff' }}>— Non spécifié —</option>
+                <option value="cash" style={{ background: '#1C1816', color: '#fff' }}>Espèces / Cash</option>
+                <option value="cheque" style={{ background: '#1C1816', color: '#fff' }}>Chèque</option>
+                <option value="card" style={{ background: '#1C1816', color: '#fff' }}>Carte de crédit</option>
               </select>
             </div>
           </div>
