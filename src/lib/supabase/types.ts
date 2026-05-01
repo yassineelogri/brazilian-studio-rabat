@@ -165,6 +165,8 @@ export interface DevisItem {
   sort_order: number
 }
 
+export type DevisPaymentMode = 'cash' | 'cheque' | 'card'
+
 export interface Devis {
   id: string
   number: string
@@ -174,6 +176,10 @@ export interface Devis {
   tva_rate: number
   notes: string | null
   valid_until: string | null
+  rdv_date: string | null
+  avance_amount: number | null
+  avance_paid: boolean
+  payment_mode: DevisPaymentMode | null
   events: StatusEvent[]
   created_at: string
 }

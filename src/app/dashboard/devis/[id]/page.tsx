@@ -65,6 +65,10 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
   const [editClientName, setEditClientName] = useState('')
   const [editClientPhone, setEditClientPhone] = useState('')
   const [editClientEmail, setEditClientEmail] = useState('')
+  const [editRdvDate, setEditRdvDate] = useState('')
+  const [editAvanceAmount, setEditAvanceAmount] = useState('')
+  const [editAvancePaid, setEditAvancePaid] = useState(false)
+  const [editPaymentMode, setEditPaymentMode] = useState('')
   const [saving, setSaving] = useState(false)
 
   async function load() {
@@ -137,6 +141,10 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
     setEditClientName(devis.clients?.name ?? '')
     setEditClientPhone(devis.clients?.phone ?? '')
     setEditClientEmail(devis.clients?.email ?? '')
+    setEditRdvDate((devis as any).rdv_date ?? '')
+    setEditAvanceAmount((devis as any).avance_amount != null ? String((devis as any).avance_amount) : '')
+    setEditAvancePaid(Boolean((devis as any).avance_paid))
+    setEditPaymentMode((devis as any).payment_mode ?? '')
     setEditItems(devis.items.map(i => ({
       id: crypto.randomUUID(),
       description: i.description,
@@ -166,6 +174,10 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
         tva_rate: editTvaRate,
         valid_until: editValidUntil || null,
         notes: editNotes || null,
+        rdv_date: editRdvDate || null,
+        avance_amount: editAvanceAmount ? Number(editAvanceAmount) : null,
+        avance_paid: editAvancePaid,
+        payment_mode: editPaymentMode || null,
         items: validItems.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price })),
       }),
     })
@@ -281,6 +293,41 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
             </div>
           </div>
 
+          {/* RDV + Avance + Payment mode */}
+          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(201,169,110,0.15)', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C9A96E', margin: 0 }}>Rendez-vous &amp; Paiement</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div>
+                <label style={labelStyle}>Date de rendez-vous</label>
+                <input type="date" value={editRdvDate} onChange={e => setEditRdvDate(e.target.value)} style={inputStyle} />
+              </div>
+              <div>
+                <label style={labelStyle}>Mode de paiement</label>
+                <select value={editPaymentMode} onChange={e => setEditPaymentMode(e.target.value)} style={inputStyle}>
+                  <option value="">— Non spécifié —</option>
+                  <option value="cash">Espèces / Cash</option>
+                  <option value="cheque">Chèque</option>
+                  <option value="card">Carte de crédit</option>
+                </select>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '12px', alignItems: 'flex-end' }}>
+              <div>
+                <label style={labelStyle}>Avance (MAD)</label>
+                <input type="number" min={0} step={1} value={editAvanceAmount} onChange={e => setEditAvanceAmount(e.target.value)} placeholder="Ex: 500" style={inputStyle} />
+              </div>
+              {editAvanceAmount && (
+                <div>
+                  <label style={labelStyle}>Réglée ?</label>
+                  <button type="button" onClick={() => setEditAvancePaid(v => !v)}
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '10px', border: editAvancePaid ? '1px solid rgba(74,222,128,0.4)' : '1px solid rgba(255,255,255,0.12)', background: editAvancePaid ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.07)', color: editAvancePaid ? '#4ADE80' : 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '13px' }}>
+                    {editAvancePaid ? '✓ Oui' : 'Non'}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
           <LineItemsBuilder key="edit" tva_rate={editTvaRate} initialItems={editItems} onChange={setEditItems} />
 
           <div>
@@ -313,6 +360,26 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
             <>
               <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Valable jusqu&apos;au</p>
               <p style={{ color: 'rgba(255,255,255,0.7)' }}>{new Date(devis.valid_until).toLocaleDateString('fr-FR')}</p>
+            </>
+          )}
+          {(devis as any).rdv_date && (
+            <>
+              <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Date de RDV</p>
+              <p style={{ color: '#C9A96E' }}>{new Date((devis as any).rdv_date + 'T00:00:00').toLocaleDateString('fr-FR')}</p>
+            </>
+          )}
+          {(devis as any).avance_amount != null && (
+            <>
+              <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Avance</p>
+              <p style={{ color: (devis as any).avance_paid ? '#4ADE80' : 'rgba(255,255,255,0.7)' }}>
+                {Number((devis as any).avance_amount).toFixed(2)} MAD — {(devis as any).avance_paid ? 'Réglée' : 'En attente'}
+              </p>
+            </>
+          )}
+          {(devis as any).payment_mode && (
+            <>
+              <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Mode de paiement</p>
+              <p style={{ color: 'rgba(255,255,255,0.7)' }}>{{ cash: 'Espèces / Cash', cheque: 'Chèque', card: 'Carte de crédit' }[(devis as any).payment_mode as string] ?? (devis as any).payment_mode}</p>
             </>
           )}
           <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>TVA</p>

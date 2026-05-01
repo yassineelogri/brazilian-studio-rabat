@@ -42,6 +42,10 @@ export default function NewDevisPage() {
   const [items, setItems] = useState<LineItem[]>([])
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [rdvDate, setRdvDate] = useState('')
+  const [avanceAmount, setAvanceAmount] = useState('')
+  const [avancePaid, setAvancePaid] = useState(false)
+  const [paymentMode, setPaymentMode] = useState('')
 
   const [appointments, setAppointments] = useState<AppointmentOption[]>([])
   const [appointmentId, setAppointmentId] = useState<string | null>(null)
@@ -132,7 +136,7 @@ export default function NewDevisPage() {
     if (!clientId) return
     const validItems = items.filter(i => i.description.trim() && i.quantity > 0)
     if (validItems.length === 0) return
-    const payload = { client_id: clientId, appointment_id: appointmentId || null, tva_rate: tvaRate, valid_until: validUntil || null, notes: notes || null, items: validItems.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price })) }
+    const payload = { client_id: clientId, appointment_id: appointmentId || null, tva_rate: tvaRate, valid_until: validUntil || null, notes: notes || null, rdv_date: rdvDate || null, avance_amount: avanceAmount ? Number(avanceAmount) : null, avance_paid: avancePaid, payment_mode: paymentMode || null, items: validItems.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price })) }
     if (savedIdRef.current) {
       await fetch(`/api/devis/${savedIdRef.current}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
     } else {
@@ -152,7 +156,7 @@ export default function NewDevisPage() {
     setSaving(true)
     const resolvedClientId = await resolveClientId()
     if (!resolvedClientId) { setError('Impossible de créer le client.'); setSaving(false); return }
-    const payload = { client_id: resolvedClientId, tva_rate: tvaRate, valid_until: validUntil || null, notes: notes || null, appointment_id: appointmentId || null, items: validItems.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price })) }
+    const payload = { client_id: resolvedClientId, tva_rate: tvaRate, valid_until: validUntil || null, notes: notes || null, appointment_id: appointmentId || null, rdv_date: rdvDate || null, avance_amount: avanceAmount ? Number(avanceAmount) : null, avance_paid: avancePaid, payment_mode: paymentMode || null, items: validItems.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price })) }
     let res: Response
     if (savedIdRef.current) {
       res = await fetch(`/api/devis/${savedIdRef.current}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
@@ -242,6 +246,41 @@ export default function NewDevisPage() {
           <div>
             <label style={labelStyle}>Valable jusqu&apos;au</label>
             <input type="date" value={validUntil} onChange={e => { setValidUntil(e.target.value); triggerAutoSave() }} style={inputStyle} />
+          </div>
+        </div>
+
+        {/* RDV + Avance + Payment */}
+        <div style={card}>
+          <p style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginBottom: '16px' }}>Rendez-vous &amp; Paiement</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div>
+              <label style={labelStyle}>Date de rendez-vous</label>
+              <input type="date" value={rdvDate} onChange={e => { setRdvDate(e.target.value); triggerAutoSave() }} style={inputStyle} />
+            </div>
+            <div>
+              <label style={labelStyle}>Mode de paiement</label>
+              <select value={paymentMode} onChange={e => { setPaymentMode(e.target.value); triggerAutoSave() }} style={inputStyle}>
+                <option value="">— Non spécifié —</option>
+                <option value="cash">Espèces / Cash</option>
+                <option value="cheque">Chèque</option>
+                <option value="card">Carte de crédit</option>
+              </select>
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '16px', alignItems: 'flex-end' }}>
+            <div>
+              <label style={labelStyle}>Avance (MAD)</label>
+              <input type="number" min={0} step={1} value={avanceAmount} onChange={e => { setAvanceAmount(e.target.value); triggerAutoSave() }} placeholder="Ex: 500" style={inputStyle} />
+            </div>
+            {avanceAmount && (
+              <div style={{ paddingBottom: '2px' }}>
+                <label style={labelStyle}>Réglée ?</label>
+                <button type="button" onClick={() => { setAvancePaid(v => !v); triggerAutoSave() }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '9px 14px', borderRadius: '10px', border: avancePaid ? '1px solid rgba(74,222,128,0.4)' : '1px solid rgba(255,255,255,0.12)', background: avancePaid ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.07)', color: avancePaid ? '#4ADE80' : 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '13px' }}>
+                  {avancePaid ? '✓ Oui' : 'Non'}
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

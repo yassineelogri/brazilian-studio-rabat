@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     if (!staff) return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
 
     const body = await request.json()
-    const { client_id, appointment_id, tva_rate, notes, valid_until, items } = body
+    const { client_id, appointment_id, tva_rate, notes, valid_until, items, rdv_date, avance_amount, avance_paid, payment_mode } = body
 
     if (!client_id || typeof client_id !== 'string') {
       return NextResponse.json({ error: 'client_id is required' }, { status: 422 })
@@ -49,6 +49,10 @@ export async function POST(request: NextRequest) {
         tva_rate: tva_rate ?? 20,
         notes: notes?.trim() || null,
         valid_until: valid_until || null,
+        rdv_date: rdv_date || null,
+        avance_amount: avance_amount != null ? Number(avance_amount) : null,
+        avance_paid: Boolean(avance_paid),
+        payment_mode: payment_mode || null,
         events: [initialEvent],
       })
       .select()
@@ -101,6 +105,7 @@ export async function GET(request: NextRequest) {
       .from('devis')
       .select(`
         id, number, status, tva_rate, valid_until, notes, events, created_at, client_id, appointment_id,
+        rdv_date, avance_amount, avance_paid, payment_mode,
         clients(name, phone, email),
         devis_items(id, description, quantity, unit_price, sort_order)
       `)
@@ -141,6 +146,10 @@ export async function GET(request: NextRequest) {
           created_at: d.created_at,
           client_id: d.client_id,
           appointment_id: d.appointment_id,
+          rdv_date: d.rdv_date,
+          avance_amount: d.avance_amount,
+          avance_paid: d.avance_paid,
+          payment_mode: d.payment_mode,
           clients: d.clients,
           items,
           ...totals,

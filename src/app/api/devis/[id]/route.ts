@@ -10,6 +10,7 @@ async function fetchDevisWithItems(supabase: ReturnType<typeof createServerSupab
     .from('devis')
     .select(`
       id, number, status, tva_rate, valid_until, notes, events, created_at, client_id, appointment_id,
+      rdv_date, avance_amount, avance_paid, payment_mode,
       clients(name, phone, email),
       devis_items(id, description, quantity, unit_price, sort_order)
     `)
@@ -53,12 +54,16 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     if (existing.status !== 'draft') return NextResponse.json({ error: 'not_draft' }, { status: 409 })
 
     const body = await request.json()
-    const { notes, valid_until, tva_rate, items } = body
+    const { notes, valid_until, tva_rate, items, rdv_date, avance_amount, avance_paid, payment_mode } = body
 
     // Build update payload from whitelisted fields only
     const updates: Record<string, unknown> = {}
-    if (notes !== undefined)       updates.notes = notes?.trim() || null
-    if (valid_until !== undefined) updates.valid_until = valid_until || null
+    if (notes !== undefined)         updates.notes = notes?.trim() || null
+    if (valid_until !== undefined)   updates.valid_until = valid_until || null
+    if (rdv_date !== undefined)      updates.rdv_date = rdv_date || null
+    if (avance_amount !== undefined) updates.avance_amount = avance_amount != null ? Number(avance_amount) : null
+    if (avance_paid !== undefined)   updates.avance_paid = Boolean(avance_paid)
+    if (payment_mode !== undefined)  updates.payment_mode = payment_mode || null
     if (tva_rate !== undefined) {
       if (isNaN(Number(tva_rate)) || Number(tva_rate) < 0 || Number(tva_rate) > 100) {
         return NextResponse.json({ error: 'tva_rate must be between 0 and 100' }, { status: 422 })

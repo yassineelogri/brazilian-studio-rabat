@@ -1,23 +1,23 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { requireStaff, computeTotals } from '@/lib/api-helpers'
 import { renderToBuffer } from '@react-pdf/renderer'
 import React from 'react'
 import { DocumentTemplate } from '@/components/pdf/DocumentTemplate'
 
-function readLogoBase64(): string | null {
+async function fetchLogoBase64(request: NextRequest): Promise<string | null> {
   try {
-    const buf = fs.readFileSync(path.join(process.cwd(), 'public', 'logo-black.png'))
-    return `data:image/png;base64,${buf.toString('base64')}`
+    const origin = new URL(request.url).origin
+    const res = await fetch(`${origin}/logo-black.png`)
+    if (!res.ok) return null
+    const buf = await res.arrayBuffer()
+    return `data:image/png;base64,${Buffer.from(buf).toString('base64')}`
   } catch {
     return null
   }
 }
-
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     const items = ((facture as any).facture_items || []).sort((a: any, b: any) => a.sort_order - b.sort_order)
     const totals = computeTotals(items, facture.tva_rate)
     const docData = { ...facture, items, ...totals, clients: (facture as any).clients }
-    const logoBase64 = readLogoBase64()
+    const logoBase64 = await fetchLogoBase64(request)
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const buffer = await renderToBuffer(

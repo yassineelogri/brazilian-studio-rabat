@@ -161,8 +161,12 @@ const STATUS_LABELS: Record<string, string> = {
   rejected: 'Refusé', expired: 'Expiré', paid: 'Payée', cancelled: 'Annulée',
 }
 
-const PAYMENT_LABELS: Record<string, string> = {
+const FACTURE_PAYMENT_LABELS: Record<string, string> = {
   cash: 'Espèces', card: 'Carte bancaire', transfer: 'Virement',
+}
+
+const DEVIS_PAYMENT_LABELS: Record<string, string> = {
+  cash: 'Espèces / Cash', cheque: 'Chèque', card: 'Carte de crédit',
 }
 
 interface Props {
@@ -261,7 +265,34 @@ export function DocumentTemplate({ doc, type, logoBase64 }: Props) {
           </View>
         </View>
 
-        {/* ── Info box: notes / payment ── */}
+        {/* ── Info box: devis extra fields ── */}
+        {!isFacture && (devis as any)?.rdv_date || (devis as any)?.avance_amount || (devis as any)?.payment_mode ? (
+          <View style={styles.infoBox}>
+            {(devis as any)?.rdv_date ? (
+              <View style={{ flexDirection: 'row', gap: 6, marginBottom: 4 }}>
+                <Text style={styles.infoLabel}>Date de RDV :</Text>
+                <Text style={styles.infoText}>{fmtDate((devis as any).rdv_date)}</Text>
+              </View>
+            ) : null}
+            {(devis as any)?.avance_amount != null ? (
+              <View style={{ flexDirection: 'row', gap: 6, marginBottom: 4 }}>
+                <Text style={styles.infoLabel}>Avance :</Text>
+                <Text style={styles.infoText}>
+                  {fmtAmount(Number((devis as any).avance_amount))}
+                  {(devis as any).avance_paid ? ' — Réglée' : ' — En attente'}
+                </Text>
+              </View>
+            ) : null}
+            {(devis as any)?.payment_mode ? (
+              <View style={{ flexDirection: 'row', gap: 6 }}>
+                <Text style={styles.infoLabel}>Mode de paiement :</Text>
+                <Text style={styles.infoText}>{DEVIS_PAYMENT_LABELS[(devis as any).payment_mode] ?? (devis as any).payment_mode}</Text>
+              </View>
+            ) : null}
+          </View>
+        ) : null}
+
+        {/* ── Info box: notes / facture payment ── */}
         {(doc.notes || facture?.paid_at) ? (
           <View style={styles.infoBox}>
             {doc.notes ? (
@@ -274,7 +305,7 @@ export function DocumentTemplate({ doc, type, logoBase64 }: Props) {
               <Text style={{ ...styles.infoText, marginTop: doc.notes ? 8 : 0 }}>
                 {'Payée le '}
                 {fmtDate(facture.paid_at)}
-                {facture.payment_method ? ` — ${PAYMENT_LABELS[facture.payment_method] ?? facture.payment_method}` : ''}
+                {facture.payment_method ? ` — ${FACTURE_PAYMENT_LABELS[facture.payment_method] ?? facture.payment_method}` : ''}
                 {facture.paid_amount != null ? ` — ${fmtAmount(Number(facture.paid_amount))}` : ''}
               </Text>
             ) : null}
