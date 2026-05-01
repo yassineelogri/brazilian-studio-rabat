@@ -1,6 +1,4 @@
 import React from 'react'
-import fs from 'fs'
-import path from 'path'
 import { Document, Page, View, Text, Image, StyleSheet } from '@react-pdf/renderer'
 import type { DevisWithRelations, FactureWithRelations } from '@/lib/supabase/types'
 import { SALON } from '@/lib/salon-info'
@@ -10,15 +8,6 @@ const DARK  = '#1a1a1a'
 const GRAY  = '#666666'
 const LIGHT = '#f9f6f2'
 const LINE  = '#e8e0d6'
-
-function loadLogo(): string | null {
-  try {
-    const buf = fs.readFileSync(path.join(process.cwd(), 'public', 'logo-black.png'))
-    return `data:image/png;base64,${buf.toString('base64')}`
-  } catch {
-    return null
-  }
-}
 
 const styles = StyleSheet.create({
   page: {
@@ -179,13 +168,13 @@ const PAYMENT_LABELS: Record<string, string> = {
 interface Props {
   doc: DevisWithRelations | FactureWithRelations
   type: 'devis' | 'facture'
+  logoBase64?: string | null
 }
 
-export function DocumentTemplate({ doc, type }: Props) {
+export function DocumentTemplate({ doc, type, logoBase64 }: Props) {
   const isFacture = type === 'facture'
   const facture = isFacture ? (doc as FactureWithRelations) : null
   const devis   = !isFacture ? (doc as DevisWithRelations) : null
-  const logoSrc = loadLogo()
 
   return (
     <Document>
@@ -193,7 +182,7 @@ export function DocumentTemplate({ doc, type }: Props) {
 
         {/* ── Header: logo left / doc type + ref right ── */}
         <View style={styles.headerRow}>
-          {logoSrc ? <Image src={logoSrc} style={styles.logo} /> : <View style={styles.logo} />}
+          {logoBase64 ? <Image src={logoBase64} style={styles.logo} /> : <View style={styles.logo} />}
           <View style={styles.headerRight}>
             <Text style={styles.docType}>{isFacture ? 'FACTURE' : 'DEVIS'}</Text>
             <View style={styles.refRow}>
