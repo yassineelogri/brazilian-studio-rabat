@@ -1,4 +1,5 @@
 import React from 'react'
+import fs from 'fs'
 import path from 'path'
 import { Document, Page, View, Text, Image, StyleSheet } from '@react-pdf/renderer'
 import type { DevisWithRelations, FactureWithRelations } from '@/lib/supabase/types'
@@ -10,7 +11,14 @@ const GRAY  = '#666666'
 const LIGHT = '#f9f6f2'
 const LINE  = '#e8e0d6'
 
-const LOGO_PATH = path.join(process.cwd(), 'public', 'logo-black.png')
+function loadLogo(): string | null {
+  try {
+    const buf = fs.readFileSync(path.join(process.cwd(), 'public', 'logo-black.png'))
+    return `data:image/png;base64,${buf.toString('base64')}`
+  } catch {
+    return null
+  }
+}
 
 const styles = StyleSheet.create({
   page: {
@@ -177,6 +185,7 @@ export function DocumentTemplate({ doc, type }: Props) {
   const isFacture = type === 'facture'
   const facture = isFacture ? (doc as FactureWithRelations) : null
   const devis   = !isFacture ? (doc as DevisWithRelations) : null
+  const logoSrc = loadLogo()
 
   return (
     <Document>
@@ -184,7 +193,7 @@ export function DocumentTemplate({ doc, type }: Props) {
 
         {/* ── Header: logo left / doc type + ref right ── */}
         <View style={styles.headerRow}>
-          <Image src={LOGO_PATH} style={styles.logo} />
+          {logoSrc ? <Image src={logoSrc} style={styles.logo} /> : <View style={styles.logo} />}
           <View style={styles.headerRight}>
             <Text style={styles.docType}>{isFacture ? 'FACTURE' : 'DEVIS'}</Text>
             <View style={styles.refRow}>
@@ -217,10 +226,7 @@ export function DocumentTemplate({ doc, type }: Props) {
             <Text style={styles.partyLine}>{SALON.address}</Text>
             <Text style={styles.partyLine}>Tél : {SALON.phone}</Text>
             {SALON.email ? <Text style={styles.partyLine}>{SALON.email}</Text> : null}
-            {SALON.ice   ? <Text style={styles.partyLine}>ICE : {SALON.ice}</Text>  : null}
-            {SALON.if_   ? <Text style={styles.partyLine}>IF : {SALON.if_}</Text>   : null}
-            {SALON.rc    ? <Text style={styles.partyLine}>RC : {SALON.rc}</Text>    : null}
-            {SALON.tp    ? <Text style={styles.partyLine}>TP : {SALON.tp}</Text>    : null}
+            {SALON.ice   ? <Text style={styles.partyLine}>ICE : {SALON.ice}</Text> : null}
           </View>
 
           {/* Client */}
