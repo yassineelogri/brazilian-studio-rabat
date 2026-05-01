@@ -1,10 +1,11 @@
 export const SALON = {
-  name:    'Brazilian Studio Rabat',
-  address: 'Rabat, Maroc',
-  phone:   '+212 661 21 58 00',
-  email:   'brazilianstudiorabat@gmail.com',
-  ice:     '',   // ← fill in your ICE number
-  if_:     '',   // ← fill in your IF number
-  rc:      '',   // ← fill in your RC number (optional)
-  website: 'www.brazilianstudiorabat.com',
+  name:    'Brazilian STUDIO by Ali K',
+  address: 'Millennium Business Center, Étage M N°09',
+  phone:   '0661 215 800',
+  email:   '',
+  ice:     '003516614000066',
+  if_:     '66009810',
+  rc:      '178249',
+  tp:      '25911451',
+  website: '',
 } as const

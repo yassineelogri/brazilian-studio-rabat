@@ -217,9 +217,10 @@ export function DocumentTemplate({ doc, type }: Props) {
             <Text style={styles.partyLine}>{SALON.address}</Text>
             <Text style={styles.partyLine}>Tél : {SALON.phone}</Text>
             {SALON.email ? <Text style={styles.partyLine}>{SALON.email}</Text> : null}
-            {SALON.ice   ? <Text style={styles.partyLine}>ICE : {SALON.ice}</Text> : null}
-            {SALON.if_   ? <Text style={styles.partyLine}>IF : {SALON.if_}</Text>  : null}
-            {SALON.rc    ? <Text style={styles.partyLine}>RC : {SALON.rc}</Text>   : null}
+            {SALON.ice   ? <Text style={styles.partyLine}>ICE : {SALON.ice}</Text>  : null}
+            {SALON.if_   ? <Text style={styles.partyLine}>IF : {SALON.if_}</Text>   : null}
+            {SALON.rc    ? <Text style={styles.partyLine}>RC : {SALON.rc}</Text>    : null}
+            {SALON.tp    ? <Text style={styles.partyLine}>TP : {SALON.tp}</Text>    : null}
           </View>
 
           {/* Client */}
