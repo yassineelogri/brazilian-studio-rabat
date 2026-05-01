@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Download, Send, ArrowRightLeft, Copy, Trash2, CheckCircle, XCircle, Edit } from 'lucide-react'
 import type { DevisWithRelations, StatusEvent } from '@/lib/supabase/types'
 import { LineItemsBuilder, LineItem } from '@/components/dashboard/LineItemsBuilder'
+import { createClient } from '@/lib/supabase/client'
 
 export const dynamic = 'force-dynamic'
 
@@ -61,6 +62,9 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
   const [editValidUntil, setEditValidUntil] = useState('')
   const [editNotes, setEditNotes] = useState('')
   const [editItems, setEditItems] = useState<LineItem[]>([])
+  const [editClientName, setEditClientName] = useState('')
+  const [editClientPhone, setEditClientPhone] = useState('')
+  const [editClientEmail, setEditClientEmail] = useState('')
   const [saving, setSaving] = useState(false)
 
   async function load() {
@@ -130,6 +134,9 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
     setEditTvaRate(Number(devis.tva_rate))
     setEditValidUntil(devis.valid_until ?? '')
     setEditNotes(devis.notes ?? '')
+    setEditClientName(devis.clients?.name ?? '')
+    setEditClientPhone(devis.clients?.phone ?? '')
+    setEditClientEmail(devis.clients?.email ?? '')
     setEditItems(devis.items.map(i => ({
       id: crypto.randomUUID(),
       description: i.description,
@@ -142,7 +149,16 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
   async function handleSave() {
     const validItems = editItems.filter(i => i.description.trim() && i.quantity > 0)
     if (validItems.length === 0) { setError('Au moins une ligne requise.'); return }
+    if (!editClientName.trim()) { setError('Le nom du client est requis.'); return }
     setSaving(true)
+    // Update client info
+    const supabase = createClient()
+    await supabase.from('clients').update({
+      name: editClientName.trim(),
+      phone: editClientPhone.trim() || 'Non renseigné',
+      email: editClientEmail.trim() || null,
+    }).eq('id', devis!.client_id)
+    // Update devis
     const res = await fetch(`/api/devis/${params.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -231,8 +247,29 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
 
       {/* Edit form */}
       {isEditing && (
-        <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <p style={{ fontSize: '15px', fontWeight: 500, color: 'rgba(255,255,255,0.85)' }}>Modifier le devis</p>
+
+          {/* Client */}
+          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(201,169,110,0.15)', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C9A96E', margin: 0 }}>Client</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div>
+                <label style={labelStyle}>Nom</label>
+                <input value={editClientName} onChange={e => setEditClientName(e.target.value)} placeholder="Nom complet" style={inputStyle} />
+              </div>
+              <div>
+                <label style={labelStyle}>Téléphone</label>
+                <input value={editClientPhone} onChange={e => setEditClientPhone(e.target.value)} placeholder="0661 000 000" style={inputStyle} />
+              </div>
+            </div>
+            <div>
+              <label style={labelStyle}>Email (optionnel)</label>
+              <input type="email" value={editClientEmail} onChange={e => setEditClientEmail(e.target.value)} placeholder="email@exemple.com" style={inputStyle} />
+            </div>
+          </div>
+
+          {/* TVA + validity */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div>
               <label style={labelStyle}>Taux TVA (%)</label>
@@ -243,11 +280,14 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
               <input type="date" value={editValidUntil} onChange={e => setEditValidUntil(e.target.value)} style={inputStyle} />
             </div>
           </div>
+
           <LineItemsBuilder key="edit" tva_rate={editTvaRate} initialItems={editItems} onChange={setEditItems} />
+
           <div>
             <label style={labelStyle}>Notes</label>
             <textarea value={editNotes} onChange={e => setEditNotes(e.target.value)} rows={3} style={{ ...inputStyle, resize: 'none' }} />
           </div>
+
           <div style={{ display: 'flex', gap: '10px' }}>
             <button type="button" onClick={handleSave} disabled={saving}
               style={{ padding: '9px 20px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}>
