@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
     borderBottomColor: LINE,
   },
   logo: {
-    width: 110,
-    height: 48,
+    width: 220,
+    height: 96,
     objectFit: 'contain',
   },
   headerRight: {
