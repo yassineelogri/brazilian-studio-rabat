@@ -3,6 +3,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import styles from './About.module.css';
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 interface CounterState {
   yearsExperience: number;
   clientsSatisfied: number;
@@ -42,7 +44,8 @@ function AnimatedCounter({ target, decimals = 0 }: { target: number; decimals?: 
     const animate = () => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const currentValue = target * progress;
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const currentValue = target * eased;
 
       if (isMounted) {
         setCount(decimals > 0 ? parseFloat(currentValue.toFixed(decimals)) : Math.floor(currentValue));
@@ -94,7 +97,7 @@ export default function About() {
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.6, ease: EASE }}
           >
             5+ Ans d'Excellence
           </motion.div>
@@ -105,7 +108,7 @@ export default function About() {
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, ease: EASE }}
         >
           <span className={styles.subtitle}>Notre Histoire</span>
           <h2 className={`${styles.title} heading-lg`}>L&apos;Excellence au Service de Votre Beauté</h2>

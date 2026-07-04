@@ -24,7 +24,7 @@
 }
 
 .separator {
-  color: #d68f9f;
+  color: var(--color-accent-soft);
   font-size: 0.8rem;
 }
 

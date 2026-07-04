@@ -33,16 +33,16 @@ export default function Footer() {
             <h4 className={styles.title}>Navigation</h4>
             <ul className={styles.list}>
               <li>
-                <a href="#accueil" className={styles.link}>Accueil</a>
+                <a href="/" className={styles.link}>Accueil</a>
               </li>
               <li>
-                <a href="#services" className={styles.link}>Services & Prix</a>
+                <a href="/services" className={styles.link}>Services & Prix</a>
               </li>
               <li>
-                <a href="#galerie" className={styles.link}>Galerie</a>
+                <a href="/#gallery" className={styles.link}>Galerie</a>
               </li>
               <li>
-                <a href="#about" className={styles.link}>À Propos</a>
+                <a href="/about" className={styles.link}>À Propos</a>
               </li>
             </ul>
           </div>
@@ -52,22 +52,22 @@ export default function Footer() {
             <h4 className={styles.title}>Nos Services</h4>
             <ul className={styles.list}>
               <li>
-                <a href="#services" className={styles.link}>Manucure Russe</a>
+                <a href="/services" className={styles.link}>Manucure Russe</a>
               </li>
               <li>
-                <a href="#services" className={styles.link}>Lissage Brésilien</a>
+                <a href="/services" className={styles.link}>Lissage Brésilien</a>
               </li>
               <li>
-                <a href="#services" className={styles.link}>Extensions de Cils</a>
+                <a href="/services" className={styles.link}>Extensions de Cils</a>
               </li>
               <li>
-                <a href="#services" className={styles.link}>Soin Visage</a>
+                <a href="/services" className={styles.link}>Soin Visage</a>
               </li>
               <li>
-                <a href="#services" className={styles.link}>Maquillage</a>
+                <a href="/services" className={styles.link}>Maquillage</a>
               </li>
               <li>
-                <a href="#services" className={styles.link}>Épilation</a>
+                <a href="/services" className={styles.link}>Épilation</a>
               </li>
             </ul>
           </div>
@@ -111,7 +111,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className={styles.bottom}>
-          <p>&copy; {currentYear} Brazilian Studio Rabat. Crafted with love in Rabat</p>
+          <p>&copy; {currentYear} Brazilian Studio Rabat · Tous droits réservés</p>
         </div>
       </div>
     </footer>

@@ -20,12 +20,10 @@
 }
 
 .logo {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-serif), 'Playfair Display', serif;
   font-size: 1.5rem;
   font-weight: 600;
-  background: var(--gradient-brand);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-text);
 }
 
 .links {
@@ -85,10 +83,14 @@
   display: block;
   width: 28px;
   height: 2px;
-  background-color: #D4A574;
+  background-color: var(--color-accent-deep);
   border-radius: 2px;
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   transform-origin: center;
+}
+
+.hamburger[aria-expanded="true"] .line {
+  background-color: #FDF6F0;
 }
 
 .hamburger[aria-expanded="true"] .line:first-child {
@@ -110,7 +112,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #3d1535;
+  background: #2F2123;
   z-index: 99;
   display: flex;
   align-items: flex-start;
@@ -140,7 +142,7 @@
 }
 
 .mobileLink {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-serif), 'Playfair Display', serif;
   font-size: 2.5rem;
   font-weight: 600;
   color: white;
@@ -149,11 +151,11 @@
 }
 
 .mobileLink:hover {
-  color: #D4A574;
+  color: var(--color-accent-soft);
 }
 
 .mobileBookBtn {
-  background: linear-gradient(135deg, #D4A574 0%, #C9956B 100%);
+  background: var(--gradient-rose-gold);
   color: white;
   padding: 1rem 2.5rem;
   border-radius: 50px;

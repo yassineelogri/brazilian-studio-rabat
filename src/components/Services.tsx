@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import styles from './Services.module.css';
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 const services = [
   {
     title: "Manucure Russe",
@@ -53,7 +55,7 @@ export default function Services() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
+              transition={{ duration: 0.6, delay: index * 0.08, ease: EASE }}
             >
               <div className={styles.imageWrapper}>
                 <img src={service.image} alt={service.title} className={styles.image} loading="lazy" decoding="async" />
@@ -61,7 +63,7 @@ export default function Services() {
               <div className={styles.cardContent}>
                 <h3 className={styles.cardTitle}>{service.title}</h3>
                 <p className={styles.cardDesc}>{service.description}</p>
-                <a href="#" className={styles.discoverLink}>Découvrir →</a>
+                <Link href="/services" className={styles.discoverLink}>Découvrir →</Link>
               </div>
             </motion.div>
           ))}

@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Gallery.module.css';
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 type Category = 'Tout' | 'Cheveux' | 'Ongles' | 'Cils' | 'Visage' | 'Maquillage';
 
 const galleryItems = [
@@ -63,7 +65,7 @@ export default function Gallery() {
                 className={styles.imageWrapper}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: index * 0.06 }}
+                transition={{ duration: 0.4, delay: index * 0.05, ease: EASE }}
                 onClick={() => setSelectedImage(item)}
               >
                 <img src={item.src} alt={item.title} className={styles.image} loading="lazy" decoding="async" />

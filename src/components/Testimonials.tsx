@@ -9,28 +9,24 @@ const testimonials = [
     text: "Je n'ai jamais vu une telle attention aux détails. La Manucure Russe a complètement transformé mes ongles, le résultat a duré des semaines sans une seule écaille.",
     author: "Sophia R.",
     service: "Manucure Russe",
-    image: "/model_testimonial.webp",
     rating: 5
   },
   {
     text: "Le Lissage Brésilien ici est magique. Mes cheveux n'ont jamais été aussi soyeux et faciles à coiffer. Le salon lui-même est un rêve absolu.",
     author: "Amira B.",
     service: "Lissage Brésilien",
-    image: "/model_testimonial.webp",
     rating: 5
   },
   {
     text: "Les meilleures artistes de cils à Rabat. Elles ont personnalisé le volume parfaitement. Le résultat est si naturel et glamour.",
     author: "Leila M.",
     service: "Extensions de Cils",
-    image: "/model_testimonial.webp",
     rating: 5
   },
   {
     text: "Mon Hydrafacial chez Brazilian Studio m'a donné une peau éclatante instantanément. Je reviens chaque mois, c'est devenu mon rituel beauté.",
     author: "Yasmine K.",
     service: "Soin Hydrafacial",
-    image: "/model_testimonial.webp",
     rating: 5
   }
 ];
@@ -39,36 +35,24 @@ export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
+  const easeOutQuint = [0.22, 1, 0.36, 1] as const;
+
   const slideVariants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0,
-      scale: 0.8,
-      rotateY: direction > 0 ? 45 : -45
+      x: direction > 0 ? 60 : -60,
+      opacity: 0
     }),
     center: {
       zIndex: 1,
       x: 0,
       opacity: 1,
-      scale: 1,
-      rotateY: 0,
-      transition: {
-        x: { type: "spring" as const, stiffness: 300, damping: 30 },
-        opacity: { duration: 0.4 },
-        rotateY: { duration: 0.6 }
-      }
+      transition: { duration: 0.5, ease: easeOutQuint }
     },
     exit: (direction: number) => ({
       zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
+      x: direction < 0 ? 60 : -60,
       opacity: 0,
-      scale: 0.8,
-      rotateY: direction < 0 ? 45 : -45,
-      transition: {
-        x: { type: "spring" as const, stiffness: 300, damping: 30 },
-        opacity: { duration: 0.4 },
-        rotateY: { duration: 0.6 }
-      }
+      transition: { duration: 0.35, ease: easeOutQuint }
     })
   };
 
@@ -113,7 +97,7 @@ export default function Testimonials() {
               className={styles.card}
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={1}
+              dragElastic={0.2}
               onDragEnd={(e, { offset, velocity }) => {
                 const swipe = swipePower(offset.x, velocity.x);
                 if (swipe < -swipeConfidenceThreshold) {
@@ -129,7 +113,9 @@ export default function Testimonials() {
               <Quote size={48} className={styles.quoteIcon} />
               <p className={styles.quoteText}>&quot;{testimonials[currentIndex].text}&quot;</p>
               <div className={styles.authorInfo}>
-                <img src={testimonials[currentIndex].image} alt={testimonials[currentIndex].author} className={styles.authorImage} loading="lazy" decoding="async" />
+                <div className={styles.authorMonogram} aria-hidden="true">
+                  {testimonials[currentIndex].author.charAt(0)}
+                </div>
                 <div className={styles.authorDetails}>
                   <span className={styles.authorName}>{testimonials[currentIndex].author}</span>
                   <span className={styles.authorService}>{testimonials[currentIndex].service}</span>
@@ -148,16 +134,16 @@ export default function Testimonials() {
                 setDirection(index > currentIndex ? 1 : -1);
                 setCurrentIndex(index);
               }}
-              aria-label={`Go to testimonial ${index + 1}`}
+              aria-label={`Aller au témoignage ${index + 1}`}
             />
           ))}
         </div>
 
         <div className={styles.controls}>
-          <button className={styles.controlBtn} onClick={() => paginate(-1)} aria-label="Previous">
+          <button className={styles.controlBtn} onClick={() => paginate(-1)} aria-label="Témoignage précédent">
             <ChevronLeft size={24} />
           </button>
-          <button className={styles.controlBtn} onClick={() => paginate(1)} aria-label="Next">
+          <button className={styles.controlBtn} onClick={() => paginate(1)} aria-label="Témoignage suivant">
             <ChevronRight size={24} />
           </button>
         </div>

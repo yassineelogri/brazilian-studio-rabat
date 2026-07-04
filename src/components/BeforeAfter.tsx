@@ -1,25 +1,27 @@
-"use client";
+﻿"use client";
 import { motion } from 'framer-motion';
 import styles from './BeforeAfter.module.css';
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const reveals = [
   {
     image: "/smooth_hair.webp",
     service: "Lissage Brésilien",
     label: "Cheveux",
-    desc: "Des mèches transformées en soie — brillance, légèreté, durée jusqu'à 6 mois."
+    desc: "Des mèches transformées en soie : brillance, légèreté, durée jusqu'à 6 mois."
   },
   {
     image: "/russian_manicure.webp",
     service: "Manucure Russe",
     label: "Ongles",
-    desc: "Cuticules parfaites, vernis longue durée — la précision russe au bout des doigts."
+    desc: "Cuticules parfaites, vernis longue durée : la précision russe au bout des doigts."
   },
   {
     image: "/lash_extensions.webp",
     service: "Extensions de Cils",
     label: "Cils",
-    desc: "Un regard profond et magnétique — posé cil par cil, personnalisé pour vous."
+    desc: "Un regard profond et magnétique, posé cil par cil, personnalisé pour vous."
   }
 ];
 
@@ -32,7 +34,7 @@ export default function BeforeAfter() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, ease: EASE }}
         >
           Résultats
         </motion.span>
@@ -41,7 +43,7 @@ export default function BeforeAfter() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: EASE }}
         >
           Nos Révélations
         </motion.h2>
@@ -50,7 +52,7 @@ export default function BeforeAfter() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.6, delay: 0.2, ease: EASE }}
         >
           Chaque visite est une transformation. Voici quelques-uns de nos résultats.
         </motion.p>
@@ -64,7 +66,7 @@ export default function BeforeAfter() {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: i * 0.15 }}
+            transition={{ duration: 0.7, delay: i * 0.1, ease: EASE }}
           >
             <div className={styles.imageFrame}>
               <img src={item.image} alt={item.service} className={styles.image} loading="lazy" decoding="async" />

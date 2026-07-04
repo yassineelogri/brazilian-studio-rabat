@@ -39,7 +39,7 @@
 .decorativeLine {
   width: 40px;
   height: 2px;
-  background: #D68F9F;
+  background: var(--color-accent-soft);
   margin: 0 auto 2rem;
 }
 
@@ -47,13 +47,13 @@
   text-transform: uppercase;
   letter-spacing: 3px;
   font-size: 0.9rem;
-  color: #D68F9F;
+  color: var(--color-accent-soft);
   margin-bottom: 1rem;
   font-weight: 500;
 }
 
 .heading {
-  font-family: "Playfair Display", serif;
+  font-family: var(--font-serif), 'Playfair Display', serif;
   font-size: clamp(2rem, 4vw, 3rem);
   color: white;
   margin-bottom: 1.5rem;
@@ -83,21 +83,20 @@
   padding: 1rem 2rem;
   border-radius: 50px;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: transform 0.4s var(--ease-out-quint), box-shadow 0.4s var(--ease-out-quint), background-color 0.4s var(--ease-out-quint), color 0.4s var(--ease-out-quint);
   font-size: 1rem;
   cursor: pointer;
   border: none;
 }
 
 .buttonPrimary {
-  background: linear-gradient(135deg, #D68F9F, #C56F7F);
+  background: var(--gradient-rose-gold);
   color: white;
 }
 
 .buttonPrimary:hover {
-  background: linear-gradient(135deg, #E5A5B5, #D68F9F);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(214, 143, 159, 0.3);
+  box-shadow: 0 8px 20px rgba(150, 82, 95, 0.35);
 }
 
 .buttonOutline {

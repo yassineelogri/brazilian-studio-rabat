@@ -3,6 +3,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import styles from './Hero.module.css';
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 export default function Hero() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -15,32 +17,32 @@ export default function Hero() {
   // Staggered animation variants
   const badgeVariants = {
     hidden: { opacity: 0, y: -20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.1 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.1, ease: EASE } }
   };
 
   const titleVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.3 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.3, ease: EASE } }
   };
 
   const subtitleVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.4 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.4, ease: EASE } }
   };
 
   const descriptionVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.5 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.5, ease: EASE } }
   };
 
   const actionsVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.6 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.6, ease: EASE } }
   };
 
   const floatingImageVariants = {
     hidden: { opacity: 0, scale: 0.8, x: 50 },
-    visible: { opacity: 1, scale: 1, x: 0, transition: { duration: 0.8, delay: 0.4 } }
+    visible: { opacity: 1, scale: 1, x: 0, transition: { duration: 0.8, delay: 0.4, ease: EASE } }
   };
 
   return (
@@ -110,7 +112,7 @@ export default function Hero() {
           className={styles.description}
           variants={descriptionVariants}
         >
-          Découvrez nos soins signature — Manucure Russe, Lissage Brésilien, Extensions de Cils — dans un cadre luxueux au cœur de Rabat-Agdal.
+          Découvrez nos soins signature, Manucure Russe, Lissage Brésilien et Extensions de Cils, dans un cadre luxueux au cœur de Rabat-Agdal.
         </motion.p>
 
         <motion.div

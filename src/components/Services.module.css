@@ -8,7 +8,7 @@
 }
 
 .subtitle {
-  color: #D68F9F;
+  color: var(--color-accent-deep);
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 0.85rem;
@@ -60,7 +60,7 @@
 }
 
 .cardTitle {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-serif), 'Playfair Display', serif;
   font-size: 1.4rem;
   margin-bottom: 1rem;
   font-weight: 600;
@@ -74,7 +74,7 @@
 }
 
 .discoverLink {
-  color: #D68F9F;
+  color: var(--color-accent-deep);
   font-weight: 500;
   text-decoration: none;
   display: inline-block;
@@ -94,9 +94,9 @@
 
 .buttonOutline {
   padding: 0.875rem 2rem;
-  border: 2px solid #D68F9F;
+  border: 1px solid var(--color-accent);
   border-radius: 50px;
-  color: #D68F9F;
+  color: var(--color-accent-deep);
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
@@ -105,7 +105,7 @@
 }
 
 .buttonOutline:hover {
-  background-color: #D68F9F;
+  background-color: var(--color-accent-deep);
   color: #ffffff;
 }
 

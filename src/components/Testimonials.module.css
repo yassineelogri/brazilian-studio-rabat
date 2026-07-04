@@ -18,7 +18,7 @@
 }
 
 .subtitle {
-  color: #D68F9F;
+  color: var(--color-accent-deep);
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 0.85rem;
@@ -32,7 +32,6 @@
   align-items: center;
   justify-content: center;
   min-height: 500px;
-  perspective: 1000px;
 }
 
 .card {
@@ -60,21 +59,21 @@
   display: flex;
   gap: 4px;
   margin-bottom: 2rem;
-  color: #E8A060;
+  color: var(--color-accent);
   justify-content: center;
 }
 
 .star {
-  color: #E8A060;
+  color: var(--color-accent);
 }
 
 .quoteIcon {
-  color: rgba(232, 160, 96, 0.2);
+  color: rgba(194, 117, 138, 0.2);
   margin-bottom: 2rem;
 }
 
 .quoteText {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-serif), 'Playfair Display', serif;
   font-size: clamp(1.2rem, 3vw, 1.6rem);
   line-height: 1.5;
   color: var(--color-text);
@@ -88,12 +87,19 @@
   gap: 1.5rem;
 }
 
-.authorImage {
-  width: 70px;
-  height: 70px;
+.authorMonogram {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #E8A060;
+  background: #F8E7EC;
+  border: 1px solid var(--color-border);
+  color: var(--color-accent-deep);
+  font-family: var(--font-serif), 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 
@@ -125,20 +131,20 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: var(--color-text-muted);
+  background-color: var(--color-border);
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  padding: 0;
+  transition: background-color 0.3s var(--ease-out-quint), transform 0.3s var(--ease-out-quint);
 }
 
 .dotActive {
-  background-color: #E8A060;
-  width: 12px;
-  height: 12px;
+  background-color: var(--color-accent-deep);
+  transform: scale(1.2);
 }
 
 .dot:hover {
-  background-color: #E8A060;
+  background-color: var(--color-accent);
 }
 
 .controls {
@@ -163,15 +169,16 @@
 }
 
 .controlBtn:hover {
-  background-color: #E8A060;
-  border-color: #E8A060;
+  background-color: var(--color-accent-deep);
+  border-color: var(--color-accent-deep);
   color: white;
 }
 
 @media (max-width: 768px) {
-  .authorImage {
-    width: 60px;
-    height: 60px;
+  .authorMonogram {
+    width: 54px;
+    height: 54px;
+    font-size: 1.35rem;
   }
 
   .dots {

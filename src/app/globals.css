@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
-
 @import "tailwindcss";
 
 @theme {
@@ -18,20 +16,24 @@
   --shadow-card-hover: 0 4px 16px rgba(107,58,63,0.14);
 
   /* Serif font family */
-  --font-family-serif: 'Playfair Display', serif;
+  --font-family-serif: var(--font-serif), 'Playfair Display', serif;
 }
 
 :root {
   --color-primary: #FFB6C1;
   --color-secondary: #F497A9;
-  --color-accent: #E8A8BB;
+  /* Accent pair: decor for borders/icons/backgrounds, deep for small text (AA on cream) */
+  --color-accent: #C2758A;
+  --color-accent-deep: #A85D70;
+  --color-accent-soft: #D68F9F; /* for use on dark surfaces only */
   --color-background: #FFFAFC;
   --color-surface: #FFFFFF;
   --color-text: #3D2C2E;
   --color-text-muted: #826E72;
   --color-border: #F0E0E4;
   --gradient-brand: linear-gradient(135deg, #FFB6C1, #E8A8BB);
-  --gradient-rose-gold: linear-gradient(135deg, #F8B4B4, #DDA0BA);
+  --gradient-rose-gold: linear-gradient(135deg, #B76E79, #96525F);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -46,7 +48,7 @@ html, body {
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans), 'Inter', sans-serif;
   color: var(--color-text);
   background-color: var(--color-background);
   -webkit-font-smoothing: antialiased;
@@ -54,9 +56,26 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-serif), 'Playfair Display', serif;
   font-weight: 600;
   color: var(--color-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 a {
@@ -84,47 +103,23 @@ a {
   color: var(--color-surface);
   border: none;
   border-radius: 50px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
+  font-family: var(--font-sans), 'Inter', sans-serif;
+  font-weight: 600;
   font-size: 1rem;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 14px rgba(232, 168, 187, 0.4);
+  transition: transform 0.4s var(--ease-out-quint), box-shadow 0.4s var(--ease-out-quint);
+  box-shadow: 0 4px 14px rgba(150, 82, 95, 0.25);
 }
 
 .button-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(232, 168, 187, 0.6);
+  box-shadow: 0 8px 24px rgba(150, 82, 95, 0.35);
 }
 
-.button-primary {
-  position: relative;
-  overflow: hidden;
-}
-
-.button-primary::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
-  animation: shimmer 3s infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-  }
-  100% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
-  }
+.button-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(150, 82, 95, 0.3);
 }
 
 @keyframes pulse {
@@ -141,11 +136,12 @@ a {
   color: var(--color-text);
   border: 1px solid var(--color-text);
   border-radius: 50px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
+  font-family: var(--font-sans), 'Inter', sans-serif;
+  font-weight: 600;
   font-size: 1rem;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.4s var(--ease-out-quint), color 0.4s var(--ease-out-quint), border-color 0.4s var(--ease-out-quint);
 }
 
 .button-outline:hover {

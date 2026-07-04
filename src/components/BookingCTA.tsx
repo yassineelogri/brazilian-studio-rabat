@@ -5,13 +5,15 @@ import { Phone, Instagram } from "lucide-react";
 import Link from "next/link";
 import styles from "./BookingCTA.module.css";
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 export default function BookingCTA() {
   return (
     <motion.section
       className={styles.section}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: EASE }}
       viewport={{ once: true, amount: 0.3 }}
     >
       <img
@@ -51,7 +53,7 @@ export default function BookingCTA() {
           </a>
 
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/brazilian_studio_rabat/"
             target="_blank"
             rel="noopener noreferrer"
             className={`${styles.button} ${styles.buttonOutline}`}

@@ -1,7 +1,24 @@
 import type { Metadata } from "next";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import MotionProvider from "@/components/MotionProvider";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 const SITE_URL = "https://brazilian-studio-rabat.vercel.app";
 
@@ -73,15 +90,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={`${inter.variable} ${playfair.variable}`}>
       <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
         />
-        <CustomCursor />
-        <WhatsAppButton />
-        {children}
+        <MotionProvider>
+          <CustomCursor />
+          <WhatsAppButton />
+          {children}
+        </MotionProvider>
       </body>
     </html>
   );
