@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Brazilian Studio by Ali K — Rabat
 
-## Getting Started
+Website and management platform for a beauty salon in Rabat-Agdal, Morocco. Combines a public marketing site, an online booking flow, a full admin back-office, and a client portal in a single Next.js app.
 
-First, run the development server:
+**Live:** https://brazilian-studio-rabat.vercel.app/
+
+## Features
+
+### Public site (French)
+- Animated landing page (hero, services, gallery, before/after, testimonials) built with Framer Motion
+- Multi-step online booking: service → date → time slot → client info, with real-time availability
+- WhatsApp contact button and contact page
+
+### Admin dashboard (staff only)
+- Calendar with day/week views and appointment slide-over management
+- Appointments: create, confirm, cancel, status tracking
+- Clients directory with inline editing
+- **Devis (quotes)**: line-item builder, PDF export with logo, send by email, convert to facture, duplicate, RDV date / advance payment / payment mode
+- **Factures (invoices)**: PDF export, send by email, mark paid, cancel
+- Pricing catalog (categories + items), products with low-stock alerts, sales recording and history
+- Automated appointment reminders (cron + Resend email / WhatsApp)
+
+### Client portal (espace-client)
+- Passwordless access via magic link or secure token
+- View and cancel appointments, consult devis and factures, edit profile
+
+## Stack
+
+| Layer | Tech |
+|---|---|
+| Framework | Next.js 14 (App Router, TypeScript) |
+| Database & Auth | Supabase (Postgres, RLS, magic links) |
+| Emails | Resend |
+| PDFs | @react-pdf/renderer |
+| Animations | Framer Motion |
+| Styling | CSS Modules + Tailwind |
+
+## Getting started
 
 ```bash
+npm install
+cp .env.local.example .env.local   # fill in Supabase + Resend keys
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. Database schema and migrations live in `supabase/`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Deployed on Vercel. See [DEPLOYMENT.md](DEPLOYMENT.md) for environment variables and the cron reminder setup.

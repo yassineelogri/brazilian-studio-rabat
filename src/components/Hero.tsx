@@ -118,7 +118,7 @@ export default function Hero() {
           variants={actionsVariants}
         >
           <a href="/booking" className="button-primary">Réserver</a>
-          <button className="button-outline">Nos Services</button>
+          <a href="/services" className="button-outline">Nos Services</a>
         </motion.div>
       </motion.div>
 

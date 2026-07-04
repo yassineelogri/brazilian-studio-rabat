@@ -40,3 +40,6 @@ next-env.d.ts
 
 # superpowers brainstorm sessions
 .superpowers/
+
+# local reference assets (screenshots, logo sources)
+/_reference-assets/
