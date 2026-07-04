@@ -12,7 +12,15 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = createAnonSupabaseClient()
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
+    // Canonical URL only: trailing slashes stripped, and never a preview/localhost
+    // URL in production — Supabase silently falls back to its Site URL setting
+    // when redirect_to is not an exact allow-list match.
+    const siteUrl = (
+      process.env.NEXT_PUBLIC_SITE_URL ??
+      (process.env.NODE_ENV === 'production'
+        ? 'https://brazilian-studio-rabat.vercel.app'
+        : 'http://localhost:3000')
+    ).replace(/\/+$/, '')
 
     await supabase.auth.signInWithOtp({
       email: email.trim().toLowerCase(),

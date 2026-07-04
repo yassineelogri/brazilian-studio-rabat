@@ -44,14 +44,26 @@ export async function GET(request: NextRequest) {
 
   // Link auth user to clients row (use service_role to bypass RLS)
   const admin = createServerSupabaseClient()
-  const { data: client } = await admin
+  let { data: client } = await admin
     .from('clients')
     .select('id, auth_user_id')
     .eq('email', user.email)
     .single()
 
+  // First visit without any prior booking: create the client record so
+  // account registration works for brand-new visitors too
   if (!client) {
-    return errorResponse('not_found')
+    const fallbackName = user.email.split('@')[0].replace(/[._-]+/g, ' ').trim() || 'Cliente'
+    const { data: created, error: createError } = await admin
+      .from('clients')
+      .insert({ name: fallbackName, phone: '', email: user.email, auth_user_id: user.id })
+      .select('id, auth_user_id')
+      .single()
+    if (createError || !created) {
+      console.error('Failed to create client record on first login:', createError)
+      return errorResponse('server_error')
+    }
+    client = created
   }
 
   if (!client.auth_user_id) {
