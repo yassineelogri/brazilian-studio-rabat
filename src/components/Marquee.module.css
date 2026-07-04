@@ -1,5 +1,5 @@
 .container {
-  background-color: #2f2123;
+  background-color: var(--color-dark);
   overflow: hidden;
   padding: 1.5rem 0;
 }

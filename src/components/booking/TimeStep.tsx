@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Sunrise, Sun, Sunset } from 'lucide-react'
+import styles from './Booking.module.css'
 
 interface Props {
   date: string
@@ -55,43 +57,54 @@ export default function TimeStep({ date, durationMinutes, selectedTime, onSelect
     }).length < 2
   }
 
+  const groups = [
+    { label: 'Matin', icon: <Sunrise size={14} />, slots: slots.filter(s => timeToMinutes(s) < 13 * 60) },
+    { label: 'Après-midi', icon: <Sun size={14} />, slots: slots.filter(s => timeToMinutes(s) >= 13 * 60 && timeToMinutes(s) < 17 * 60) },
+    { label: 'Soir', icon: <Sunset size={14} />, slots: slots.filter(s => timeToMinutes(s) >= 17 * 60) },
+  ].filter(g => g.slots.length > 0)
+
   if (loading) {
     return (
       <div>
-        <h2 style={{ fontFamily: 'serif', fontSize: '22px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginBottom: '12px', marginTop: '32px' }}>Choisissez un horaire</h2>
-        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>Chargement des disponibilités...</p>
+        <h2 className={styles.stepTitle}>À quelle heure ?</h2>
+        <p className={styles.stepHint}>Chargement des disponibilités…</p>
       </div>
     )
   }
 
+  const noneAvailable = slots.every(s => !isAvailable(s))
+
   return (
     <div>
-      <h2 style={{ fontFamily: 'serif', fontSize: '22px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginBottom: '16px', marginTop: '32px' }}>Choisissez un horaire</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
-        {slots.map(slot => {
-          const available = isAvailable(slot)
-          const selected = selectedTime === slot
-          return (
-            <button
-              key={slot}
-              disabled={!available}
-              onClick={() => onSelect(slot)}
-              style={{
-                padding: '10px 0', borderRadius: '10px', fontSize: '13px', fontWeight: 500, cursor: available ? 'pointer' : 'not-allowed',
-                background: selected ? 'linear-gradient(135deg, #C9A96E, #B8944F)' : available ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
-                border: selected ? 'none' : available ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(255,255,255,0.04)',
-                color: selected ? '#1A1410' : available ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.2)',
-              }}
-            >
-              {slot}
-            </button>
-          )
-        })}
-      </div>
-      {slots.every(s => !isAvailable(s)) && (
-        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', marginTop: '16px', textAlign: 'center' }}>
-          Aucun créneau disponible ce jour. Veuillez choisir une autre date.
+      <h2 className={styles.stepTitle}>À quelle heure ?</h2>
+      <p className={styles.stepHint}>Les horaires barrés sont déjà réservés.</p>
+
+      {noneAvailable ? (
+        <p className={styles.emptySlots}>
+          Cette journée est complète. Choisissez une autre date, ou écrivez-nous sur WhatsApp : nous trouvons toujours une solution.
         </p>
+      ) : (
+        groups.map(group => (
+          <div key={group.label} className={styles.slotGroup}>
+            <span className={styles.slotGroupLabel}>{group.icon} {group.label}</span>
+            <div className={styles.slotGrid}>
+              {group.slots.map(slot => {
+                const available = isAvailable(slot)
+                return (
+                  <button
+                    key={slot}
+                    disabled={!available}
+                    className={styles.slot}
+                    data-selected={selectedTime === slot}
+                    onClick={() => onSelect(slot)}
+                  >
+                    {slot}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ))
       )}
     </div>
   )

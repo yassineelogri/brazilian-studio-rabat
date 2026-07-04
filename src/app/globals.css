@@ -20,19 +20,21 @@
 }
 
 :root {
-  --color-primary: #FFB6C1;
-  --color-secondary: #F497A9;
+  --color-primary: #E2A7B5;
+  --color-secondary: #C98FA0;
   /* Accent pair: decor for borders/icons/backgrounds, deep for small text (AA on cream) */
-  --color-accent: #C2758A;
-  --color-accent-deep: #A85D70;
-  --color-accent-soft: #D68F9F; /* for use on dark surfaces only */
-  --color-background: #FFFAFC;
+  --color-accent: #B26478;
+  --color-accent-deep: #8E4457;
+  --color-accent-soft: #E2A7B5; /* for use on dark surfaces only */
+  --color-background: #FAF3EE;
   --color-surface: #FFFFFF;
-  --color-text: #3D2C2E;
-  --color-text-muted: #826E72;
-  --color-border: #F0E0E4;
-  --gradient-brand: linear-gradient(135deg, #FFB6C1, #E8A8BB);
-  --gradient-rose-gold: linear-gradient(135deg, #B76E79, #96525F);
+  --color-blush: #F7E9E6;
+  --color-dark: #2B1B1E;
+  --color-text: #382227;
+  --color-text-muted: #7E6469;
+  --color-border: #EEDCD7;
+  --gradient-brand: linear-gradient(135deg, #E2A7B5, #C98FA0);
+  --gradient-rose-gold: linear-gradient(135deg, #A85D70, #7E4452);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 

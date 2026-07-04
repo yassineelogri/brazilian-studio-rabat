@@ -112,7 +112,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #2F2123;
+  background: var(--color-dark);
   z-index: 99;
   display: flex;
   align-items: flex-start;

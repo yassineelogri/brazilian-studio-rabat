@@ -24,7 +24,7 @@
 .tooltip {
   position: absolute;
   right: 70px;
-  background: #3d1535;
+  background: var(--color-dark);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 8px;
@@ -45,5 +45,5 @@
   transform: translateY(-50%);
   border: 6px solid transparent;
   border-right: none;
-  border-left-color: #3d1535;
+  border-left-color: var(--color-dark);
 }

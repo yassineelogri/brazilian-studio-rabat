@@ -10,15 +10,19 @@ Public site tokens (`:root` in `src/app/globals.css`):
 
 | Token | Value | Role |
 |---|---|---|
-| `--color-background` | `#FFFAFC` | Page background (pink-tinted, never pure white) |
+| `--color-background` | `#FAF3EE` | Page background (warm cream, matches salon interior) |
 | `--color-surface` | `#FFFFFF` | Cards, nav when scrolled |
-| `--color-text` | `#3D2C2E` | Headings + body (warm near-black, never `#000`) |
-| `--color-text-muted` | `#826E72` | Secondary text |
-| `--color-accent` | `#C97B8E` | Kickers, labels, small accents (AA on cream at ≥14px bold) |
-| `--color-border` | `#F0E0E4` | Hairlines, card borders |
-| `--gradient-rose-gold` | `linear-gradient(135deg, #F8B4B4, #DDA0BA)` | Primary buttons only |
+| `--color-blush` | `#F7E9E6` | Alternating sections, tinted chips/recaps |
+| `--color-dark` | `#2B1B1E` | Footer, marquee, dark overlays (plum-cocoa, never `#000`) |
+| `--color-text` | `#382227` | Headings + body (deep plum-brown) |
+| `--color-text-muted` | `#7E6469` | Secondary text |
+| `--color-accent` | `#B26478` | Borders, icons, decorative rose |
+| `--color-accent-deep` | `#8E4457` | Accent TEXT on light (6.2:1 on cream, AA small text) |
+| `--color-accent-soft` | `#E2A7B5` | Accents on dark surfaces only |
+| `--color-border` | `#EEDCD7` | Hairlines, card borders |
+| `--gradient-rose-gold` | `linear-gradient(135deg, #A85D70, #7E4452)` | Primary buttons (white text passes AA) |
 
-Strategy: **Restrained-plus.** Pink-tinted neutrals everywhere; the rose gradient appears only on primary actions and the odd decorative moment. The dashboard uses a separate `salon-*` token set (`@theme`); don't mix the two systems.
+Strategy: **Committed.** Warm cream carries the surface, deep wine-rose carries identity and actions. Richer than pastel: luxury through depth, not darkness. The dashboard uses a separate `salon-*` token set (`@theme`); don't mix the two systems. `/booking` uses the same public tokens (see `src/components/booking/Booking.module.css`), never a separate visual world.
 
 ## Typography
 

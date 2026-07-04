@@ -1,5 +1,5 @@
 .section {
-  background: #fdf6f8;
+  background: var(--color-blush);
   padding: 6rem 2rem;
 }
 
@@ -83,7 +83,7 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: rgba(201, 169, 110, 0.9);
+  background: rgba(142, 68, 87, 0.92);
   color: white;
   text-transform: uppercase;
   font-size: 0.7rem;

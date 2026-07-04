@@ -1,11 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Sparkles, CalendarDays, Clock, CheckCircle2, MessageCircle } from 'lucide-react'
 import type { Service } from '@/lib/supabase/types'
 import ServiceStep from './ServiceStep'
 import DateStep from './DateStep'
 import TimeStep from './TimeStep'
 import ClientInfoStep from './ClientInfoStep'
+import styles from './Booking.module.css'
 
 type Step = 'service' | 'date' | 'time' | 'info' | 'success' | 'error'
 
@@ -13,21 +17,14 @@ interface Props {
   services: Service[]
 }
 
-const STEP_LABELS = ['Service', 'Date', 'Heure', 'Vous']
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+const STEP_LABELS = ['Soin', 'Date', 'Heure', 'Vous']
+const WA_NUMBER = '212661215800'
 
-const btnPrimary: React.CSSProperties = {
-  flex: 1, padding: '12px',
-  background: 'linear-gradient(135deg, #C9A96E, #B8944F)',
-  color: '#1A1410', borderRadius: '12px',
-  fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '14px',
-}
-
-const btnSecondary: React.CSSProperties = {
-  flex: 1, padding: '12px',
-  background: 'rgba(255,255,255,0.06)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  color: 'rgba(255,255,255,0.6)', borderRadius: '12px',
-  fontSize: '14px', cursor: 'pointer',
+export function formatDateFr(dateStr: string) {
+  if (!dateStr) return ''
+  const d = new Date(dateStr + 'T12:00:00')
+  return new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(d)
 }
 
 export default function BookingForm({ services }: Props) {
@@ -39,7 +36,8 @@ export default function BookingForm({ services }: Props) {
   const [conflictError, setConflictError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
-  const stepNumber: Record<Step, number> = { service: 1, date: 2, time: 3, info: 4, success: 4, error: 4 }
+  const stepNumber: Record<Step, number> = { service: 1, date: 2, time: 3, info: 4, success: 5, error: 4 }
+  const current = stepNumber[step]
 
   async function handleSubmit() {
     if (!selectedService || !selectedDate || !selectedTime || !clientInfo.name || !clientInfo.phone) return
@@ -60,117 +58,198 @@ export default function BookingForm({ services }: Props) {
 
     setSubmitting(false)
 
-    if (res.status === 409) { setConflictError(true); setStep('time'); return }
+    if (res.status === 409) { setConflictError(true); setSelectedTime(''); setStep('time'); return }
     if (!res.ok) { setStep('error'); return }
     setStep('success')
   }
 
-  function reset() {
-    setStep('service')
-    setSelectedService(null)
-    setSelectedDate('')
-    setSelectedTime('')
-    setClientInfo({ name: '', phone: '', email: '' })
-    setConflictError(false)
-  }
+  const waHref = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(
+    'Bonjour, je souhaite prendre rendez-vous chez Brazilian Studio Rabat.'
+  )}`
+
+  const waConfirmHref = selectedService
+    ? `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(
+        `Bonjour, je viens de réserver en ligne : ${selectedService.name}, ${formatDateFr(selectedDate)} à ${selectedTime}, au nom de ${clientInfo.name}.`
+      )}`
+    : waHref
 
   if (step === 'success') {
     return (
-      <div style={{ textAlign: 'center', padding: '48px 0' }}>
-        <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(74,222,128,0.15)', border: '1px solid rgba(74,222,128,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#4ADE80" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
+      <motion.div
+        className={styles.finalScreen}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: EASE }}
+      >
+        <div className={styles.finalIcon}>
+          <CheckCircle2 size={34} />
         </div>
-        <h2 style={{ fontFamily: 'serif', fontSize: '26px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginBottom: '10px' }}>Merci !</h2>
-        <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', maxWidth: '320px', margin: '0 auto 24px', lineHeight: '1.6' }}>
-          Nous avons bien reçu votre demande. Nous vous confirmerons votre rendez-vous sous peu.
+        <h2 className={styles.finalTitle}>Demande envoyée !</h2>
+        <p className={styles.finalText}>
+          Merci {clientInfo.name.split(' ')[0]}. Nous vous confirmons votre rendez-vous très vite par téléphone ou WhatsApp.
         </p>
-        <button onClick={reset} style={{ background: 'none', border: 'none', color: '#C9A96E', fontSize: '14px', cursor: 'pointer', textDecoration: 'underline' }}>
-          Prendre un autre rendez-vous
-        </button>
-      </div>
+
+        <div className={styles.summaryCard}>
+          <div className={styles.summaryRow}>
+            <span className={styles.summaryLabel}>Soin</span>
+            <span className={styles.summaryValue}>{selectedService?.name}</span>
+          </div>
+          <div className={styles.summaryRow}>
+            <span className={styles.summaryLabel}>Date</span>
+            <span className={styles.summaryValue}>{formatDateFr(selectedDate)}</span>
+          </div>
+          <div className={styles.summaryRow}>
+            <span className={styles.summaryLabel}>Heure</span>
+            <span className={styles.summaryValue}>{selectedTime}</span>
+          </div>
+        </div>
+
+        <div className={styles.finalActions}>
+          <a href={waConfirmHref} target="_blank" rel="noopener noreferrer" className={styles.btnWhatsApp}>
+            <MessageCircle size={18} /> Nous écrire sur WhatsApp
+          </a>
+          <Link href="/" className={styles.btnHome}>Retour à l&apos;accueil</Link>
+        </div>
+      </motion.div>
     )
   }
 
   if (step === 'error') {
     return (
-      <div style={{ textAlign: 'center', padding: '48px 0' }}>
-        <p style={{ color: '#F87171', marginBottom: '16px', fontSize: '14px' }}>Une erreur est survenue. Veuillez réessayer.</p>
-        <button onClick={() => setStep('info')} style={{ background: 'none', border: 'none', color: '#C9A96E', fontSize: '14px', cursor: 'pointer', textDecoration: 'underline' }}>Réessayer</button>
+      <div className={styles.finalScreen}>
+        <h2 className={styles.finalTitle}>Oups, un imprévu</h2>
+        <p className={styles.finalText}>
+          Votre demande n&apos;a pas pu être envoyée. Réessayez, ou réservez directement sur WhatsApp : nous répondons vite.
+        </p>
+        <div className={styles.finalActions}>
+          <button onClick={() => setStep('info')} className={styles.btnPrimary} style={{ flex: 'none' }}>
+            Réessayer
+          </button>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" className={styles.btnWhatsApp}>
+            <MessageCircle size={18} /> Réserver sur WhatsApp
+          </a>
+        </div>
       </div>
     )
   }
 
   return (
-    <div style={{ maxWidth: '640px', margin: '0 auto' }}>
-      {/* Step indicator */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', padding: '28px 0 0' }}>
+    <div>
+      {/* Progress */}
+      <div className={styles.progress}>
         {[1, 2, 3, 4].map((n, i) => (
-          <div key={n} style={{ display: 'flex', alignItems: 'center', flex: i < 3 ? 1 : 'none' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
-              <div style={{
-                width: '32px', height: '32px', borderRadius: '50%',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '12px', fontWeight: 600,
-                background: n < stepNumber[step] ? 'linear-gradient(135deg, #C9A96E, #B8944F)' : n === stepNumber[step] ? 'rgba(201,169,110,0.15)' : 'rgba(255,255,255,0.06)',
-                border: n === stepNumber[step] ? '1px solid rgba(201,169,110,0.4)' : '1px solid transparent',
-                color: n < stepNumber[step] ? '#1A1410' : n === stepNumber[step] ? '#C9A96E' : 'rgba(255,255,255,0.3)',
-              }}>
-                {n < stepNumber[step] ? '✓' : n}
+          <div key={n} className={styles.progressSegment} data-grow={i < 3}>
+            <div className={styles.progressStep}>
+              <div className={styles.progressDot} data-state={n < current ? 'done' : n === current ? 'active' : 'todo'}>
+                {n < current ? '✓' : n}
               </div>
-              <span style={{ fontSize: '10px', letterSpacing: '0.05em', color: n <= stepNumber[step] ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.2)' }}>
+              <span className={styles.progressLabel} data-state={n === current ? 'active' : undefined}>
                 {STEP_LABELS[i]}
               </span>
             </div>
-            {i < 3 && (
-              <div style={{ flex: 1, height: '1px', margin: '0 8px 16px', background: n < stepNumber[step] ? 'rgba(201,169,110,0.4)' : 'rgba(255,255,255,0.08)' }} />
-            )}
+            {i < 3 && <div className={styles.progressLine} data-done={n < current} />}
           </div>
         ))}
       </div>
 
+      {/* Live recap of choices */}
+      {selectedService && step !== 'service' && (
+        <div className={styles.recap}>
+          <span className={styles.recapItem}>
+            <Sparkles size={14} /> {selectedService.name}
+          </span>
+          {selectedDate && step !== 'date' && (
+            <>
+              <span className={styles.recapDivider}>·</span>
+              <span className={styles.recapItem}>
+                <CalendarDays size={14} /> {formatDateFr(selectedDate)}
+              </span>
+            </>
+          )}
+          {selectedTime && step === 'info' && (
+            <>
+              <span className={styles.recapDivider}>·</span>
+              <span className={styles.recapItem}>
+                <Clock size={14} /> {selectedTime}
+              </span>
+            </>
+          )}
+        </div>
+      )}
+
       {/* Step content */}
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', padding: '24px', marginTop: '8px' }}>
-        {step === 'service' && (
-          <ServiceStep services={services} selectedId={selectedService?.id ?? null} onSelect={s => { setSelectedService(s); setStep('date') }} />
-        )}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={step}
+          className={styles.card}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.35, ease: EASE }}
+        >
+          {step === 'service' && (
+            <ServiceStep
+              services={services}
+              selectedId={selectedService?.id ?? null}
+              onSelect={s => { setSelectedService(s); setStep('date') }}
+            />
+          )}
 
-        {step === 'date' && (
-          <>
-            <DateStep selectedDate={selectedDate} onChange={setSelectedDate} />
-            <div style={{ display: 'flex', gap: '10px', marginTop: '24px' }}>
-              <button onClick={() => setStep('service')} style={btnSecondary}>Retour</button>
-              <button onClick={() => setStep('time')} disabled={!selectedDate} style={{ ...btnPrimary, opacity: !selectedDate ? 0.4 : 1, cursor: !selectedDate ? 'not-allowed' : 'pointer' }}>Continuer</button>
-            </div>
-          </>
-        )}
+          {step === 'date' && (
+            <>
+              <DateStep selectedDate={selectedDate} onChange={d => { setSelectedDate(d); setSelectedTime('') }} />
+              <div className={styles.actions}>
+                <button onClick={() => setStep('service')} className={styles.btnGhost}>Retour</button>
+                <button onClick={() => setStep('time')} disabled={!selectedDate} className={styles.btnPrimary}>
+                  Continuer
+                </button>
+              </div>
+            </>
+          )}
 
-        {step === 'time' && (
-          <>
-            {conflictError && (
-              <p style={{ fontSize: '13px', color: '#F87171', background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.2)', padding: '10px 14px', borderRadius: '10px', marginBottom: '16px' }}>
-                Ce créneau n&apos;est plus disponible. Veuillez en choisir un autre.
-              </p>
-            )}
-            <TimeStep date={selectedDate} durationMinutes={selectedService?.min_duration ?? 60} selectedTime={selectedTime} onSelect={t => { setSelectedTime(t); setStep('info') }} />
-            <button onClick={() => setStep('date')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '13px', cursor: 'pointer', marginTop: '16px', textDecoration: 'underline' }}>Retour</button>
-          </>
-        )}
+          {step === 'time' && (
+            <>
+              {conflictError && (
+                <p className={`${styles.alert} ${styles.alertError}`}>
+                  Ce créneau vient d&apos;être pris. Choisissez-en un autre, il reste de belles disponibilités.
+                </p>
+              )}
+              <TimeStep
+                date={selectedDate}
+                durationMinutes={selectedService?.min_duration ?? 60}
+                selectedTime={selectedTime}
+                onSelect={t => { setSelectedTime(t); setStep('info') }}
+              />
+              <div className={styles.actions}>
+                <button onClick={() => setStep('date')} className={styles.btnGhost}>Retour</button>
+              </div>
+            </>
+          )}
 
-        {step === 'info' && (
-          <>
-            <ClientInfoStep info={clientInfo} onChange={setClientInfo} />
-            <div style={{ display: 'flex', gap: '10px', marginTop: '24px' }}>
-              <button onClick={() => setStep('time')} style={btnSecondary}>Retour</button>
-              <button onClick={handleSubmit} disabled={submitting || !clientInfo.name || !clientInfo.phone}
-                style={{ ...btnPrimary, opacity: submitting || !clientInfo.name || !clientInfo.phone ? 0.5 : 1, cursor: submitting || !clientInfo.name || !clientInfo.phone ? 'not-allowed' : 'pointer' }}>
-                {submitting ? 'Envoi...' : 'Confirmer le rendez-vous'}
-              </button>
-            </div>
-          </>
-        )}
-      </div>
+          {step === 'info' && (
+            <>
+              <ClientInfoStep info={clientInfo} onChange={setClientInfo} />
+              <div className={styles.actions}>
+                <button onClick={() => setStep('time')} className={styles.btnGhost}>Retour</button>
+                <button
+                  onClick={handleSubmit}
+                  disabled={submitting || !clientInfo.name || !clientInfo.phone}
+                  className={styles.btnPrimary}
+                >
+                  {submitting ? 'Envoi en cours…' : 'Confirmer ma réservation'}
+                </button>
+              </div>
+            </>
+          )}
+        </motion.div>
+      </AnimatePresence>
+
+      <p className={styles.waFallback}>
+        Vous préférez discuter ?
+        <a href={waHref} target="_blank" rel="noopener noreferrer">
+          <MessageCircle size={15} /> Réservez sur WhatsApp
+        </a>
+      </p>
     </div>
   )
 }

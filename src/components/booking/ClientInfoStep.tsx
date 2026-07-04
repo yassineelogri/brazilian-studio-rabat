@@ -1,3 +1,6 @@
+import { ShieldCheck } from 'lucide-react'
+import styles from './Booking.module.css'
+
 interface ClientInfo {
   name: string
   phone: string
@@ -9,21 +12,6 @@ interface Props {
   onChange: (info: ClientInfo) => void
 }
 
-const inputStyle: React.CSSProperties = {
-  width: '100%', padding: '10px 14px',
-  background: 'rgba(255,255,255,0.07)',
-  border: '1px solid rgba(255,255,255,0.12)',
-  borderRadius: '12px',
-  color: 'rgba(255,255,255,0.9)',
-  fontSize: '14px', outline: 'none',
-}
-
-const labelStyle: React.CSSProperties = {
-  display: 'block', fontSize: '11px', fontWeight: 500,
-  color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase',
-  letterSpacing: '0.1em', marginBottom: '6px',
-}
-
 export default function ClientInfoStep({ info, onChange }: Props) {
   function update(field: keyof ClientInfo, value: string) {
     onChange({ ...info, [field]: value })
@@ -31,21 +19,58 @@ export default function ClientInfoStep({ info, onChange }: Props) {
 
   return (
     <div>
-      <h2 style={{ fontFamily: 'serif', fontSize: '22px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginBottom: '20px', marginTop: '32px' }}>Vos coordonnées</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div>
-          <label style={labelStyle}>Nom complet *</label>
-          <input type="text" value={info.name} onChange={e => update('name', e.target.value)} required placeholder="Votre nom" style={inputStyle} />
+      <h2 className={styles.stepTitle}>Presque terminé !</h2>
+      <p className={styles.stepHint}>Vos coordonnées pour confirmer le rendez-vous.</p>
+
+      <div className={styles.fieldGroup}>
+        <div className={styles.field}>
+          <label htmlFor="booking-name">Nom complet</label>
+          <input
+            id="booking-name"
+            className={styles.input}
+            type="text"
+            autoComplete="name"
+            value={info.name}
+            onChange={e => update('name', e.target.value)}
+            required
+            placeholder="Votre nom"
+          />
         </div>
-        <div>
-          <label style={labelStyle}>Téléphone *</label>
-          <input type="tel" value={info.phone} onChange={e => update('phone', e.target.value)} required placeholder="06 XX XX XX XX" style={inputStyle} />
+        <div className={styles.field}>
+          <label htmlFor="booking-phone">Téléphone</label>
+          <input
+            id="booking-phone"
+            className={styles.input}
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            value={info.phone}
+            onChange={e => update('phone', e.target.value)}
+            required
+            placeholder="06 XX XX XX XX"
+          />
         </div>
-        <div>
-          <label style={labelStyle}>Email <span style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 400, textTransform: 'none', letterSpacing: 'normal', fontSize: '11px' }}>(optionnel — pour la confirmation)</span></label>
-          <input type="email" value={info.email} onChange={e => update('email', e.target.value)} placeholder="votre@email.com" style={inputStyle} />
+        <div className={styles.field}>
+          <label htmlFor="booking-email">
+            Email <span>(optionnel, pour recevoir la confirmation)</span>
+          </label>
+          <input
+            id="booking-email"
+            className={styles.input}
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            value={info.email}
+            onChange={e => update('email', e.target.value)}
+            placeholder="votre@email.com"
+          />
         </div>
       </div>
+
+      <p className={styles.confirmNote}>
+        <ShieldCheck size={18} />
+        Vos informations restent confidentielles. Nous vous confirmons le rendez-vous par téléphone ou WhatsApp.
+      </p>
     </div>
   )
 }

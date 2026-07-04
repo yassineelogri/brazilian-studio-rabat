@@ -1,41 +1,59 @@
+import styles from './Booking.module.css'
+
 interface Props {
   selectedDate: string
   onChange: (date: string) => void
 }
 
-const inputStyle = {
-  width: '100%', padding: '10px 14px',
-  background: 'rgba(255,255,255,0.07)',
-  border: '1px solid rgba(255,255,255,0.12)',
-  borderRadius: '12px',
-  color: 'rgba(255,255,255,0.9)',
-  fontSize: '14px', outline: 'none',
-  colorScheme: 'dark',
+interface DayOption {
+  value: string
+  dow: string
+  date: string
+}
+
+/* Next 14 open days (salon closed on Sundays) */
+function buildDays(): DayOption[] {
+  const days: DayOption[] = []
+  const cursor = new Date()
+  const dowFmt = new Intl.DateTimeFormat('fr-FR', { weekday: 'short' })
+  const dateFmt = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short' })
+
+  while (days.length < 14) {
+    if (cursor.getDay() !== 0) {
+      const value = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, '0')}-${String(cursor.getDate()).padStart(2, '0')}`
+      const isToday = days.length === 0 && cursor.getDate() === new Date().getDate()
+      days.push({
+        value,
+        dow: isToday ? "Auj." : dowFmt.format(cursor).replace('.', ''),
+        date: dateFmt.format(cursor),
+      })
+    }
+    cursor.setDate(cursor.getDate() + 1)
+  }
+  return days
 }
 
 export default function DateStep({ selectedDate, onChange }: Props) {
-  const d = new Date()
-  const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-
-  function isSunday(dateStr: string) {
-    if (!dateStr) return false
-    return new Date(dateStr + 'T12:00:00').getDay() === 0
-  }
+  const days = buildDays()
 
   return (
     <div>
-      <h2 style={{ fontFamily: 'serif', fontSize: '22px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginBottom: '6px', marginTop: '32px' }}>Choisissez une date</h2>
-      <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', marginBottom: '16px' }}>Ouvert du lundi au samedi · 10h00–20h00</p>
-      <input
-        type="date"
-        value={selectedDate}
-        min={today}
-        onChange={e => { if (!isSunday(e.target.value)) onChange(e.target.value) }}
-        style={inputStyle}
-      />
-      {selectedDate && isSunday(selectedDate) && (
-        <p style={{ fontSize: '13px', color: '#F87171', marginTop: '8px' }}>Le salon est fermé le dimanche. Veuillez choisir un autre jour.</p>
-      )}
+      <h2 className={styles.stepTitle}>Quel jour vous convient ?</h2>
+      <p className={styles.stepHint}>Ouvert du lundi au samedi, de 10h à 20h.</p>
+
+      <div className={styles.dayGrid}>
+        {days.map(day => (
+          <button
+            key={day.value}
+            className={styles.dayChip}
+            data-selected={selectedDate === day.value}
+            onClick={() => onChange(day.value)}
+          >
+            <span className={styles.dayChipDow}>{day.dow}</span>
+            <span className={styles.dayChipDate}>{day.date}</span>
+          </button>
+        ))}
+      </div>
     </div>
   )
 }
