@@ -63,7 +63,7 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
     onClose()
   }
 
-  const color = appointment?.services?.color ?? '#C9A96E'
+  const color = appointment?.services?.color ?? '#E2A7B5'
   const status = appointment ? (STATUS_CONFIG[appointment.status] ?? STATUS_CONFIG.pending) : null
 
   const dateStr = appointment
@@ -97,7 +97,7 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
             style={{
               width: '340px',
               maxWidth: '90vw',
-              background: '#1C1816',
+              background: '#2A191D',
               borderLeft: '1px solid rgba(255,255,255,0.08)',
               boxShadow: '-8px 0 32px rgba(0,0,0,0.5)',
             }}
@@ -181,7 +181,7 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
                 {appointment.clients?.phone && (
                   <a
                     href={`tel:${appointment.clients.phone}`}
-                    style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#C9A96E', marginTop: '4px', textDecoration: 'none' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#E2A7B5', marginTop: '4px', textDecoration: 'none' }}
                   >
                     <Phone size={12} /> {appointment.clients.phone}
                   </a>
@@ -204,9 +204,9 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
                     fontSize: '11px',
                     padding: '2px 8px',
                     borderRadius: '20px',
-                    background: 'rgba(201,169,110,0.1)',
-                    color: '#C9A96E',
-                    border: '1px solid rgba(201,169,110,0.15)',
+                    background: 'rgba(226, 167, 181,0.1)',
+                    color: '#E2A7B5',
+                    border: '1px solid rgba(226, 167, 181,0.15)',
                   }}>
                     {appointment.duration_minutes} min
                   </span>
@@ -255,9 +255,9 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '8px',
-                      background: 'linear-gradient(135deg, #C9A96E, #B8944F)',
-                      color: '#1A1410',
-                      boxShadow: '0 4px 16px rgba(201,169,110,0.2)',
+                      background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)',
+                      color: '#2B1B1E',
+                      boxShadow: '0 4px 16px rgba(226, 167, 181,0.2)',
                       opacity: loading ? 0.5 : 1,
                     }}
                   >
@@ -299,9 +299,9 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '8px',
-                      background: 'linear-gradient(135deg, #C9A96E, #B8944F)',
-                      color: '#1A1410',
-                      boxShadow: '0 4px 16px rgba(201,169,110,0.2)',
+                      background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)',
+                      color: '#2B1B1E',
+                      boxShadow: '0 4px 16px rgba(226, 167, 181,0.2)',
                       opacity: loading ? 0.5 : 1,
                     }}
                   >

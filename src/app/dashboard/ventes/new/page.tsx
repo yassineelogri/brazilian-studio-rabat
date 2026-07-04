@@ -168,7 +168,7 @@ export default function NewVentePage() {
         <p style={{ fontSize: '18px', fontFamily: 'serif', fontWeight: 300, color: 'rgba(255,255,255,0.9)' }}>Vente enregistrée !</p>
         <button
           onClick={() => setSuccess(false)}
-          style={{ background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', padding: '10px 24px', borderRadius: '12px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '14px' }}
+          style={{ background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', padding: '10px 24px', borderRadius: '12px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '14px' }}
         >
           Nouvelle vente
         </button>
@@ -180,9 +180,9 @@ export default function NewVentePage() {
     <div style={{ maxWidth: '680px' }}>
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Commerce</p>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.6)', fontWeight: 500 }}>Commerce</p>
         <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <ShoppingBag size={22} style={{ color: '#C9A96E' }} /> Enregistrer une vente
+          <ShoppingBag size={22} style={{ color: '#E2A7B5' }} /> Enregistrer une vente
         </h1>
       </div>
 
@@ -197,7 +197,7 @@ export default function NewVentePage() {
             style={inputStyle}
           />
           {search && (
-            <div style={{ background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', marginTop: '4px', maxHeight: '200px', overflowY: 'auto' }}>
+            <div style={{ background: '#2A191D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', marginTop: '4px', maxHeight: '200px', overflowY: 'auto' }}>
               {filteredProducts.length === 0 ? (
                 <p style={{ padding: '10px 12px', fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>Aucun produit trouvé</p>
               ) : filteredProducts.map(p => (
@@ -245,7 +245,7 @@ export default function NewVentePage() {
               <tfoot>
                 <tr style={{ background: 'rgba(255,255,255,0.04)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                   <td colSpan={3} style={{ padding: '10px 14px', textAlign: 'right', fontWeight: 600, color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>Total</td>
-                  <td style={{ padding: '10px 14px', textAlign: 'right', fontWeight: 700, color: '#C9A96E' }}>{total.toFixed(2)} DH</td>
+                  <td style={{ padding: '10px 14px', textAlign: 'right', fontWeight: 700, color: '#E2A7B5' }}>{total.toFixed(2)} DH</td>
                   <td></td>
                 </tr>
               </tfoot>
@@ -272,7 +272,7 @@ export default function NewVentePage() {
                   style={inputStyle}
                 />
                 {clientSearch && (
-                  <div style={{ background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', marginTop: '4px', maxHeight: '160px', overflowY: 'auto' }}>
+                  <div style={{ background: '#2A191D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', marginTop: '4px', maxHeight: '160px', overflowY: 'auto' }}>
                     {filteredClients.length === 0 ? (
                       <p style={{ padding: '10px 12px', fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>Aucun client trouvé</p>
                     ) : filteredClients.map(c => (
@@ -300,15 +300,15 @@ export default function NewVentePage() {
                 <ChevronDown size={14} style={{ flexShrink: 0, marginLeft: '8px', color: 'rgba(255,255,255,0.4)', transform: apptDropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
               </button>
               {apptDropdownOpen && (
-                <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '200px', overflowY: 'auto' }}>
+                <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#2A191D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '200px', overflowY: 'auto' }}>
                   <button type="button" onClick={() => { setAppointmentId(''); setApptDropdownOpen(false) }}
-                    style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: !appointmentId ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', borderRadius: '10px 10px 0 0' }}>
+                    style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: !appointmentId ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', borderRadius: '10px 10px 0 0' }}>
                     — Vente indépendante —
                   </button>
                   {displayedAppointments.map((a, i) => (
                     <button key={a.id} type="button"
                       onClick={() => { setAppointmentId(a.id); setApptDropdownOpen(false) }}
-                      style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: appointmentId === a.id ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', color: appointmentId === a.id ? '#C9A96E' : 'rgba(255,255,255,0.85)', borderRadius: i === displayedAppointments.length - 1 ? '0 0 10px 10px' : '0' }}>
+                      style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: appointmentId === a.id ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', color: appointmentId === a.id ? '#E2A7B5' : 'rgba(255,255,255,0.85)', borderRadius: i === displayedAppointments.length - 1 ? '0 0 10px 10px' : '0' }}>
                       {a.date} à {(a.start_time as string)?.slice(0, 5)} — {(a.clients as any)?.name} — {(a.services as any)?.name}
                     </button>
                   ))}
@@ -327,15 +327,15 @@ export default function NewVentePage() {
               <ChevronDown size={14} style={{ flexShrink: 0, marginLeft: '8px', color: 'rgba(255,255,255,0.4)', transform: staffDropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
             </button>
             {staffDropdownOpen && (
-              <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '200px', overflowY: 'auto' }}>
+              <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#2A191D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '200px', overflowY: 'auto' }}>
                 <button type="button" onClick={() => { setSoldBy(''); setStaffDropdownOpen(false) }}
-                  style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: !soldBy ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', borderRadius: '10px 10px 0 0' }}>
+                  style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: !soldBy ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', borderRadius: '10px 10px 0 0' }}>
                   —
                 </button>
                 {staff.map((s, i) => (
                   <button key={s.id} type="button"
                     onClick={() => { setSoldBy(s.id); setStaffDropdownOpen(false) }}
-                    style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: soldBy === s.id ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', color: soldBy === s.id ? '#C9A96E' : 'rgba(255,255,255,0.85)', borderRadius: i === staff.length - 1 ? '0 0 10px 10px' : '0' }}>
+                    style={{ width: '100%', textAlign: 'left', padding: '10px 12px', fontSize: '13px', background: soldBy === s.id ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', color: soldBy === s.id ? '#E2A7B5' : 'rgba(255,255,255,0.85)', borderRadius: i === staff.length - 1 ? '0 0 10px 10px' : '0' }}>
                     {s.name}
                   </button>
                 ))}
@@ -355,8 +355,8 @@ export default function NewVentePage() {
         <button type="submit" disabled={loading || items.length === 0}
           style={{
             width: '100%', padding: '14px',
-            background: loading || items.length === 0 ? 'rgba(201,169,110,0.3)' : 'linear-gradient(135deg, #C9A96E, #B8944F)',
-            color: '#1A1410', borderRadius: '12px', fontWeight: 700, border: 'none',
+            background: loading || items.length === 0 ? 'rgba(226, 167, 181,0.3)' : 'linear-gradient(135deg, #E2A7B5, #C98FA0)',
+            color: '#2B1B1E', borderRadius: '12px', fontWeight: 700, border: 'none',
             cursor: loading || items.length === 0 ? 'not-allowed' : 'pointer', fontSize: '14px',
           }}>
           {loading ? 'Enregistrement...' : `Enregistrer la vente — ${total.toFixed(2)} DH`}

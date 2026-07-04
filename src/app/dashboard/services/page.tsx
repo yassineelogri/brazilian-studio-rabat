@@ -25,11 +25,11 @@ export default function ServicesPage() {
     <div style={{ maxWidth: '600px' }}>
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.5)', fontWeight: 500 }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.5)', fontWeight: 500 }}>
           Gestion
         </p>
         <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.95)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Scissors size={22} style={{ color: '#C9A96E' }} /> Prestations
+          <Scissors size={22} style={{ color: '#E2A7B5' }} /> Prestations
         </h1>
       </div>
 
@@ -57,7 +57,7 @@ export default function ServicesPage() {
                 </div>
                 <button
                   onClick={() => setEditing(service.id)}
-                  style={{ fontSize: '12px', color: '#C9A96E', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+                  style={{ fontSize: '12px', color: '#E2A7B5', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
                 >
                   Modifier
                 </button>
@@ -107,7 +107,7 @@ function EditServiceForm({ service, onSave, onCancel }: {
       <div style={{ display: 'flex', gap: '8px' }}>
         <button
           onClick={() => onSave({ min_duration: min, max_duration: max, color })}
-          style={{ padding: '8px 16px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '10px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}
+          style={{ padding: '8px 16px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '10px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}
         >
           Sauvegarder
         </button>

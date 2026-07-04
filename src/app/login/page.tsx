@@ -50,7 +50,7 @@ export default function LoginPage() {
           -webkit-text-fill-color: rgba(255,255,255,0.9);
           -webkit-box-shadow: 0 0 0 40px rgba(30,24,20,1) inset !important;
           transition: background-color 5000s ease-in-out 0s;
-          caret-color: #C9A96E;
+          caret-color: #E2A7B5;
         }
       `}</style>
 
@@ -59,7 +59,7 @@ export default function LoginPage() {
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(160deg, #1A1410 0%, #2A2018 35%, #1E1814 65%, #141010 100%)',
+            background: 'linear-gradient(160deg, #2B1B1E 0%, #241519 45%, #1D1114 100%)',
           }}
         />
         <div
@@ -67,7 +67,7 @@ export default function LoginPage() {
           style={{
             width: '900px',
             height: '600px',
-            background: 'radial-gradient(ellipse, rgba(201,169,110,0.08) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse, rgba(226, 167, 181,0.08) 0%, transparent 70%)',
           }}
         />
         <div
@@ -93,7 +93,7 @@ export default function LoginPage() {
           className="absolute top-0 left-1/2 -translate-x-1/2 h-px pointer-events-none"
           style={{
             width: '200px',
-            background: 'linear-gradient(90deg, transparent, rgba(201,169,110,0.4), transparent)',
+            background: 'linear-gradient(90deg, transparent, rgba(226, 167, 181,0.4), transparent)',
           }}
         />
 
@@ -111,7 +111,7 @@ export default function LoginPage() {
             style={{
               inset: '-1px',
               borderRadius: '28px',
-              background: 'linear-gradient(145deg, rgba(201,169,110,0.2), transparent 50%, rgba(201,169,110,0.1))',
+              background: 'linear-gradient(145deg, rgba(226, 167, 181,0.2), transparent 50%, rgba(226, 167, 181,0.1))',
             }}
           />
 
@@ -141,7 +141,7 @@ export default function LoginPage() {
                   style={{
                     inset: '-12px',
                     borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(201,169,110,0.15) 0%, transparent 70%)',
+                    background: 'radial-gradient(circle, rgba(226, 167, 181,0.15) 0%, transparent 70%)',
                   }}
                 />
                 <div
@@ -153,8 +153,8 @@ export default function LoginPage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: 'linear-gradient(145deg, rgba(201,169,110,0.18), rgba(201,169,110,0.06))',
-                    border: '1px solid rgba(201,169,110,0.3)',
+                    background: 'linear-gradient(145deg, rgba(226, 167, 181,0.18), rgba(226, 167, 181,0.06))',
+                    border: '1px solid rgba(226, 167, 181,0.3)',
                     boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 24px rgba(0,0,0,0.4)',
                   }}
                 >
@@ -164,9 +164,9 @@ export default function LoginPage() {
                       fontStyle: 'italic',
                       fontSize: '22px',
                       fontWeight: 600,
-                      color: '#C9A96E',
+                      color: '#E2A7B5',
                       letterSpacing: '0.06em',
-                      textShadow: '0 0 30px rgba(201,169,110,0.4)',
+                      textShadow: '0 0 30px rgba(226, 167, 181,0.4)',
                     }}
                   >
                     BS
@@ -180,7 +180,7 @@ export default function LoginPage() {
                   textTransform: 'uppercase',
                   fontWeight: 500,
                   letterSpacing: '0.35em',
-                  color: 'rgba(201,169,110,0.65)',
+                  color: 'rgba(226, 167, 181,0.65)',
                   marginBottom: '16px',
                 }}
               >
@@ -220,7 +220,7 @@ export default function LoginPage() {
                 width: '64px',
                 height: '1px',
                 margin: '0 auto 40px',
-                background: 'linear-gradient(90deg, transparent, rgba(201,169,110,0.35), transparent)',
+                background: 'linear-gradient(90deg, transparent, rgba(226, 167, 181,0.35), transparent)',
               }}
             />
 
@@ -254,10 +254,10 @@ export default function LoginPage() {
                       ? 'rgba(255,255,255,0.12)'
                       : 'rgba(255,255,255,0.07)',
                     border: emailFocused
-                      ? '1.5px solid rgba(201,169,110,0.5)'
+                      ? '1.5px solid rgba(226, 167, 181,0.5)'
                       : '1.5px solid rgba(255,255,255,0.12)',
                     boxShadow: emailFocused
-                      ? '0 0 0 4px rgba(201,169,110,0.12), 0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)'
+                      ? '0 0 0 4px rgba(226, 167, 181,0.12), 0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)'
                       : '0 2px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)',
                     transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
                   }}
@@ -284,7 +284,7 @@ export default function LoginPage() {
                       fontSize: '15px',
                       fontWeight: 400,
                       color: 'rgba(255,255,255,0.9)',
-                      caretColor: '#C9A96E',
+                      caretColor: '#E2A7B5',
                       letterSpacing: '0.01em',
                     }}
                   />
@@ -315,10 +315,10 @@ export default function LoginPage() {
                       ? 'rgba(255,255,255,0.12)'
                       : 'rgba(255,255,255,0.07)',
                     border: passwordFocused
-                      ? '1.5px solid rgba(201,169,110,0.5)'
+                      ? '1.5px solid rgba(226, 167, 181,0.5)'
                       : '1.5px solid rgba(255,255,255,0.12)',
                     boxShadow: passwordFocused
-                      ? '0 0 0 4px rgba(201,169,110,0.12), 0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)'
+                      ? '0 0 0 4px rgba(226, 167, 181,0.12), 0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)'
                       : '0 2px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)',
                     transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
                   }}
@@ -345,7 +345,7 @@ export default function LoginPage() {
                       fontSize: '15px',
                       fontWeight: 400,
                       color: 'rgba(255,255,255,0.9)',
-                      caretColor: '#C9A96E',
+                      caretColor: '#E2A7B5',
                       letterSpacing: '0.06em',
                     }}
                   />
@@ -367,7 +367,7 @@ export default function LoginPage() {
                       color: 'rgba(255,255,255,0.3)',
                       transition: 'color 0.2s',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.color = 'rgba(201,169,110,0.8)')}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'rgba(226, 167, 181,0.8)')}
                     onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.3)')}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -404,7 +404,7 @@ export default function LoginPage() {
                 disabled={loading}
                 whileHover={{
                   y: -2,
-                  boxShadow: '0 16px 48px rgba(201,169,110,0.35), 0 0 0 1px rgba(201,169,110,0.4), inset 0 1px 0 rgba(255,255,255,0.25)',
+                  boxShadow: '0 16px 48px rgba(226, 167, 181,0.35), 0 0 0 1px rgba(226, 167, 181,0.4), inset 0 1px 0 rgba(255,255,255,0.25)',
                 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
@@ -423,9 +423,9 @@ export default function LoginPage() {
                   fontSize: '15px',
                   fontWeight: 600,
                   letterSpacing: '0.06em',
-                  color: '#1A1410',
-                  background: 'linear-gradient(145deg, #D4B577 0%, #C9A96E 40%, #B8944F 100%)',
-                  boxShadow: '0 6px 28px rgba(201,169,110,0.25), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(0,0,0,0.1)',
+                  color: '#2B1B1E',
+                  background: 'linear-gradient(145deg, #E2A7B5 0%, #C98FA0 100%)',
+                  boxShadow: '0 6px 28px rgba(226, 167, 181,0.25), inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(0,0,0,0.1)',
                   overflow: 'hidden',
                   opacity: loading ? 0.5 : 1,
                 }}
@@ -450,7 +450,7 @@ export default function LoginPage() {
                       height: '18px',
                       borderRadius: '50%',
                       border: '2.5px solid rgba(26,20,16,0.3)',
-                      borderTopColor: '#1A1410',
+                      borderTopColor: '#2B1B1E',
                     }}
                   />
                 ) : (
@@ -473,7 +473,7 @@ export default function LoginPage() {
                 marginTop: '40px',
                 fontStyle: 'italic',
                 fontWeight: 300,
-                color: 'rgba(201,169,110,0.3)',
+                color: 'rgba(226, 167, 181,0.3)',
                 letterSpacing: '0.03em',
               }}
             >
@@ -498,11 +498,11 @@ export default function LoginPage() {
             gap: '12px',
           }}
         >
-          <div style={{ height: '1px', width: '40px', background: 'linear-gradient(90deg, transparent, rgba(201,169,110,0.2))' }} />
-          <p style={{ fontSize: '10px', textTransform: 'uppercase', fontWeight: 300, color: 'rgba(201,169,110,0.3)', letterSpacing: '0.3em' }}>
+          <div style={{ height: '1px', width: '40px', background: 'linear-gradient(90deg, transparent, rgba(226, 167, 181,0.2))' }} />
+          <p style={{ fontSize: '10px', textTransform: 'uppercase', fontWeight: 300, color: 'rgba(226, 167, 181,0.3)', letterSpacing: '0.3em' }}>
             Rabat
           </p>
-          <div style={{ height: '1px', width: '40px', background: 'linear-gradient(90deg, rgba(201,169,110,0.2), transparent)' }} />
+          <div style={{ height: '1px', width: '40px', background: 'linear-gradient(90deg, rgba(226, 167, 181,0.2), transparent)' }} />
         </motion.div>
       </div>
     </>

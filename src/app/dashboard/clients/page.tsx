@@ -38,8 +38,8 @@ const lbl: React.CSSProperties = {
   display: 'block',
 }
 const btnGold: React.CSSProperties = {
-  background: 'linear-gradient(135deg, #C9A96E, #B8944F)',
-  color: '#1A1410',
+  background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)',
+  color: '#2B1B1E',
   border: 'none',
   borderRadius: '10px',
   padding: '8px 16px',
@@ -130,9 +130,9 @@ export default function ClientsPage() {
     <div style={{ maxWidth: '720px' }}>
       {/* Header */}
       <div style={{ marginBottom: '28px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.5)', fontWeight: 500 }}>Gestion</p>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.5)', fontWeight: 500 }}>Gestion</p>
         <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.95)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Users size={22} style={{ color: '#C9A96E' }} /> Clients
+          <Users size={22} style={{ color: '#E2A7B5' }} /> Clients
         </h1>
       </div>
 
@@ -219,8 +219,8 @@ function AddClientForm({ onSave, onCancel }: { onSave: (n: string, p: string, e:
   useEffect(() => { ref.current?.focus() }, [])
 
   return (
-    <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(201,169,110,0.2)', borderRadius: '16px', padding: '20px', marginBottom: '12px' }}>
-      <p style={{ fontSize: '13px', fontWeight: 600, color: '#C9A96E', marginBottom: '14px', letterSpacing: '0.05em' }}>Nouveau client</p>
+    <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(226, 167, 181,0.2)', borderRadius: '16px', padding: '20px', marginBottom: '12px' }}>
+      <p style={{ fontSize: '13px', fontWeight: 600, color: '#E2A7B5', marginBottom: '14px', letterSpacing: '0.05em' }}>Nouveau client</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
         <div>
           <label style={lbl}>Nom *</label>
@@ -270,8 +270,8 @@ function ClientRow({ client, expanded, editing, historyData, historyLoading, onT
       {/* Row header */}
       <div style={{ display: 'flex', alignItems: 'center', padding: '14px 16px', gap: '12px' }}>
         {/* Avatar */}
-        <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(201,169,110,0.2), rgba(201,169,110,0.08))', border: '1px solid rgba(201,169,110,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <span style={{ fontSize: '13px', fontWeight: 600, color: '#C9A96E' }}>{client.name.charAt(0).toUpperCase()}</span>
+        <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(226, 167, 181,0.2), rgba(226, 167, 181,0.08))', border: '1px solid rgba(226, 167, 181,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <span style={{ fontSize: '13px', fontWeight: 600, color: '#E2A7B5' }}>{client.name.charAt(0).toUpperCase()}</span>
         </div>
 
         {/* Info */}
@@ -292,7 +292,7 @@ function ClientRow({ client, expanded, editing, historyData, historyLoading, onT
         {/* Actions */}
         <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
           {!editing && (
-            <button onClick={onStartEdit} style={{ fontSize: '12px', color: '#C9A96E', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px' }}>
+            <button onClick={onStartEdit} style={{ fontSize: '12px', color: '#E2A7B5', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px' }}>
               Modifier
             </button>
           )}
@@ -345,7 +345,7 @@ function ClientRow({ client, expanded, editing, historyData, historyLoading, onT
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               {/* RDVs */}
               <div>
-                <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', marginBottom: '10px' }}>
+                <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.6)', marginBottom: '10px' }}>
                   Rendez-vous ({historyData.appointments.length})
                 </p>
                 {historyData.appointments.length === 0 ? (
@@ -366,7 +366,7 @@ function ClientRow({ client, expanded, editing, historyData, historyLoading, onT
               </div>
               {/* Factures */}
               <div>
-                <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', marginBottom: '10px' }}>
+                <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.6)', marginBottom: '10px' }}>
                   Factures ({historyData.factures.length})
                 </p>
                 {historyData.factures.length === 0 ? (

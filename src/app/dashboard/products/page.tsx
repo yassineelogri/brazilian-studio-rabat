@@ -122,14 +122,14 @@ export default function ProductsPage() {
       {/* Header */}
       <div style={{ marginBottom: '32px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Gestion</p>
+          <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.6)', fontWeight: 500 }}>Gestion</p>
           <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Package size={22} style={{ color: '#C9A96E' }} /> Produits
+            <Package size={22} style={{ color: '#E2A7B5' }} /> Produits
           </h1>
         </div>
         <button
           onClick={() => { setEditProduct(null); setForm({ name: '', brand: '', buying_price: '', selling_price: '', stock_quantity: '0', low_stock_threshold: '3' }); setShowForm(true) }}
-          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '12px', padding: '10px 18px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '12px', padding: '10px 18px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}
         >
           <Plus size={14} /> Ajouter un produit
         </button>
@@ -209,7 +209,7 @@ export default function ProductsPage() {
       {/* Add/Edit form slide-over */}
       {showForm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 50, display: 'flex', justifyContent: 'flex-end' }}>
-          <div style={{ background: '#1C1816', width: '100%', maxWidth: '420px', height: '100%', overflowY: 'auto', padding: '28px 24px', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ background: '#2A191D', width: '100%', maxWidth: '420px', height: '100%', overflowY: 'auto', padding: '28px 24px', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
               <h2 style={{ fontSize: '20px', fontFamily: 'serif', fontWeight: 300, color: 'rgba(255,255,255,0.9)' }}>
                 {editProduct ? 'Modifier le produit' : 'Ajouter un produit'}
@@ -250,7 +250,7 @@ export default function ProductsPage() {
               </div>
               {error && <p style={{ color: '#F87171', fontSize: '13px' }}>{error}</p>}
               <div style={{ display: 'flex', gap: '10px', paddingTop: '4px' }}>
-                <button type="submit" style={{ flex: 1, padding: '10px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}>
+                <button type="submit" style={{ flex: 1, padding: '10px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}>
                   {editProduct ? 'Enregistrer' : 'Ajouter'}
                 </button>
                 <button type="button" onClick={() => { setShowForm(false); setEditProduct(null) }}

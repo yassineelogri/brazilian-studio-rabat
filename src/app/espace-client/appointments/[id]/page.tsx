@@ -57,7 +57,7 @@ export default function AppointmentDetailPage({ params }: { params: { id: string
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#141210', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#221418', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Chargement...</p>
       </div>
     )
@@ -65,10 +65,10 @@ export default function AppointmentDetailPage({ params }: { params: { id: string
 
   if (!appt) {
     return (
-      <div style={{ minHeight: '100vh', background: '#141210', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#221418', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <p style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '12px' }}>Rendez-vous introuvable.</p>
-          <Link href="/espace-client/dashboard" style={{ fontSize: '13px', color: '#C9A96E', textDecoration: 'none' }}>
+          <Link href="/espace-client/dashboard" style={{ fontSize: '13px', color: '#E2A7B5', textDecoration: 'none' }}>
             Retour au tableau de bord
           </Link>
         </div>
@@ -77,9 +77,9 @@ export default function AppointmentDetailPage({ params }: { params: { id: string
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#141210', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100vh', background: '#221418', paddingBottom: '80px' }}>
       {/* Header */}
-      <div style={{ background: '#1C1816', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '16px 20px' }}>
+      <div style={{ background: '#2A191D', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '16px 20px' }}>
         <div style={{ maxWidth: '480px', margin: '0 auto' }}>
           <Link href="/espace-client/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', marginBottom: '8px' }}>
             <ChevronLeft size={14} /> Retour
@@ -115,7 +115,7 @@ export default function AppointmentDetailPage({ params }: { params: { id: string
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
               <span style={{ color: 'rgba(255,255,255,0.4)' }}>Heure</span>
-              <span style={{ color: '#C9A96E', fontWeight: 700, fontFamily: 'monospace', fontSize: '16px' }}>{appt.start_time.slice(0, 5)}</span>
+              <span style={{ color: '#E2A7B5', fontWeight: 700, fontFamily: 'monospace', fontSize: '16px' }}>{appt.start_time.slice(0, 5)}</span>
             </div>
             {appt.staff?.name && (
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
@@ -142,7 +142,7 @@ export default function AppointmentDetailPage({ params }: { params: { id: string
       </div>
 
       {/* Bottom nav */}
-      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#1C1816', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', height: '60px', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#2A191D', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', height: '60px', paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {[
           { href: '/espace-client/dashboard', label: 'Accueil', icon: CalendarDays },
           { href: '/espace-client/devis', label: 'Devis', icon: FileText },

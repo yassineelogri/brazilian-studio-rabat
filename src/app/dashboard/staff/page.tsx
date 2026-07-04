@@ -27,11 +27,11 @@ export default function StaffPage() {
     <div style={{ maxWidth: '600px' }}>
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.5)', fontWeight: 500 }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.5)', fontWeight: 500 }}>
           Gestion
         </p>
         <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.95)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Users size={22} style={{ color: '#C9A96E' }} /> Staff
+          <Users size={22} style={{ color: '#E2A7B5' }} /> Staff
         </h1>
       </div>
 

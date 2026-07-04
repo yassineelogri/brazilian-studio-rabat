@@ -142,11 +142,11 @@ export default function FacturesListPage() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Finance</p>
+          <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.6)', fontWeight: 500 }}>Finance</p>
           <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px' }}>Factures</h1>
         </div>
         <Link href="/dashboard/factures/new"
-          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '12px', padding: '10px 18px', fontWeight: 600, textDecoration: 'none', fontSize: '13px' }}>
+          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '12px', padding: '10px 18px', fontWeight: 600, textDecoration: 'none', fontSize: '13px' }}>
           <Plus size={14} /> Nouvelle facture
         </Link>
       </div>
@@ -169,9 +169,9 @@ export default function FacturesListPage() {
             <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '6px' }}>Total TVA</p>
             <p style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>{summary.tva_amount.toFixed(2)} MAD</p>
           </div>
-          <div style={{ background: 'rgba(201,169,110,0.08)', border: '1px solid rgba(201,169,110,0.2)', borderRadius: '16px', padding: '20px', textAlign: 'center' }}>
-            <p style={{ fontSize: '10px', color: 'rgba(201,169,110,0.6)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '6px' }}>Total TTC</p>
-            <p style={{ fontSize: '18px', fontWeight: 700, color: '#C9A96E' }}>{summary.total_ttc.toFixed(2)} MAD</p>
+          <div style={{ background: 'rgba(226, 167, 181,0.08)', border: '1px solid rgba(226, 167, 181,0.2)', borderRadius: '16px', padding: '20px', textAlign: 'center' }}>
+            <p style={{ fontSize: '10px', color: 'rgba(226, 167, 181,0.6)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '6px' }}>Total TTC</p>
+            <p style={{ fontSize: '18px', fontWeight: 700, color: '#E2A7B5' }}>{summary.total_ttc.toFixed(2)} MAD</p>
           </div>
         </div>
       )}
@@ -190,11 +190,11 @@ export default function FacturesListPage() {
             <ChevronDown size={13} style={{ flexShrink: 0, marginLeft: '6px', color: 'rgba(255,255,255,0.4)', transform: statusOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
           </button>
           {statusOpen && (
-            <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50 }}>
+            <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#2A191D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50 }}>
               {[['', 'Tous les statuts'], ...Object.entries(STATUS_LABELS)].map(([v, l], i, arr) => (
                 <button key={v} type="button"
                   onClick={() => { setStatusFilter(v); setStatusOpen(false) }}
-                  style={{ width: '100%', textAlign: 'left', padding: '9px 12px', fontSize: '13px', background: statusFilter === v ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: statusFilter === v ? '#C9A96E' : v === '' ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === arr.length - 1 ? '0 0 10px 10px' : '0' }}>
+                  style={{ width: '100%', textAlign: 'left', padding: '9px 12px', fontSize: '13px', background: statusFilter === v ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: statusFilter === v ? '#E2A7B5' : v === '' ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === arr.length - 1 ? '0 0 10px 10px' : '0' }}>
                   {l}
                 </button>
               ))}
@@ -217,7 +217,7 @@ export default function FacturesListPage() {
       {/* Pay modal */}
       {payModal && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
-          <div style={{ background: '#1C1816', borderRadius: '20px', padding: '28px', width: '320px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ background: '#2A191D', borderRadius: '20px', padding: '28px', width: '320px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <h2 style={{ fontSize: '18px', fontFamily: 'serif', fontWeight: 300, color: 'rgba(255,255,255,0.9)' }}>Marquer comme payé</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div>
@@ -229,11 +229,11 @@ export default function FacturesListPage() {
                     <ChevronDown size={13} style={{ flexShrink: 0, color: 'rgba(255,255,255,0.4)', transform: payMethodOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
                   </button>
                   {payMethodOpen && (
-                    <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 60 }}>
+                    <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#2A191D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 60 }}>
                       {(['cash', 'card', 'transfer'] as const).map((v, i) => (
                         <button key={v} type="button"
                           onClick={() => { setPayModal(prev => prev ? { ...prev, paymentMethod: v } : prev); setPayMethodOpen(false) }}
-                          style={{ width: '100%', textAlign: 'left', padding: '9px 12px', fontSize: '13px', background: payModal.paymentMethod === v ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: payModal.paymentMethod === v ? '#C9A96E' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === 2 ? '0 0 10px 10px' : '0' }}>
+                          style={{ width: '100%', textAlign: 'left', padding: '9px 12px', fontSize: '13px', background: payModal.paymentMethod === v ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: payModal.paymentMethod === v ? '#E2A7B5' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === 2 ? '0 0 10px 10px' : '0' }}>
                           {{ cash: 'Espèces', card: 'Carte', transfer: 'Virement' }[v]}
                         </button>
                       ))}
@@ -254,7 +254,7 @@ export default function FacturesListPage() {
                 Annuler
               </button>
               <button type="button" onClick={handleMarkPaid} disabled={!!actionLoading}
-                style={{ padding: '9px 18px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '10px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+                style={{ padding: '9px 18px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '10px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
                 Confirmer
               </button>
             </div>
@@ -281,7 +281,7 @@ export default function FacturesListPage() {
               {factures.map((f, i) => (
                 <tr key={f.id} style={{ borderBottom: i < factures.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
                   <td style={{ padding: '12px 14px' }}>
-                    <Link href={`/dashboard/factures/${f.id}`} style={{ fontFamily: 'monospace', color: '#C9A96E', textDecoration: 'none', fontSize: '13px' }}>
+                    <Link href={`/dashboard/factures/${f.id}`} style={{ fontFamily: 'monospace', color: '#E2A7B5', textDecoration: 'none', fontSize: '13px' }}>
                       {f.number}
                     </Link>
                   </td>

@@ -112,11 +112,11 @@ export default function NewAppointmentPage() {
     <div style={{ maxWidth: '520px' }}>
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.5)', fontWeight: 500 }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.5)', fontWeight: 500 }}>
           Agenda
         </p>
         <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.95)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <CalendarDays size={22} style={{ color: '#C9A96E' }} /> Nouveau rendez-vous
+          <CalendarDays size={22} style={{ color: '#E2A7B5' }} /> Nouveau rendez-vous
         </h1>
       </div>
 
@@ -145,11 +145,11 @@ export default function NewAppointmentPage() {
               <ChevronDown size={14} style={{ flexShrink: 0, marginLeft: '8px', color: 'rgba(255,255,255,0.4)', transform: serviceOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
             </button>
             {serviceOpen && (
-              <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '220px', overflowY: 'auto' }}>
+              <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#2A191D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '220px', overflowY: 'auto' }}>
                 {services.map((s, i) => (
                   <button key={s.id} type="button"
                     onClick={() => { setForm(f => ({...f, serviceId: s.id, durationMinutes: s.min_duration ?? 60})); setServiceOpen(false) }}
-                    style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: form.serviceId === s.id ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: form.serviceId === s.id ? '#C9A96E' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === services.length - 1 ? '0 0 10px 10px' : '0' }}>
+                    style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: form.serviceId === s.id ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: form.serviceId === s.id ? '#E2A7B5' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === services.length - 1 ? '0 0 10px 10px' : '0' }}>
                     {s.name} <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>({s.min_duration}–{s.max_duration} min)</span>
                   </button>
                 ))}
@@ -168,15 +168,15 @@ export default function NewAppointmentPage() {
               <ChevronDown size={14} style={{ flexShrink: 0, marginLeft: '8px', color: 'rgba(255,255,255,0.4)', transform: staffOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
             </button>
             {staffOpen && (
-              <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '200px', overflowY: 'auto' }}>
+              <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#2A191D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '200px', overflowY: 'auto' }}>
                 <button type="button" onClick={() => { setForm(f => ({...f, staffId: ''})); setStaffOpen(false) }}
-                  style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: !form.staffId ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', borderRadius: '10px 10px 0 0' }}>
+                  style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: !form.staffId ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', borderRadius: '10px 10px 0 0' }}>
                   À assigner plus tard
                 </button>
                 {staff.filter(s => s.role !== 'secretary').map((s, i, arr) => (
                   <button key={s.id} type="button"
                     onClick={() => { setForm(f => ({...f, staffId: s.id})); setStaffOpen(false) }}
-                    style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: form.staffId === s.id ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', color: form.staffId === s.id ? '#C9A96E' : 'rgba(255,255,255,0.85)', borderRadius: i === arr.length - 1 ? '0 0 10px 10px' : '0' }}>
+                    style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: form.staffId === s.id ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', color: form.staffId === s.id ? '#E2A7B5' : 'rgba(255,255,255,0.85)', borderRadius: i === arr.length - 1 ? '0 0 10px 10px' : '0' }}>
                     {s.name} <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>({s.role})</span>
                   </button>
                 ))}
@@ -199,8 +199,8 @@ export default function NewAppointmentPage() {
           style={{
             width: '100%',
             padding: '12px',
-            background: loading ? 'rgba(201,169,110,0.4)' : 'linear-gradient(135deg, #C9A96E, #B8944F)',
-            color: '#1A1410',
+            background: loading ? 'rgba(226, 167, 181,0.4)' : 'linear-gradient(135deg, #E2A7B5, #C98FA0)',
+            color: '#2B1B1E',
             borderRadius: '12px',
             fontSize: '14px',
             fontWeight: 600,

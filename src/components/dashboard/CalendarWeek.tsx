@@ -64,7 +64,7 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                 padding: '16px 0',
                 textAlign: 'center',
                 borderLeft: '1px solid rgba(255,255,255,0.04)',
-                background: isToday ? 'rgba(201,169,110,0.06)' : 'transparent',
+                background: isToday ? 'rgba(226, 167, 181,0.06)' : 'transparent',
               }}
             >
               <p style={{
@@ -72,7 +72,7 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                 fontWeight: 700,
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
-                color: isToday ? '#C9A96E' : 'rgba(255,255,255,0.35)',
+                color: isToday ? '#E2A7B5' : 'rgba(255,255,255,0.35)',
               }}>
                 {DAY_LABELS[i]}
               </p>
@@ -82,8 +82,8 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                     position: 'absolute',
                     inset: '-4px -8px',
                     borderRadius: '12px',
-                    background: 'rgba(201,169,110,0.15)',
-                    border: '1px solid rgba(201,169,110,0.2)',
+                    background: 'rgba(226, 167, 181,0.15)',
+                    border: '1px solid rgba(226, 167, 181,0.2)',
                   }} />
                 )}
                 <p style={{
@@ -91,7 +91,7 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                   fontSize: '22px',
                   fontWeight: 700,
                   lineHeight: 1,
-                  color: isToday ? '#C9A96E' : 'rgba(255,255,255,0.8)',
+                  color: isToday ? '#E2A7B5' : 'rgba(255,255,255,0.8)',
                 }}>
                   {day.getDate()}
                 </p>
@@ -107,9 +107,9 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  background: isToday ? 'rgba(201,169,110,0.2)' : 'rgba(255,255,255,0.06)',
-                  color: isToday ? '#C9A96E' : 'rgba(255,255,255,0.5)',
-                  border: isToday ? '1px solid rgba(201,169,110,0.3)' : '1px solid rgba(255,255,255,0.08)',
+                  background: isToday ? 'rgba(226, 167, 181,0.2)' : 'rgba(255,255,255,0.06)',
+                  color: isToday ? '#E2A7B5' : 'rgba(255,255,255,0.5)',
+                  border: isToday ? '1px solid rgba(226, 167, 181,0.3)' : '1px solid rgba(255,255,255,0.08)',
                 }}>
                   {count}
                 </div>
@@ -172,7 +172,7 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '6px',
-                    background: isToday ? 'rgba(201,169,110,0.02)' : 'transparent',
+                    background: isToday ? 'rgba(226, 167, 181,0.02)' : 'transparent',
                     overflow: 'hidden',
                     minWidth: 0,
                   }}

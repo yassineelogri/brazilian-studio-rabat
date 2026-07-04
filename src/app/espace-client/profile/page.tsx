@@ -50,9 +50,9 @@ export default function ClientProfilePage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#141210', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100vh', background: '#221418', paddingBottom: '80px' }}>
       {/* Header */}
-      <div style={{ background: '#1C1816', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '16px 20px' }}>
+      <div style={{ background: '#2A191D', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '16px 20px' }}>
         <div style={{ maxWidth: '480px', margin: '0 auto' }}>
           <Link href="/espace-client/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', marginBottom: '8px' }}>
             <ChevronLeft size={14} /> Retour
@@ -90,7 +90,7 @@ export default function ClientProfilePage() {
               <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginTop: '4px' }}>Pour modifier votre email, contactez le salon.</p>
             </div>
             <button type="submit" disabled={saving}
-              style={{ padding: '12px', background: saving ? 'rgba(201,169,110,0.4)' : 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '12px', fontWeight: 700, border: 'none', cursor: saving ? 'not-allowed' : 'pointer', fontSize: '14px' }}>
+              style={{ padding: '12px', background: saving ? 'rgba(226, 167, 181,0.4)' : 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '12px', fontWeight: 700, border: 'none', cursor: saving ? 'not-allowed' : 'pointer', fontSize: '14px' }}>
               {saving ? 'Enregistrement...' : 'Enregistrer'}
             </button>
           </form>
@@ -98,14 +98,14 @@ export default function ClientProfilePage() {
       </div>
 
       {/* Bottom nav */}
-      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#1C1816', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', height: '60px', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#2A191D', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', height: '60px', paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {[
           { href: '/espace-client/dashboard', label: 'Accueil', icon: CalendarDays },
           { href: '/espace-client/devis', label: 'Devis', icon: FileText },
           { href: '/espace-client/factures', label: 'Factures', icon: Receipt },
           { href: '/espace-client/profile', label: 'Profil', icon: User },
         ].map(({ href, label, icon: Icon }) => (
-          <Link key={href} href={href} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '3px', textDecoration: 'none', color: href === '/espace-client/profile' ? '#C9A96E' : 'rgba(255,255,255,0.35)' }}>
+          <Link key={href} href={href} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '3px', textDecoration: 'none', color: href === '/espace-client/profile' ? '#E2A7B5' : 'rgba(255,255,255,0.35)' }}>
             <Icon size={18} />
             <span style={{ fontSize: '10px', fontWeight: 500 }}>{label}</span>
           </Link>

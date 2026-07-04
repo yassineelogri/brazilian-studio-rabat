@@ -116,11 +116,11 @@ export default function DevisListPage() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Finance</p>
+          <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.6)', fontWeight: 500 }}>Finance</p>
           <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px' }}>Devis</h1>
         </div>
         <Link href="/dashboard/devis/new"
-          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '12px', padding: '10px 18px', fontWeight: 600, textDecoration: 'none', fontSize: '13px' }}>
+          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '12px', padding: '10px 18px', fontWeight: 600, textDecoration: 'none', fontSize: '13px' }}>
           <Plus size={14} /> Nouveau devis
         </Link>
       </div>
@@ -151,11 +151,11 @@ export default function DevisListPage() {
             <ChevronDown size={13} style={{ flexShrink: 0, marginLeft: '6px', color: 'rgba(255,255,255,0.4)', transform: statusOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
           </button>
           {statusOpen && (
-            <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#1C1816', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50 }}>
+            <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#2A191D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50 }}>
               {[['', 'Tous les statuts'], ...Object.entries(STATUS_LABELS)].map(([v, l], i, arr) => (
                 <button key={v} type="button"
                   onClick={() => { setStatusFilter(v); setStatusOpen(false) }}
-                  style={{ width: '100%', textAlign: 'left', padding: '9px 12px', fontSize: '13px', background: statusFilter === v ? 'rgba(201,169,110,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: statusFilter === v ? '#C9A96E' : v === '' ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === arr.length - 1 ? '0 0 10px 10px' : '0' }}>
+                  style={{ width: '100%', textAlign: 'left', padding: '9px 12px', fontSize: '13px', background: statusFilter === v ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: statusFilter === v ? '#E2A7B5' : v === '' ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === arr.length - 1 ? '0 0 10px 10px' : '0' }}>
                   {l}
                 </button>
               ))}
@@ -194,7 +194,7 @@ export default function DevisListPage() {
               {devis.map((d, i) => (
                 <tr key={d.id} style={{ borderBottom: i < devis.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
                   <td style={{ padding: '12px 14px' }}>
-                    <Link href={`/dashboard/devis/${d.id}`} style={{ fontFamily: 'monospace', color: '#C9A96E', textDecoration: 'none', fontSize: '13px' }}>
+                    <Link href={`/dashboard/devis/${d.id}`} style={{ fontFamily: 'monospace', color: '#E2A7B5', textDecoration: 'none', fontSize: '13px' }}>
                       {d.number}
                     </Link>
                   </td>

@@ -133,7 +133,7 @@ export default function CalendarPage() {
               cursor: 'pointer',
               transition: 'all 0.15s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,169,110,0.1)'; e.currentTarget.style.color = '#C9A96E'; e.currentTarget.style.borderColor = 'rgba(201,169,110,0.2)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(226, 167, 181,0.1)'; e.currentTarget.style.color = '#E2A7B5'; e.currentTarget.style.borderColor = 'rgba(226, 167, 181,0.2)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
           >
             <ChevronLeft size={15} />
@@ -153,7 +153,7 @@ export default function CalendarPage() {
               cursor: 'pointer',
               transition: 'all 0.15s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,169,110,0.1)'; e.currentTarget.style.color = '#C9A96E'; e.currentTarget.style.borderColor = 'rgba(201,169,110,0.2)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(226, 167, 181,0.1)'; e.currentTarget.style.color = '#E2A7B5'; e.currentTarget.style.borderColor = 'rgba(226, 167, 181,0.2)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
           >
             <ChevronRight size={15} />
@@ -217,9 +217,9 @@ export default function CalendarPage() {
               padding: '5px 12px',
               borderRadius: '8px',
               cursor: 'pointer',
-              background: 'rgba(201,169,110,0.08)',
-              border: '1px solid rgba(201,169,110,0.2)',
-              color: '#C9A96E',
+              background: 'rgba(226, 167, 181,0.08)',
+              border: '1px solid rgba(226, 167, 181,0.2)',
+              color: '#E2A7B5',
               fontWeight: 500,
               transition: 'all 0.15s',
             }}
@@ -252,7 +252,7 @@ export default function CalendarPage() {
                 cursor: 'pointer',
                 border: 'none',
                 background: 'transparent',
-                color: view === v ? '#C9A96E' : 'rgba(255,255,255,0.4)',
+                color: view === v ? '#E2A7B5' : 'rgba(255,255,255,0.4)',
                 transition: 'color 0.15s',
                 position: 'relative',
                 zIndex: 1,
@@ -265,8 +265,8 @@ export default function CalendarPage() {
                     position: 'absolute',
                     inset: 0,
                     borderRadius: '8px',
-                    background: 'rgba(201,169,110,0.12)',
-                    border: '1px solid rgba(201,169,110,0.2)',
+                    background: 'rgba(226, 167, 181,0.12)',
+                    border: '1px solid rgba(226, 167, 181,0.2)',
                     zIndex: -1,
                   }}
                   transition={{ type: 'spring', damping: 25, stiffness: 350 }}

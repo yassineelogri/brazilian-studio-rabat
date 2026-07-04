@@ -3,7 +3,7 @@ import { Document, Page, View, Text, Image, StyleSheet } from '@react-pdf/render
 import type { DevisWithRelations, FactureWithRelations } from '@/lib/supabase/types'
 import { SALON } from '@/lib/salon-info'
 
-const GOLD  = '#C9A96E'
+const GOLD  = '#8E4457'
 const DARK  = '#1a1a1a'
 const GRAY  = '#666666'
 const LIGHT = '#f9f6f2'

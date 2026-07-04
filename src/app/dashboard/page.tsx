@@ -59,7 +59,7 @@ export default async function DashboardPage() {
     <div>
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.5)', fontWeight: 500 }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.5)', fontWeight: 500 }}>
           {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
         </p>
         <h1
@@ -87,20 +87,20 @@ export default async function DashboardPage() {
       {/* Quick actions */}
       <div className="flex gap-3 flex-wrap mb-8">
         <Link
-          href="/dashboard/calendar"
+          href="/dashboard/appointments/new"
           className="flex items-center gap-2 text-sm font-medium transition-all duration-200"
           style={{
             padding: '10px 18px',
             borderRadius: '14px',
-            background: 'linear-gradient(135deg, rgba(201,169,110,0.15), rgba(201,169,110,0.08))',
-            border: '1px solid rgba(201,169,110,0.2)',
-            color: '#C9A96E',
+            background: 'linear-gradient(135deg, rgba(226, 167, 181,0.15), rgba(226, 167, 181,0.08))',
+            border: '1px solid rgba(226, 167, 181,0.2)',
+            color: '#E2A7B5',
           }}
         >
-          <CalendarDays size={15} /> Calendrier
+          <Plus size={15} /> Nouveau RDV
         </Link>
         <Link
-          href="/dashboard/appointments/new"
+          href="/dashboard/calendar"
           className="flex items-center gap-2 text-sm font-medium transition-all duration-200"
           style={{
             padding: '10px 18px',
@@ -110,7 +110,7 @@ export default async function DashboardPage() {
             color: 'rgba(255,255,255,0.6)',
           }}
         >
-          <Plus size={15} /> Nouveau RDV
+          <CalendarDays size={15} /> Calendrier
         </Link>
         <Link
           href="/dashboard/ventes/new"
@@ -156,22 +156,14 @@ export default async function DashboardPage() {
                   boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
                 }}
               >
-                {/* Service color bar */}
-                <div
-                  style={{
-                    width: '3px',
-                    alignSelf: 'stretch',
-                    borderRadius: '4px',
-                    backgroundColor: a.services?.color ?? '#C9A96E',
-                    boxShadow: `0 0 8px ${a.services?.color ?? '#C9A96E'}40`,
-                  }}
-                />
+                
                 {/* Info */}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.9)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {a.clients?.name}
                   </p>
-                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>
+                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0, display: 'inline-block', backgroundColor: a.services?.color ?? '#E2A7B5' }} />
                     {a.services?.name}
                   </p>
                 </div>
@@ -213,14 +205,14 @@ export default async function DashboardPage() {
             textAlign: 'center',
           }}
         >
-          <CalendarDays size={32} style={{ color: 'rgba(201,169,110,0.3)', margin: '0 auto 12px' }} />
+          <CalendarDays size={32} style={{ color: 'rgba(226, 167, 181,0.3)', margin: '0 auto 12px' }} />
           <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', fontWeight: 400 }}>
             Aucun rendez-vous aujourd&apos;hui
           </p>
           <Link
             href="/dashboard/appointments/new"
             className="inline-flex items-center gap-1.5 text-sm font-medium mt-3"
-            style={{ color: '#C9A96E' }}
+            style={{ color: '#E2A7B5' }}
           >
             <Plus size={14} /> Créer un rendez-vous
           </Link>

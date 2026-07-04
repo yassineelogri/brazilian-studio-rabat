@@ -1,6 +1,6 @@
 /* Header Banner */
 .headerBanner {
-  background-color: #3d1535;
+  background-color: var(--color-dark);
   height: 40vh;
   display: flex;
   align-items: center;
@@ -19,13 +19,13 @@
   font-size: 1.125rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #c9a96e;
+  color: var(--color-accent-deep);
   margin-bottom: 1rem;
   font-weight: 300;
 }
 
 .headerTitle {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-serif), 'Playfair Display', serif;
   font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 700;
   color: white;
@@ -56,7 +56,7 @@
 }
 
 .card {
-  background-color: #3d1535;
+  background-color: var(--color-dark);
   border: 1px solid rgba(201, 169, 110, 0.2);
   border-radius: 0.5rem;
   padding: 1.75rem;
@@ -85,7 +85,7 @@
 .cardIcon {
   width: 2.5rem;
   height: 2.5rem;
-  color: #c9a96e;
+  color: var(--color-accent-deep);
   flex-shrink: 0;
 }
 
@@ -93,7 +93,7 @@
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #c9a96e;
+  color: var(--color-accent-deep);
   margin: 0;
   margin-bottom: 0.5rem;
   font-weight: 600;
@@ -115,9 +115,9 @@
 }
 
 .formTitle {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-serif), 'Playfair Display', serif;
   font-size: 2rem;
-  color: #3d1535;
+  color: var(--color-dark);
   margin: 0 0 2rem 0;
   font-weight: 700;
 }
@@ -143,7 +143,7 @@
   font-size: 1rem;
   font-family: inherit;
   background-color: transparent;
-  color: #3d1535;
+  color: var(--color-dark);
   transition: border-color 0.3s ease;
 }
 
@@ -155,7 +155,7 @@
 .input:focus,
 .textarea:focus {
   outline: none;
-  border-bottom-color: #c9a96e;
+  border-bottom-color: var(--color-accent);
 }
 
 .input[type='tel'],
@@ -169,7 +169,7 @@
 }
 
 .submitBtn {
-  background-color: #c9a96e;
+  background-color: var(--color-accent-deep);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -204,7 +204,7 @@
   max-width: 1200px;
   margin: 0 auto;
   height: 400px;
-  background-color: #3d1535;
+  background-color: var(--color-dark);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -217,11 +217,11 @@
 .mapIcon {
   width: 3rem;
   height: 3rem;
-  color: #c9a96e;
+  color: var(--color-accent-deep);
 }
 
 .mapText {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-serif), 'Playfair Display', serif;
   font-size: 1.5rem;
   margin: 0;
   text-align: center;

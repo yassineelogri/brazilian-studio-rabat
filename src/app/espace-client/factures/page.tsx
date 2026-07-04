@@ -41,9 +41,9 @@ export default function ClientFacturesPage() {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div style={{ minHeight: '100vh', background: '#141210', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100vh', background: '#221418', paddingBottom: '80px' }}>
       {/* Header */}
-      <div style={{ background: '#1C1816', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '16px 20px' }}>
+      <div style={{ background: '#2A191D', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '16px 20px' }}>
         <div style={{ maxWidth: '480px', margin: '0 auto' }}>
           <Link href="/espace-client/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: 'rgba(255,255,255,0.4)', textDecoration: 'none', marginBottom: '8px' }}>
             <ChevronLeft size={14} /> Retour
@@ -65,7 +65,7 @@ export default function ClientFacturesPage() {
             {factures.map(f => (
               <div key={f.id} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
-                  <p style={{ fontFamily: 'monospace', fontSize: '14px', fontWeight: 600, color: '#C9A96E', marginBottom: '4px' }}>{f.number}</p>
+                  <p style={{ fontFamily: 'monospace', fontSize: '14px', fontWeight: 600, color: '#E2A7B5', marginBottom: '4px' }}>{f.number}</p>
                   <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginBottom: '6px' }}>{new Date(f.created_at).toLocaleDateString('fr-FR')}</p>
                   <span style={{ ...STATUS_STYLES[f.status], padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 500 }}>
                     {STATUS_LABELS[f.status] ?? f.status}
@@ -88,14 +88,14 @@ export default function ClientFacturesPage() {
       </div>
 
       {/* Bottom nav */}
-      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#1C1816', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', height: '60px', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#2A191D', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', height: '60px', paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {[
           { href: '/espace-client/dashboard', label: 'Accueil', icon: CalendarDays },
           { href: '/espace-client/devis', label: 'Devis', icon: FileText },
           { href: '/espace-client/factures', label: 'Factures', icon: Receipt },
           { href: '/espace-client/profile', label: 'Profil', icon: User },
         ].map(({ href, label, icon: Icon }) => (
-          <Link key={href} href={href} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '3px', textDecoration: 'none', color: href === '/espace-client/factures' ? '#C9A96E' : 'rgba(255,255,255,0.35)' }}>
+          <Link key={href} href={href} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '3px', textDecoration: 'none', color: href === '/espace-client/factures' ? '#E2A7B5' : 'rgba(255,255,255,0.35)' }}>
             <Icon size={18} />
             <span style={{ fontSize: '10px', fontWeight: 500 }}>{label}</span>
           </Link>

@@ -44,6 +44,9 @@ export default function Footer() {
               <li>
                 <a href="/about" className={styles.link}>À Propos</a>
               </li>
+              <li>
+                <a href="/booking" className={styles.link}>Réserver en ligne</a>
+              </li>
             </ul>
           </div>
 
@@ -112,6 +115,11 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className={styles.bottom}>
           <p>&copy; {currentYear} Brazilian Studio Rabat · Tous droits réservés</p>
+          <div className={styles.bottomLinks}>
+            <a href="/espace-client" className={styles.link}>Espace Client</a>
+            <span className={styles.bottomDot}>·</span>
+            <a href="/login" className={styles.link}>Espace Pro</a>
+          </div>
         </div>
       </div>
     </footer>

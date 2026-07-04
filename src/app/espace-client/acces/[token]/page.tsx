@@ -66,13 +66,13 @@ export default function TokenViewPage({ params }: { params: { token: string } })
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#141210', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+    <div style={{ minHeight: '100vh', background: '#221418', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
       {/* Logo */}
       <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-        <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', boxShadow: '0 8px 32px rgba(201,169,110,0.3)' }}>
-          <span style={{ fontFamily: 'serif', fontStyle: 'italic', fontSize: '16px', fontWeight: 700, color: '#1A1410' }}>BS</span>
+        <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', boxShadow: '0 8px 32px rgba(226, 167, 181,0.3)' }}>
+          <span style={{ fontFamily: 'serif', fontStyle: 'italic', fontSize: '16px', fontWeight: 700, color: '#2B1B1E' }}>BS</span>
         </div>
-        <p style={{ fontFamily: 'serif', fontStyle: 'italic', fontSize: '17px', color: '#C9A96E' }}>Brazilian Studio</p>
+        <p style={{ fontFamily: 'serif', fontStyle: 'italic', fontSize: '17px', color: '#E2A7B5' }}>Brazilian Studio</p>
         <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>Votre rendez-vous</p>
       </div>
 
@@ -115,7 +115,7 @@ export default function TokenViewPage({ params }: { params: { token: string } })
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
                 <span style={{ color: 'rgba(255,255,255,0.4)' }}>Heure</span>
-                <span style={{ color: '#C9A96E', fontWeight: 700, fontFamily: 'monospace', fontSize: '16px' }}>{data.start_time.slice(0, 5)}</span>
+                <span style={{ color: '#E2A7B5', fontWeight: 700, fontFamily: 'monospace', fontSize: '16px' }}>{data.start_time.slice(0, 5)}</span>
               </div>
               {data.staff?.name && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
@@ -147,7 +147,7 @@ export default function TokenViewPage({ params }: { params: { token: string } })
         )}
 
         <div style={{ textAlign: 'center' }}>
-          <Link href="/espace-client" style={{ fontSize: '13px', color: '#C9A96E', textDecoration: 'none' }}>
+          <Link href="/espace-client" style={{ fontSize: '13px', color: '#E2A7B5', textDecoration: 'none' }}>
             Accéder à mon espace client
           </Link>
         </div>

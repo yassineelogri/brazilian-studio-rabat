@@ -192,7 +192,7 @@ export default function FactureDetailPage({ params }: { params: { id: string } }
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>
-            <Link href="/dashboard/factures" style={{ color: 'rgba(201,169,110,0.7)', textDecoration: 'none' }}>Factures</Link>
+            <Link href="/dashboard/factures" style={{ color: 'rgba(226, 167, 181,0.7)', textDecoration: 'none' }}>Factures</Link>
             {' / '}
             <span style={{ fontFamily: 'monospace' }}>{facture.number}</span>
           </p>
@@ -265,7 +265,7 @@ export default function FactureDetailPage({ params }: { params: { id: string } }
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
             <button type="button" onClick={handleMarkPaid} disabled={!!actionLoading}
-              style={{ padding: '9px 20px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}>
+              style={{ padding: '9px 20px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}>
               {actionLoading === 'mark-paid' ? 'Enregistrement...' : 'Confirmer'}
             </button>
             <button type="button" onClick={() => setShowMarkPaid(false)} disabled={!!actionLoading} style={btnGlass}>Annuler</button>
@@ -279,8 +279,8 @@ export default function FactureDetailPage({ params }: { params: { id: string } }
           <p style={{ fontSize: '15px', fontWeight: 500, color: 'rgba(255,255,255,0.85)' }}>Modifier la facture</p>
 
           {/* Client */}
-          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(201,169,110,0.15)', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C9A96E', margin: 0 }}>Client</p>
+          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(226, 167, 181,0.15)', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#E2A7B5', margin: 0 }}>Client</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
                 <label style={labelStyle}>Nom</label>
@@ -312,7 +312,7 @@ export default function FactureDetailPage({ params }: { params: { id: string } }
 
           <div style={{ display: 'flex', gap: '10px' }}>
             <button type="button" onClick={handleSave} disabled={saving}
-              style={{ padding: '9px 20px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}>
+              style={{ padding: '9px 20px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}>
               {saving ? 'Enregistrement...' : 'Enregistrer'}
             </button>
             <button type="button" onClick={() => setIsEditing(false)} disabled={saving} style={btnGlass}>Annuler</button>
@@ -336,7 +336,7 @@ export default function FactureDetailPage({ params }: { params: { id: string } }
           {facture.devis_id && (
             <>
               <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Créé depuis le devis</p>
-              <Link href={`/dashboard/devis/${facture.devis_id}`} style={{ fontFamily: 'monospace', color: '#C9A96E', textDecoration: 'none', fontSize: '12px' }}>
+              <Link href={`/dashboard/devis/${facture.devis_id}`} style={{ fontFamily: 'monospace', color: '#E2A7B5', textDecoration: 'none', fontSize: '12px' }}>
                 {facture.devis_id}
               </Link>
             </>
@@ -389,8 +389,8 @@ export default function FactureDetailPage({ params }: { params: { id: string } }
             <span style={{ width: '112px', textAlign: 'right', color: 'rgba(255,255,255,0.7)' }}>{facture.tva_amount.toFixed(2)} MAD</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '32px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '10px', marginTop: '4px' }}>
-            <span style={{ fontWeight: 700, color: '#C9A96E' }}>Total TTC</span>
-            <span style={{ width: '112px', textAlign: 'right', fontWeight: 700, color: '#C9A96E' }}>{facture.total_ttc.toFixed(2)} MAD</span>
+            <span style={{ fontWeight: 700, color: '#E2A7B5' }}>Total TTC</span>
+            <span style={{ width: '112px', textAlign: 'right', fontWeight: 700, color: '#E2A7B5' }}>{facture.total_ttc.toFixed(2)} MAD</span>
           </div>
         </div>
       </div>
@@ -409,7 +409,7 @@ export default function FactureDetailPage({ params }: { params: { id: string } }
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {((facture.events ?? []) as StatusEvent[]).map((ev, idx) => (
             <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' }}>
-              <CheckCircle size={13} style={{ color: '#C9A96E', flexShrink: 0 }} />
+              <CheckCircle size={13} style={{ color: '#E2A7B5', flexShrink: 0 }} />
               <span style={{ color: 'rgba(255,255,255,0.35)' }}>{new Date(ev.at).toLocaleString('fr-FR')}</span>
               <span style={{ color: 'rgba(255,255,255,0.7)', textTransform: 'capitalize' }}>{STATUS_LABELS[ev.status] ?? ev.status}</span>
             </div>

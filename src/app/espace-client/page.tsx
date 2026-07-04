@@ -54,10 +54,10 @@ function LoginForm() {
         <div style={{ fontSize: '36px', marginBottom: '16px' }}>📧</div>
         <p style={{ fontSize: '16px', fontWeight: 500, color: 'rgba(255,255,255,0.9)', marginBottom: '8px' }}>Lien envoyé !</p>
         <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: '1.6', marginBottom: '20px' }}>
-          Un lien de connexion a été envoyé à <strong style={{ color: '#C9A96E' }}>{email}</strong>. Vérifiez vos emails.
+          Un lien de connexion a été envoyé à <strong style={{ color: '#E2A7B5' }}>{email}</strong>. Vérifiez vos emails.
         </p>
         <button type="button" onClick={() => { setSent(false); setEmail('') }}
-          style={{ background: 'none', border: 'none', color: '#C9A96E', fontSize: '13px', cursor: 'pointer', textDecoration: 'underline' }}>
+          style={{ background: 'none', border: 'none', color: '#E2A7B5', fontSize: '13px', cursor: 'pointer', textDecoration: 'underline' }}>
           Utiliser une autre adresse
         </button>
       </div>
@@ -83,7 +83,7 @@ function LoginForm() {
       </div>
 
       <button type="submit" disabled={loading}
-        style={{ padding: '13px', background: loading ? 'rgba(201,169,110,0.4)' : 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '12px', fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontSize: '14px' }}>
+        style={{ padding: '13px', background: loading ? 'rgba(226, 167, 181,0.4)' : 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '12px', fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer', fontSize: '14px' }}>
         {loading ? 'Envoi...' : 'Recevoir mon lien de connexion'}
       </button>
     </form>
@@ -92,14 +92,14 @@ function LoginForm() {
 
 export default function EspaceClientLoginPage() {
   return (
-    <div style={{ minHeight: '100vh', background: '#141210', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+    <div style={{ minHeight: '100vh', background: '#221418', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
       {/* Logo */}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 8px 32px rgba(201,169,110,0.3)' }}>
-          <span style={{ fontFamily: 'serif', fontStyle: 'italic', fontSize: '18px', fontWeight: 700, color: '#1A1410' }}>BS</span>
+        <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 8px 32px rgba(226, 167, 181,0.3)' }}>
+          <span style={{ fontFamily: 'serif', fontStyle: 'italic', fontSize: '18px', fontWeight: 700, color: '#2B1B1E' }}>BS</span>
         </div>
-        <p style={{ fontFamily: 'serif', fontStyle: 'italic', fontSize: '18px', color: '#C9A96E' }}>Brazilian Studio</p>
-        <p style={{ fontSize: '10px', letterSpacing: '0.3em', color: 'rgba(201,169,110,0.4)', textTransform: 'uppercase', marginTop: '4px' }}>Espace Client · Rabat</p>
+        <p style={{ fontFamily: 'serif', fontStyle: 'italic', fontSize: '18px', color: '#E2A7B5' }}>Brazilian Studio</p>
+        <p style={{ fontSize: '10px', letterSpacing: '0.3em', color: 'rgba(226, 167, 181,0.4)', textTransform: 'uppercase', marginTop: '4px' }}>Espace Client · Rabat</p>
       </div>
 
       {/* Card */}
@@ -108,7 +108,7 @@ export default function EspaceClientLoginPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div style={{ height: '16px', background: 'rgba(255,255,255,0.06)', borderRadius: '8px', width: '60%' }} />
             <div style={{ height: '44px', background: 'rgba(255,255,255,0.04)', borderRadius: '12px' }} />
-            <div style={{ height: '44px', background: 'rgba(201,169,110,0.15)', borderRadius: '12px' }} />
+            <div style={{ height: '44px', background: 'rgba(226, 167, 181,0.15)', borderRadius: '12px' }} />
           </div>
         }>
           <LoginForm />

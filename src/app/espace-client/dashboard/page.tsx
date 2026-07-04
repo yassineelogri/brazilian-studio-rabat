@@ -71,18 +71,18 @@ export default function EspaceClientDashboard() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#141210', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: '#221418', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Chargement...</p>
     </div>
   )
 
   return (
-    <div style={{ minHeight: '100vh', background: '#141210', paddingBottom: '80px' }}>
+    <div style={{ minHeight: '100vh', background: '#221418', paddingBottom: '80px' }}>
       {/* Header */}
-      <div style={{ background: 'linear-gradient(135deg, #1E1A16 0%, #1C1814 100%)', padding: '28px 20px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ background: 'linear-gradient(135deg, #2B1B1E 0%, #1C1814 100%)', padding: '28px 20px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', maxWidth: '480px', margin: '0 auto' }}>
           <div>
-            <p style={{ fontSize: '10px', color: 'rgba(201,169,110,0.5)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '4px' }}>Bonjour</p>
+            <p style={{ fontSize: '10px', color: 'rgba(226, 167, 181,0.5)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '4px' }}>Bonjour</p>
             <h1 style={{ fontFamily: 'serif', fontSize: '26px', fontWeight: 300, color: 'rgba(255,255,255,0.95)' }}>{clientName} ✦</h1>
             <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>Brazilian Studio Rabat</p>
           </div>
@@ -94,7 +94,7 @@ export default function EspaceClientDashboard() {
 
       <div style={{ maxWidth: '480px', margin: '0 auto', padding: '20px 16px' }}>
         {/* Book CTA */}
-        <Link href="/booking" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '13px', background: 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', borderRadius: '14px', fontWeight: 700, fontSize: '14px', textDecoration: 'none', marginBottom: '20px', boxShadow: '0 4px 20px rgba(201,169,110,0.25)' }}>
+        <Link href="/booking" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '13px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '14px', fontWeight: 700, fontSize: '14px', textDecoration: 'none', marginBottom: '20px', boxShadow: '0 4px 20px rgba(226, 167, 181,0.25)' }}>
           <Plus size={16} /> Prendre un nouveau rendez-vous
         </Link>
 
@@ -120,7 +120,7 @@ export default function EspaceClientDashboard() {
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '12px' }}>
                     <div>
                       <p style={{ fontSize: '15px', fontFamily: 'serif', fontWeight: 400, color: 'rgba(255,255,255,0.9)', marginBottom: '4px' }}>{a.services?.name}</p>
-                      <p style={{ fontSize: '13px', color: '#C9A96E', fontWeight: 500 }}>
+                      <p style={{ fontSize: '13px', color: '#E2A7B5', fontWeight: 500 }}>
                         {new Date(a.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
                       </p>
                       <p style={{ fontSize: '16px', fontWeight: 700, color: 'rgba(255,255,255,0.9)', fontFamily: 'monospace', marginTop: '2px' }}>{a.start_time.slice(0, 5)}</p>
@@ -138,7 +138,7 @@ export default function EspaceClientDashboard() {
                       </button>
                     ) : <div style={{ flex: 1 }} />}
                     <Link href={`/espace-client/appointments/${a.id}`}
-                      style={{ flex: 1, padding: '9px', background: 'rgba(201,169,110,0.1)', border: '1px solid rgba(201,169,110,0.2)', color: '#C9A96E', borderRadius: '10px', fontSize: '13px', textAlign: 'center', textDecoration: 'none', fontWeight: 500 }}>
+                      style={{ flex: 1, padding: '9px', background: 'rgba(226, 167, 181,0.1)', border: '1px solid rgba(226, 167, 181,0.2)', color: '#E2A7B5', borderRadius: '10px', fontSize: '13px', textAlign: 'center', textDecoration: 'none', fontWeight: 500 }}>
                       Voir détails
                     </Link>
                   </div>
@@ -167,14 +167,14 @@ export default function EspaceClientDashboard() {
       </div>
 
       {/* Bottom nav */}
-      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#1C1816', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', height: '60px', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#2A191D', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', height: '60px', paddingBottom: 'env(safe-area-inset-bottom)' }}>
         {[
           { href: '/espace-client/dashboard', label: 'Accueil', icon: CalendarDays },
           { href: '/espace-client/devis', label: 'Devis', icon: FileText },
           { href: '/espace-client/factures', label: 'Factures', icon: Receipt },
           { href: '/espace-client/profile', label: 'Profil', icon: User },
         ].map(({ href, label, icon: Icon }) => (
-          <Link key={href} href={href} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '3px', textDecoration: 'none', color: href === '/espace-client/dashboard' ? '#C9A96E' : 'rgba(255,255,255,0.35)' }}>
+          <Link key={href} href={href} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '3px', textDecoration: 'none', color: href === '/espace-client/dashboard' ? '#E2A7B5' : 'rgba(255,255,255,0.35)' }}>
             <Icon size={18} />
             <span style={{ fontSize: '10px', fontWeight: 500 }}>{label}</span>
           </Link>

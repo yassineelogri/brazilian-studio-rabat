@@ -133,7 +133,7 @@
 }
 
 .instagramLink:hover {
-  color: #E5C494;
+  color: #ffffff;
 }
 
 /* Bottom Bar */
@@ -142,8 +142,26 @@
   padding-top: 2rem;
   margin-top: 4rem;
   text-align: center;
-  color: #826E72;
+  color: #B59B9F;
   font-size: 0.85rem;
+}
+
+.bottomLinks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.bottomLinks .link {
+  display: inline;
+  font-size: 0.85rem;
+}
+
+.bottomDot {
+  color: var(--color-accent-soft);
+  opacity: 0.5;
 }
 
 /* Tablet */

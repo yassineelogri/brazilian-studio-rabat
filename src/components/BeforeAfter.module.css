@@ -15,7 +15,7 @@
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #c9a96e;
+  color: var(--color-accent-deep);
   margin-bottom: 1rem;
 }
 
@@ -115,7 +115,7 @@
 
 .reserveLink {
   display: inline-block;
-  color: #c9a96e;
+  color: var(--color-accent-deep);
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9rem;

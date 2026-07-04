@@ -172,9 +172,9 @@ export default function NewDevisPage() {
   return (
     <div style={{ maxWidth: '760px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.6)', fontWeight: 500 }}>Facturation</p>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.6)', fontWeight: 500 }}>Facturation</p>
         <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <FileText size={22} style={{ color: '#C9A96E' }} /> Nouveau devis
+          <FileText size={22} style={{ color: '#E2A7B5' }} /> Nouveau devis
         </h1>
       </div>
 
@@ -191,9 +191,9 @@ export default function NewDevisPage() {
               onClick={() => { setWalkIn(v => !v); setClientId(''); setClientSearch(''); setWalkInName(''); setAppointments([]); setAppointmentId(null) }}
               style={{
                 display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', padding: '5px 12px', borderRadius: '8px', cursor: 'pointer',
-                background: walkIn ? 'rgba(201,169,110,0.15)' : 'transparent',
-                border: walkIn ? '1px solid rgba(201,169,110,0.4)' : '1px solid rgba(255,255,255,0.12)',
-                color: walkIn ? '#C9A96E' : 'rgba(255,255,255,0.4)',
+                background: walkIn ? 'rgba(226, 167, 181,0.15)' : 'transparent',
+                border: walkIn ? '1px solid rgba(226, 167, 181,0.4)' : '1px solid rgba(255,255,255,0.12)',
+                color: walkIn ? '#E2A7B5' : 'rgba(255,255,255,0.4)',
               }}>
               <UserPlus size={11} /> Client de passage
             </button>
@@ -260,10 +260,10 @@ export default function NewDevisPage() {
             <div>
               <label style={labelStyle}>Mode de paiement</label>
               <select value={paymentMode} onChange={e => { setPaymentMode(e.target.value); triggerAutoSave() }} style={{ ...inputStyle, colorScheme: 'dark' }}>
-                <option value="" style={{ background: '#1C1816', color: '#fff' }}>— Non spécifié —</option>
-                <option value="cash" style={{ background: '#1C1816', color: '#fff' }}>Espèces / Cash</option>
-                <option value="cheque" style={{ background: '#1C1816', color: '#fff' }}>Chèque</option>
-                <option value="card" style={{ background: '#1C1816', color: '#fff' }}>Carte de crédit</option>
+                <option value="" style={{ background: '#2A191D', color: '#fff' }}>— Non spécifié —</option>
+                <option value="cash" style={{ background: '#2A191D', color: '#fff' }}>Espèces / Cash</option>
+                <option value="cheque" style={{ background: '#2A191D', color: '#fff' }}>Chèque</option>
+                <option value="card" style={{ background: '#2A191D', color: '#fff' }}>Carte de crédit</option>
               </select>
             </div>
           </div>
@@ -289,12 +289,12 @@ export default function NewDevisPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <h2 style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.8)' }}>Prestations / Produits</h2>
             <button type="button" onClick={() => setShowCatalog(v => !v)}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#C9A96E', background: 'none', border: 'none', cursor: 'pointer' }}>
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#E2A7B5', background: 'none', border: 'none', cursor: 'pointer' }}>
               <Book size={13} /> Catalogue
             </button>
           </div>
           {showCatalog && (
-            <div style={{ background: '#1C1816', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', overflow: 'hidden', fontSize: '13px' }}>
+            <div style={{ background: '#2A191D', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', overflow: 'hidden', fontSize: '13px' }}>
               {services.length > 0 && (
                 <div>
                   <p style={{ padding: '8px 14px', fontSize: '10px', color: 'rgba(255,255,255,0.35)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(255,255,255,0.03)' }}>Prestations</p>
@@ -332,7 +332,7 @@ export default function NewDevisPage() {
 
         <div style={{ display: 'flex', gap: '12px' }}>
           <button type="submit" disabled={saving}
-            style={{ background: saving ? 'rgba(201,169,110,0.4)' : 'linear-gradient(135deg, #C9A96E, #B8944F)', color: '#1A1410', padding: '12px 24px', borderRadius: '12px', fontSize: '14px', fontWeight: 600, border: 'none', cursor: saving ? 'not-allowed' : 'pointer' }}>
+            style={{ background: saving ? 'rgba(226, 167, 181,0.4)' : 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', padding: '12px 24px', borderRadius: '12px', fontSize: '14px', fontWeight: 600, border: 'none', cursor: saving ? 'not-allowed' : 'pointer' }}>
             {saving ? 'Enregistrement...' : 'Créer le devis'}
           </button>
           <button type="button" onClick={() => router.back()}

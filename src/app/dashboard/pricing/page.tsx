@@ -6,7 +6,7 @@ import type { PricingCategory, PricingItem } from '@/lib/supabase/types'
 
 type CategoryWithItems = PricingCategory & { items: PricingItem[] }
 
-const gold = '#C9A96E'
+const gold = '#E2A7B5'
 const card: React.CSSProperties = {
   background: 'rgba(255,255,255,0.04)',
   border: '1px solid rgba(255,255,255,0.08)',
@@ -23,8 +23,8 @@ const input: React.CSSProperties = {
   outline: 'none',
 }
 const btnGold: React.CSSProperties = {
-  background: `linear-gradient(135deg, ${gold}, #B8944F)`,
-  color: '#1A1410',
+  background: `linear-gradient(135deg, ${gold}, #C98FA0)`,
+  color: '#2B1B1E',
   border: 'none',
   borderRadius: '10px',
   padding: '7px 14px',
@@ -143,7 +143,7 @@ export default function PricingPage() {
     <div style={{ maxWidth: '720px' }}>
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(201,169,110,0.5)', fontWeight: 500 }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.5)', fontWeight: 500 }}>
           Gestion
         </p>
         <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.95)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -214,7 +214,7 @@ export default function PricingPage() {
         ) : (
           <button
             onClick={() => setAddingCategory(true)}
-            style={{ ...btnGhost, justifyContent: 'center', padding: '12px', borderStyle: 'dashed', borderColor: 'rgba(201,169,110,0.2)', color: gold }}
+            style={{ ...btnGhost, justifyContent: 'center', padding: '12px', borderStyle: 'dashed', borderColor: 'rgba(226, 167, 181,0.2)', color: gold }}
           >
             <Plus size={16} /> Nouvelle catégorie
           </button>
@@ -296,7 +296,7 @@ function ItemRow({ item, onUpdate, onDelete }: {
           </div>
         ) : (
           <span style={{ fontSize: '13px', color: gold, fontWeight: 500 }}>
-            {item.is_from_price && <span style={{ fontSize: '11px', color: 'rgba(201,169,110,0.6)', marginRight: '2px' }}>à partir de </span>}
+            {item.is_from_price && <span style={{ fontSize: '11px', color: 'rgba(226, 167, 181,0.6)', marginRight: '2px' }}>à partir de </span>}
             {item.price}{item.price_max ? ` / ${item.price_max}` : ''}DH
           </span>
         )}

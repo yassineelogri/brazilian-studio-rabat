@@ -22,7 +22,7 @@ const STATUS_DOT: Record<string, string> = {
 export default function AppointmentBlock({ appointment, onClick, style, copiedId, onCopyLink, showTime }: Props) {
   const serviceName = appointment.services?.name ?? 'RDV'
   const clientName  = appointment.clients?.name ?? ''
-  const color       = appointment.services?.color ?? '#C9A96E'
+  const color       = appointment.services?.color ?? '#E2A7B5'
   const durationMin = appointment.duration_minutes ?? 60
   const timeStr     = appointment.start_time?.slice(0, 5) ?? ''
   const dotColor    = STATUS_DOT[appointment.status] ?? STATUS_DOT.pending
@@ -110,7 +110,7 @@ export default function AppointmentBlock({ appointment, onClick, style, copiedId
             color: 'rgba(255,255,255,0.25)',
             transition: 'all 0.15s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(201,169,110,0.15)'; e.currentTarget.style.color = '#C9A96E' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(226, 167, 181,0.15)'; e.currentTarget.style.color = '#E2A7B5' }}
           onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.25)' }}
         >
           {copiedId === appointment.id

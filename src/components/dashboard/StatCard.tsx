@@ -31,7 +31,7 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
           width: '80px',
           height: '80px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(226, 167, 181,0.08) 0%, transparent 70%)',
           pointerEvents: 'none',
         }}
       />
@@ -43,7 +43,7 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
             height: '3px',
             width: '28px',
             borderRadius: '4px',
-            background: 'linear-gradient(90deg, #C9A96E, rgba(201,169,110,0.3))',
+            background: 'linear-gradient(90deg, #E2A7B5, rgba(226, 167, 181,0.3))',
           }}
         />
         {Icon && (
@@ -55,9 +55,9 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'rgba(201,169,110,0.1)',
-              border: '1px solid rgba(201,169,110,0.15)',
-              color: '#C9A96E',
+              background: 'rgba(226, 167, 181,0.1)',
+              border: '1px solid rgba(226, 167, 181,0.15)',
+              color: '#E2A7B5',
             }}
           >
             <Icon size={16} />
@@ -85,7 +85,7 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
             textTransform: 'uppercase',
             letterSpacing: '0.16em',
             fontWeight: 500,
-            color: 'rgba(201,169,110,0.85)',
+            color: 'rgba(226, 167, 181,0.85)',
             marginTop: '8px',
           }}
         >
