@@ -42,13 +42,13 @@ export default function CalendarDay({ date, appointments, onAppointmentClick, co
             <div key={h} style={{ height: HOUR_HEIGHT }}>
               {hasBusy ? (
                 <div style={{ display: 'flex', alignItems: 'flex-start', paddingTop: '4px', gap: '8px' }}>
-                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.2)', width: '32px', textAlign: 'right', flexShrink: 0, fontWeight: 500 }}>{h}h</span>
-                  <div style={{ flex: 1, borderTop: '1px solid rgba(255,255,255,0.06)' }} />
+                  <span style={{ fontSize: '12px', color: '#B8A6AA', width: '32px', textAlign: 'right', flexShrink: 0, fontWeight: 500 }}>{h}h</span>
+                  <div style={{ flex: 1, borderTop: '1px solid #FFFFFF' }} />
                 </div>
               ) : (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '24px' }}>
-                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.2)', width: '32px', textAlign: 'right', flexShrink: 0, fontWeight: 500 }}>{h}h</span>
-                  <div style={{ flex: 1, borderTop: '1px solid rgba(255,255,255,0.06)' }} />
+                  <span style={{ fontSize: '12px', color: '#B8A6AA', width: '32px', textAlign: 'right', flexShrink: 0, fontWeight: 500 }}>{h}h</span>
+                  <div style={{ flex: 1, borderTop: '1px solid #FFFFFF' }} />
                 </div>
               )}
             </div>

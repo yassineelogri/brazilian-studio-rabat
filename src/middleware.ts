@@ -49,6 +49,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/espace-client', request.url))
   }
 
+  // Staff area requires the staff role claim (app_metadata is server-controlled,
+  // set via the admin API only — a client session can never reach /dashboard)
+  if (isStaffPath && user.app_metadata?.role !== 'staff') {
+    return NextResponse.redirect(new URL('/espace-client/dashboard', request.url))
+  }
+
   return response
 }
 

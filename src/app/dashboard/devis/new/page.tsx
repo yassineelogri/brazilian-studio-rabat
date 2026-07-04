@@ -14,15 +14,15 @@ type ClientOption = { id: string; name: string; phone: string; email: string | n
 type AppointmentOption = { id: string; date: string; start_time: string; services: string }
 
 const inputStyle: React.CSSProperties = {
-  width: '100%', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)',
-  borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '9px 12px', fontSize: '13px', outline: 'none',
+  width: '100%', background: '#FFFFFF', border: '1px solid #EEDCD7',
+  borderRadius: '10px', color: '#382227', padding: '9px 12px', fontSize: '13px', outline: 'none',
 }
 const labelStyle: React.CSSProperties = {
-  display: 'block', fontSize: '11px', fontWeight: 500, color: 'rgba(255,255,255,0.4)',
+  display: 'block', fontSize: '11px', fontWeight: 500, color: '#8A6E74',
   textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px',
 }
 const card: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)',
+  background: '#FFFFFF', border: '1px solid #FFFFFF',
   borderRadius: '16px', padding: '20px',
 }
 
@@ -173,27 +173,27 @@ export default function NewDevisPage() {
     <div style={{ maxWidth: '760px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div>
         <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.6)', fontWeight: 500 }}>Facturation</p>
-        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <FileText size={22} style={{ color: '#E2A7B5' }} /> Nouveau devis
+        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: '#382227', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <FileText size={22} style={{ color: '#8E4457' }} /> Nouveau devis
         </h1>
       </div>
 
       {error && (
-        <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.25)', color: '#F87171', padding: '10px 16px', borderRadius: '10px', fontSize: '13px' }}>{error}</div>
+        <div style={{ background: '#FBECEC', border: '1px solid rgba(248,113,113,0.25)', color: '#C94F4F', padding: '10px 16px', borderRadius: '10px', fontSize: '13px' }}>{error}</div>
       )}
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {/* Client */}
         <div style={card}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <h2 style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.8)' }}>Client</h2>
+            <h2 style={{ fontSize: '14px', fontWeight: 500, color: '#432B31' }}>Client</h2>
             <button type="button"
               onClick={() => { setWalkIn(v => !v); setClientId(''); setClientSearch(''); setWalkInName(''); setAppointments([]); setAppointmentId(null) }}
               style={{
                 display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', padding: '5px 12px', borderRadius: '8px', cursor: 'pointer',
-                background: walkIn ? 'rgba(226, 167, 181,0.15)' : 'transparent',
-                border: walkIn ? '1px solid rgba(226, 167, 181,0.4)' : '1px solid rgba(255,255,255,0.12)',
-                color: walkIn ? '#E2A7B5' : 'rgba(255,255,255,0.4)',
+                background: walkIn ? '#F7E9E6' : 'transparent',
+                border: walkIn ? '1px solid #D8A8B5' : '1px solid #EEDCD7',
+                color: walkIn ? '#8E4457' : '#8A6E74',
               }}>
               <UserPlus size={11} /> Client de passage
             </button>
@@ -203,15 +203,15 @@ export default function NewDevisPage() {
             <div>
               <label style={labelStyle}>Nom du client</label>
               <input type="text" placeholder="Ex: Fatima Zahra" value={walkInName} onChange={e => setWalkInName(e.target.value)} style={inputStyle} autoFocus />
-              <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '4px' }}>Un profil sera créé automatiquement.</p>
+              <p style={{ fontSize: '11px', color: '#9A8288', marginTop: '4px' }}>Un profil sera créé automatiquement.</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <input type="text" placeholder="Rechercher par nom ou téléphone..." value={clientSearch} onChange={e => setClientSearch(e.target.value)} style={inputStyle} />
               {selectedClient ? (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.07)', borderRadius: '10px', padding: '9px 12px', fontSize: '13px' }}>
-                  <span style={{ fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{selectedClient.name} — {selectedClient.phone}</span>
-                  <button type="button" onClick={() => { setClientId(''); setClientSearch('') }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>✕</button>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#FFFFFF', borderRadius: '10px', padding: '9px 12px', fontSize: '13px' }}>
+                  <span style={{ fontWeight: 500, color: '#382227' }}>{selectedClient.name} — {selectedClient.phone}</span>
+                  <button type="button" onClick={() => { setClientId(''); setClientSearch('') }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9A8288', fontSize: '12px' }}>✕</button>
                 </div>
               ) : (
                 <select value={clientId} onChange={e => { setClientId(e.target.value); setClientSearch(''); triggerAutoSave() }} style={inputStyle} size={Math.min(filteredClients.length + 1, 5)}>
@@ -232,7 +232,7 @@ export default function NewDevisPage() {
                   <option key={a.id} value={a.id}>{new Date(a.date + 'T00:00:00').toLocaleDateString('fr-FR')} à {a.start_time.slice(0, 5)} — {a.services}</option>
                 ))}
               </select>
-              {appointments.length === 0 && clientId && <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '4px' }}>Aucun RDV dans les 3 derniers mois.</p>}
+              {appointments.length === 0 && clientId && <p style={{ fontSize: '11px', color: '#9A8288', marginTop: '4px' }}>Aucun RDV dans les 3 derniers mois.</p>}
             </div>
           )}
         </div>
@@ -251,7 +251,7 @@ export default function NewDevisPage() {
 
         {/* RDV + Avance + Payment */}
         <div style={card}>
-          <p style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginBottom: '16px' }}>Rendez-vous &amp; Paiement</p>
+          <p style={{ fontSize: '13px', fontWeight: 500, color: '#54383E', marginBottom: '16px' }}>Rendez-vous &amp; Paiement</p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
             <div>
               <label style={labelStyle}>Date de rendez-vous</label>
@@ -259,11 +259,11 @@ export default function NewDevisPage() {
             </div>
             <div>
               <label style={labelStyle}>Mode de paiement</label>
-              <select value={paymentMode} onChange={e => { setPaymentMode(e.target.value); triggerAutoSave() }} style={{ ...inputStyle, colorScheme: 'dark' }}>
-                <option value="" style={{ background: '#2A191D', color: '#fff' }}>— Non spécifié —</option>
-                <option value="cash" style={{ background: '#2A191D', color: '#fff' }}>Espèces / Cash</option>
-                <option value="cheque" style={{ background: '#2A191D', color: '#fff' }}>Chèque</option>
-                <option value="card" style={{ background: '#2A191D', color: '#fff' }}>Carte de crédit</option>
+              <select value={paymentMode} onChange={e => { setPaymentMode(e.target.value); triggerAutoSave() }} style={{ ...inputStyle, colorScheme: 'light' }}>
+                <option value="" style={{ background: '#FFFFFF', color: '#fff' }}>— Non spécifié —</option>
+                <option value="cash" style={{ background: '#FFFFFF', color: '#fff' }}>Espèces / Cash</option>
+                <option value="cheque" style={{ background: '#FFFFFF', color: '#fff' }}>Chèque</option>
+                <option value="card" style={{ background: '#FFFFFF', color: '#fff' }}>Carte de crédit</option>
               </select>
             </div>
           </div>
@@ -276,7 +276,7 @@ export default function NewDevisPage() {
               <div style={{ paddingBottom: '2px' }}>
                 <label style={labelStyle}>Réglée ?</label>
                 <button type="button" onClick={() => { setAvancePaid(v => !v); triggerAutoSave() }}
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '9px 14px', borderRadius: '10px', border: avancePaid ? '1px solid rgba(74,222,128,0.4)' : '1px solid rgba(255,255,255,0.12)', background: avancePaid ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.07)', color: avancePaid ? '#4ADE80' : 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '13px' }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '9px 14px', borderRadius: '10px', border: avancePaid ? '1px solid rgba(74,222,128,0.4)' : '1px solid #EEDCD7', background: avancePaid ? '#E7F6EC' : '#FFFFFF', color: avancePaid ? '#1C9950' : '#7E6469', cursor: 'pointer', fontSize: '13px' }}>
                   {avancePaid ? '✓ Oui' : 'Non'}
                 </button>
               </div>
@@ -287,34 +287,34 @@ export default function NewDevisPage() {
         {/* Line items */}
         <div style={{ ...card, display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <h2 style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.8)' }}>Prestations / Produits</h2>
+            <h2 style={{ fontSize: '14px', fontWeight: 500, color: '#432B31' }}>Prestations / Produits</h2>
             <button type="button" onClick={() => setShowCatalog(v => !v)}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#E2A7B5', background: 'none', border: 'none', cursor: 'pointer' }}>
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#8E4457', background: 'none', border: 'none', cursor: 'pointer' }}>
               <Book size={13} /> Catalogue
             </button>
           </div>
           {showCatalog && (
-            <div style={{ background: '#2A191D', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', overflow: 'hidden', fontSize: '13px' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #FFFFFF', borderRadius: '12px', overflow: 'hidden', fontSize: '13px' }}>
               {services.length > 0 && (
                 <div>
-                  <p style={{ padding: '8px 14px', fontSize: '10px', color: 'rgba(255,255,255,0.35)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(255,255,255,0.03)' }}>Prestations</p>
+                  <p style={{ padding: '8px 14px', fontSize: '10px', color: '#9A8288', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', background: '#FFFFFF' }}>Prestations</p>
                   {services.map(s => (
                     <button key={s.id} type="button" onClick={() => addFromCatalog(s.name, (s as any).price ?? 0)}
-                      style={{ width: '100%', textAlign: 'left', padding: '9px 14px', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.8)', display: 'flex', justifyContent: 'space-between' }}>
+                      style={{ width: '100%', textAlign: 'left', padding: '9px 14px', background: 'none', border: 'none', cursor: 'pointer', color: '#432B31', display: 'flex', justifyContent: 'space-between' }}>
                       <span>{s.name}</span>
-                      {(s as any).price ? <span style={{ color: 'rgba(255,255,255,0.35)' }}>{(s as any).price.toFixed(2)} MAD</span> : null}
+                      {(s as any).price ? <span style={{ color: '#9A8288' }}>{(s as any).price.toFixed(2)} MAD</span> : null}
                     </button>
                   ))}
                 </div>
               )}
               {catalogProducts.length > 0 && (
                 <div>
-                  <p style={{ padding: '8px 14px', fontSize: '10px', color: 'rgba(255,255,255,0.35)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(255,255,255,0.03)' }}>Produits</p>
+                  <p style={{ padding: '8px 14px', fontSize: '10px', color: '#9A8288', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', background: '#FFFFFF' }}>Produits</p>
                   {catalogProducts.map(p => (
                     <button key={p.id} type="button" onClick={() => addFromCatalog(p.brand ? `${p.brand} — ${p.name}` : p.name, p.selling_price)}
-                      style={{ width: '100%', textAlign: 'left', padding: '9px 14px', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.8)', display: 'flex', justifyContent: 'space-between' }}>
+                      style={{ width: '100%', textAlign: 'left', padding: '9px 14px', background: 'none', border: 'none', cursor: 'pointer', color: '#432B31', display: 'flex', justifyContent: 'space-between' }}>
                       <span>{p.brand ? `${p.brand} — ${p.name}` : p.name}</span>
-                      <span style={{ color: 'rgba(255,255,255,0.35)' }}>{p.selling_price.toFixed(2)} MAD</span>
+                      <span style={{ color: '#9A8288' }}>{p.selling_price.toFixed(2)} MAD</span>
                     </button>
                   ))}
                 </div>
@@ -332,11 +332,11 @@ export default function NewDevisPage() {
 
         <div style={{ display: 'flex', gap: '12px' }}>
           <button type="submit" disabled={saving}
-            style={{ background: saving ? 'rgba(226, 167, 181,0.4)' : 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', padding: '12px 24px', borderRadius: '12px', fontSize: '14px', fontWeight: 600, border: 'none', cursor: saving ? 'not-allowed' : 'pointer' }}>
+            style={{ background: saving ? '#D8A8B5' : 'linear-gradient(135deg, #A85D70, #7E4452)', color: '#FFFFFF', padding: '12px 24px', borderRadius: '12px', fontSize: '14px', fontWeight: 600, border: 'none', cursor: saving ? 'not-allowed' : 'pointer' }}>
             {saving ? 'Enregistrement...' : 'Créer le devis'}
           </button>
           <button type="button" onClick={() => router.back()}
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', padding: '12px 24px', borderRadius: '12px', fontSize: '14px', cursor: 'pointer' }}>
+            style={{ background: '#FFFFFF', border: '1px solid #EEDCD7', color: '#7E6469', padding: '12px 24px', borderRadius: '12px', fontSize: '14px', cursor: 'pointer' }}>
             Annuler
           </button>
         </div>

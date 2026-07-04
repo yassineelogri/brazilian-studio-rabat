@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: 'rgba(255,255,255,0.07)',
-  border: '1px solid rgba(255,255,255,0.12)',
+  background: '#FFFFFF',
+  border: '1px solid #EEDCD7',
   borderRadius: '10px',
-  color: 'rgba(255,255,255,0.9)',
+  color: '#382227',
   padding: '8px 12px',
   fontSize: '13px',
   outline: 'none',
@@ -22,7 +22,7 @@ const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: '11px',
   fontWeight: 500,
-  color: 'rgba(255,255,255,0.4)',
+  color: '#8A6E74',
   textTransform: 'uppercase',
   letterSpacing: '0.1em',
   marginBottom: '6px',
@@ -123,13 +123,13 @@ export default function ProductsPage() {
       <div style={{ marginBottom: '32px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.6)', fontWeight: 500 }}>Gestion</p>
-          <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.9)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Package size={22} style={{ color: '#E2A7B5' }} /> Produits
+          <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: '#382227', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Package size={22} style={{ color: '#8E4457' }} /> Produits
           </h1>
         </div>
         <button
           onClick={() => { setEditProduct(null); setForm({ name: '', brand: '', buying_price: '', selling_price: '', stock_quantity: '0', low_stock_threshold: '3' }); setShowForm(true) }}
-          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '12px', padding: '10px 18px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'linear-gradient(135deg, #A85D70, #7E4452)', color: '#FFFFFF', borderRadius: '12px', padding: '10px 18px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}
         >
           <Plus size={14} /> Ajouter un produit
         </button>
@@ -140,8 +140,8 @@ export default function ProductsPage() {
           onClick={() => setFilterLowStock(!filterLowStock)}
           style={{
             width: '100%', display: 'flex', alignItems: 'center', gap: '8px',
-            background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.25)',
-            color: '#F87171', padding: '12px 16px', borderRadius: '12px', fontSize: '13px',
+            background: '#FBECEC', border: '1px solid rgba(248,113,113,0.25)',
+            color: '#C94F4F', padding: '12px 16px', borderRadius: '12px', fontSize: '13px',
             marginBottom: '16px', cursor: 'pointer', textAlign: 'left',
           }}
         >
@@ -151,47 +151,47 @@ export default function ProductsPage() {
       )}
 
       <div style={{ marginBottom: '16px' }}>
-        <label style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+        <label style={{ fontSize: '13px', color: '#8A6E74', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
           <input type="checkbox" checked={showAll} onChange={e => setShowAll(e.target.checked)} />
           Afficher les produits désactivés
         </label>
       </div>
 
       {loading ? (
-        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Chargement...</p>
+        <p style={{ color: '#9A8288', fontSize: '14px' }}>Chargement...</p>
       ) : displayed.length === 0 ? (
-        <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Aucun produit.</p>
+        <p style={{ color: '#9A8288', fontSize: '14px' }}>Aucun produit.</p>
       ) : (
-        <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden' }}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
-              <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+              <tr style={{ background: '#FFFFFF', borderBottom: '1px solid #FFFFFF' }}>
                 {['Produit', 'Marque', 'Prix achat', 'Prix vente', 'Marge %', 'Stock', 'Actions'].map((h, i) => (
-                  <th key={h} style={{ padding: '12px 14px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', textAlign: (i >= 2 && i <= 5) ? 'right' : i === 6 ? 'center' : 'left' }}>{h}</th>
+                  <th key={h} style={{ padding: '12px 14px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#9A8288', textAlign: (i >= 2 && i <= 5) ? 'right' : i === 6 ? 'center' : 'left' }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {displayed.map((product, i) => (
-                <tr key={product.id} style={{ borderBottom: i < displayed.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none', opacity: product.is_active ? 1 : 0.5 }}>
-                  <td style={{ padding: '12px 14px', fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{product.name}</td>
-                  <td style={{ padding: '12px 14px', color: 'rgba(255,255,255,0.4)' }}>{product.brand || '—'}</td>
-                  <td style={{ padding: '12px 14px', textAlign: 'right', color: 'rgba(255,255,255,0.4)' }}>{product.buying_price.toFixed(2)} DH</td>
-                  <td style={{ padding: '12px 14px', textAlign: 'right', fontWeight: 500, color: 'rgba(255,255,255,0.85)' }}>{product.selling_price.toFixed(2)} DH</td>
+                <tr key={product.id} style={{ borderBottom: i < displayed.length - 1 ? '1px solid #FFFFFF' : 'none', opacity: product.is_active ? 1 : 0.5 }}>
+                  <td style={{ padding: '12px 14px', fontWeight: 500, color: '#382227' }}>{product.name}</td>
+                  <td style={{ padding: '12px 14px', color: '#8A6E74' }}>{product.brand || '—'}</td>
+                  <td style={{ padding: '12px 14px', textAlign: 'right', color: '#8A6E74' }}>{product.buying_price.toFixed(2)} DH</td>
+                  <td style={{ padding: '12px 14px', textAlign: 'right', fontWeight: 500, color: '#432B31' }}>{product.selling_price.toFixed(2)} DH</td>
                   <td style={{ padding: '12px 14px', textAlign: 'right' }}>
-                    <span style={{ fontWeight: 600, color: margin(product) >= 30 ? '#4ADE80' : '#FBBF24' }}>{margin(product)}%</span>
+                    <span style={{ fontWeight: 600, color: margin(product) >= 30 ? '#1C9950' : '#B07818' }}>{margin(product)}%</span>
                   </td>
                   <td style={{ padding: '12px 14px', textAlign: 'right' }}>
-                    <span style={{ fontWeight: 600, color: product.stock_quantity <= product.low_stock_threshold ? '#F87171' : 'rgba(255,255,255,0.85)' }}>
+                    <span style={{ fontWeight: 600, color: product.stock_quantity <= product.low_stock_threshold ? '#C94F4F' : '#432B31' }}>
                       {product.stock_quantity}{product.stock_quantity <= product.low_stock_threshold && ' ⚠️'}
                     </span>
                   </td>
                   <td style={{ padding: '12px 14px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-                      <button onClick={() => openEdit(product)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: 0 }} title="Modifier">
+                      <button onClick={() => openEdit(product)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8A6E74', padding: 0 }} title="Modifier">
                         <Pencil size={14} />
                       </button>
-                      <button onClick={() => handleToggleActive(product)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', padding: 0 }} title={product.is_active ? 'Désactiver' : 'Activer'}>
+                      <button onClick={() => handleToggleActive(product)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8A6E74', padding: 0 }} title={product.is_active ? 'Désactiver' : 'Activer'}>
                         {product.is_active ? <ToggleRight size={14} /> : <ToggleLeft size={14} />}
                       </button>
                       <button onClick={() => handleDelete(product.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(248,113,113,0.6)', padding: 0 }} title="Supprimer">
@@ -209,13 +209,13 @@ export default function ProductsPage() {
       {/* Add/Edit form slide-over */}
       {showForm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 50, display: 'flex', justifyContent: 'flex-end' }}>
-          <div style={{ background: '#2A191D', width: '100%', maxWidth: '420px', height: '100%', overflowY: 'auto', padding: '28px 24px', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ background: '#FFFFFF', width: '100%', maxWidth: '420px', height: '100%', overflowY: 'auto', padding: '28px 24px', borderLeft: '1px solid #FFFFFF' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-              <h2 style={{ fontSize: '20px', fontFamily: 'serif', fontWeight: 300, color: 'rgba(255,255,255,0.9)' }}>
+              <h2 style={{ fontSize: '20px', fontFamily: 'serif', fontWeight: 300, color: '#382227' }}>
                 {editProduct ? 'Modifier le produit' : 'Ajouter un produit'}
               </h2>
               <button type="button" onClick={() => { setShowForm(false); setEditProduct(null) }}
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '6px', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center' }}>
+                style={{ background: '#FFFFFF', border: '1px solid #EEDCD7', borderRadius: '8px', padding: '6px', cursor: 'pointer', color: '#7E6469', display: 'flex', alignItems: 'center' }}>
                 <X size={16} />
               </button>
             </div>
@@ -248,13 +248,13 @@ export default function ProductsPage() {
                   <input type="number" min="0" step="1" value={form.low_stock_threshold} onChange={e => setForm(f => ({ ...f, low_stock_threshold: e.target.value }))} style={inputStyle} />
                 </div>
               </div>
-              {error && <p style={{ color: '#F87171', fontSize: '13px' }}>{error}</p>}
+              {error && <p style={{ color: '#C94F4F', fontSize: '13px' }}>{error}</p>}
               <div style={{ display: 'flex', gap: '10px', paddingTop: '4px' }}>
-                <button type="submit" style={{ flex: 1, padding: '10px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}>
+                <button type="submit" style={{ flex: 1, padding: '10px', background: 'linear-gradient(135deg, #A85D70, #7E4452)', color: '#FFFFFF', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}>
                   {editProduct ? 'Enregistrer' : 'Ajouter'}
                 </button>
                 <button type="button" onClick={() => { setShowForm(false); setEditProduct(null) }}
-                  style={{ flex: 1, padding: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}>
+                  style={{ flex: 1, padding: '10px', background: '#FFFFFF', border: '1px solid #EEDCD7', color: '#7E6469', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}>
                   Annuler
                 </button>
               </div>

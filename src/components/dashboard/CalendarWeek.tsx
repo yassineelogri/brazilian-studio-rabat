@@ -44,14 +44,14 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
     <div
       style={{
         borderRadius: '20px',
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: '#FFFFFF',
+        border: '1px solid #FFFFFF',
         overflow: 'hidden',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
+        boxShadow: '0 4px 24px rgba(56,34,39,0.06)',
       }}
     >
       {/* Day header row */}
-      <div className="grid" style={{ gridTemplateColumns: '52px repeat(6, 1fr)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="grid" style={{ gridTemplateColumns: '52px repeat(6, 1fr)', borderBottom: '1px solid #FFFFFF' }}>
         <div style={{ padding: '16px 0' }} />
         {days.map((day, i) => {
           const dateStr = formatDate(day)
@@ -63,8 +63,8 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
               style={{
                 padding: '16px 0',
                 textAlign: 'center',
-                borderLeft: '1px solid rgba(255,255,255,0.04)',
-                background: isToday ? 'rgba(226, 167, 181,0.06)' : 'transparent',
+                borderLeft: '1px solid #FFFFFF',
+                background: isToday ? '#F7E9E6' : 'transparent',
               }}
             >
               <p style={{
@@ -72,7 +72,7 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                 fontWeight: 700,
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
-                color: isToday ? '#E2A7B5' : 'rgba(255,255,255,0.35)',
+                color: isToday ? '#8E4457' : '#9A8288',
               }}>
                 {DAY_LABELS[i]}
               </p>
@@ -82,8 +82,8 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                     position: 'absolute',
                     inset: '-4px -8px',
                     borderRadius: '12px',
-                    background: 'rgba(226, 167, 181,0.15)',
-                    border: '1px solid rgba(226, 167, 181,0.2)',
+                    background: '#F7E9E6',
+                    border: '1px solid #E8C7CE',
                   }} />
                 )}
                 <p style={{
@@ -91,7 +91,7 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                   fontSize: '22px',
                   fontWeight: 700,
                   lineHeight: 1,
-                  color: isToday ? '#E2A7B5' : 'rgba(255,255,255,0.8)',
+                  color: isToday ? '#8E4457' : '#432B31',
                 }}>
                   {day.getDate()}
                 </p>
@@ -107,9 +107,9 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  background: isToday ? 'rgba(226, 167, 181,0.2)' : 'rgba(255,255,255,0.06)',
-                  color: isToday ? '#E2A7B5' : 'rgba(255,255,255,0.5)',
-                  border: isToday ? '1px solid rgba(226, 167, 181,0.3)' : '1px solid rgba(255,255,255,0.08)',
+                  background: isToday ? '#E8C7CE' : '#FFFFFF',
+                  color: isToday ? '#8E4457' : '#7E6469',
+                  border: isToday ? '1px solid #D8A8B5' : '1px solid #FFFFFF',
                 }}>
                   {count}
                 </div>
@@ -132,7 +132,7 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
             style={{
               gridTemplateColumns: '52px repeat(6, 1fr)',
               minHeight: '80px',
-              borderBottom: hi < HOURS.length - 1 ? '1px solid rgba(255,255,255,0.03)' : 'none',
+              borderBottom: hi < HOURS.length - 1 ? '1px solid #FFFFFF' : 'none',
             }}
           >
             {/* Time label */}
@@ -143,12 +143,12 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
               paddingRight: '12px',
               paddingTop: '10px',
               flexShrink: 0,
-              borderRight: '1px solid rgba(255,255,255,0.04)',
+              borderRight: '1px solid #FFFFFF',
             }}>
               <span style={{
                 fontSize: '11px',
                 fontWeight: 500,
-                color: 'rgba(255,255,255,0.2)',
+                color: '#B8A6AA',
                 fontVariantNumeric: 'tabular-nums',
               }}>
                 {hour}h
@@ -167,7 +167,7 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
                 <div
                   key={di}
                   style={{
-                    borderLeft: '1px solid rgba(255,255,255,0.04)',
+                    borderLeft: '1px solid #FFFFFF',
                     padding: '6px',
                     display: 'flex',
                     flexDirection: 'column',

@@ -16,9 +16,9 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
         position: 'relative',
         borderRadius: '20px',
         padding: '24px',
-        background: 'rgba(255,255,255,0.09)',
-        border: '1px solid rgba(255,255,255,0.13)',
-        boxShadow: '0 2px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08)',
+        background: '#FFFFFF',
+        border: '1px solid #EEDCD7',
+        boxShadow: '0 2px 16px rgba(56,34,39,0.07), inset 0 1px 0 #FFFFFF',
         overflow: 'hidden',
       }}
     >
@@ -31,7 +31,7 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
           width: '80px',
           height: '80px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(226, 167, 181,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, #F7E9E6 0%, transparent 70%)',
           pointerEvents: 'none',
         }}
       />
@@ -43,7 +43,7 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
             height: '3px',
             width: '28px',
             borderRadius: '4px',
-            background: 'linear-gradient(90deg, #E2A7B5, rgba(226, 167, 181,0.3))',
+            background: 'linear-gradient(90deg, #A85D70, #D8A8B5)',
           }}
         />
         {Icon && (
@@ -55,9 +55,9 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'rgba(226, 167, 181,0.1)',
-              border: '1px solid rgba(226, 167, 181,0.15)',
-              color: '#E2A7B5',
+              background: '#F7E9E6',
+              border: '1px solid #F7E9E6',
+              color: '#8E4457',
             }}
           >
             <Icon size={16} />
@@ -72,7 +72,7 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
             fontFamily: 'serif',
             fontSize: '32px',
             fontWeight: 300,
-            color: 'rgba(255,255,255,0.95)',
+            color: '#382227',
             lineHeight: 1,
             letterSpacing: '-0.02em',
           }}
@@ -85,14 +85,14 @@ export default function StatCard({ label, value, sub, icon: Icon }: Props) {
             textTransform: 'uppercase',
             letterSpacing: '0.16em',
             fontWeight: 500,
-            color: 'rgba(226, 167, 181,0.85)',
+            color: '#8E4457',
             marginTop: '8px',
           }}
         >
           {label}
         </p>
         {sub && (
-          <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '2px' }}>
+          <p style={{ fontSize: '11px', color: '#9A8288', marginTop: '2px' }}>
             {sub}
           </p>
         )}

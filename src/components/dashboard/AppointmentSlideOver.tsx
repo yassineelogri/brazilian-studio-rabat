@@ -12,19 +12,19 @@ interface Props {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
-  pending:   { label: 'En attente',  color: '#FBBF24', bg: 'rgba(251,191,36,0.1)',  icon: <Clock size={13} /> },
-  confirmed: { label: 'Confirmé',    color: '#4ADE80', bg: 'rgba(74,222,128,0.1)',   icon: <CheckCircle2 size={13} /> },
-  cancelled: { label: 'Annulé',      color: '#9CA3AF', bg: 'rgba(156,163,175,0.1)',  icon: <XCircle size={13} /> },
+  pending:   { label: 'En attente',  color: '#B07818', bg: '#FBF2DC',  icon: <Clock size={13} /> },
+  confirmed: { label: 'Confirmé',    color: '#1C9950', bg: '#E7F6EC',   icon: <CheckCircle2 size={13} /> },
+  cancelled: { label: 'Annulé',      color: '#6B7280', bg: '#EFEBEA',  icon: <XCircle size={13} /> },
   completed: { label: 'Terminé',     color: '#60A5FA', bg: 'rgba(96,165,250,0.1)',   icon: <CheckCircle2 size={13} /> },
-  no_show:   { label: 'No-show',     color: '#F87171', bg: 'rgba(248,113,113,0.1)',  icon: <AlertCircle size={13} /> },
+  no_show:   { label: 'No-show',     color: '#C94F4F', bg: '#FBECEC',  icon: <AlertCircle size={13} /> },
 }
 
 function InfoRow({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
   return (
     <div style={{ display: 'flex', gap: '12px' }}>
-      <div style={{ marginTop: '2px', color: 'rgba(255,255,255,0.3)', flexShrink: 0 }}>{icon}</div>
+      <div style={{ marginTop: '2px', color: '#9A8288', flexShrink: 0 }}>{icon}</div>
       <div style={{ minWidth: 0 }}>
-        <p style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.3)', marginBottom: '2px', fontWeight: 500 }}>{label}</p>
+        <p style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#9A8288', marginBottom: '2px', fontWeight: 500 }}>{label}</p>
         {children}
       </div>
     </div>
@@ -63,7 +63,7 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
     onClose()
   }
 
-  const color = appointment?.services?.color ?? '#E2A7B5'
+  const color = appointment?.services?.color ?? '#8E4457'
   const status = appointment ? (STATUS_CONFIG[appointment.status] ?? STATUS_CONFIG.pending) : null
 
   const dateStr = appointment
@@ -82,7 +82,7 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-40"
-            style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
+            style={{ background: 'rgba(56,34,39,0.12)', backdropFilter: 'blur(4px)' }}
             onClick={onClose}
           />
 
@@ -97,9 +97,9 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
             style={{
               width: '340px',
               maxWidth: '90vw',
-              background: '#2A191D',
-              borderLeft: '1px solid rgba(255,255,255,0.08)',
-              boxShadow: '-8px 0 32px rgba(0,0,0,0.5)',
+              background: '#FFFFFF',
+              borderLeft: '1px solid #FFFFFF',
+              boxShadow: '-8px 0 32px rgba(56,34,39,0.12)',
             }}
           >
             {/* Header */}
@@ -124,10 +124,10 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
               />
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                 <div style={{ minWidth: 0, flex: 1 }}>
-                  <p style={{ fontFamily: 'serif', fontSize: '18px', color: 'rgba(255,255,255,0.9)', lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 400 }}>
+                  <p style={{ fontFamily: 'serif', fontSize: '18px', color: '#382227', lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 400 }}>
                     {appointment.services?.name ?? 'Rendez-vous'}
                   </p>
-                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginTop: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <p style={{ fontSize: '13px', color: '#8A6E74', marginTop: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {appointment.clients?.name}
                   </p>
                 </div>
@@ -142,9 +142,9 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
                     alignItems: 'center',
                     justifyContent: 'center',
                     borderRadius: '10px',
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    color: 'rgba(255,255,255,0.4)',
+                    background: '#F7E9E6',
+                    border: '1px solid #FFFFFF',
+                    color: '#8A6E74',
                     cursor: 'pointer',
                     transition: 'all 0.15s',
                   }}
@@ -177,11 +177,11 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
             {/* Content */}
             <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <InfoRow icon={<User size={14} />} label="Client">
-                <p style={{ fontWeight: 500, color: 'rgba(255,255,255,0.85)', fontSize: '14px' }}>{appointment.clients?.name}</p>
+                <p style={{ fontWeight: 500, color: '#432B31', fontSize: '14px' }}>{appointment.clients?.name}</p>
                 {appointment.clients?.phone && (
                   <a
                     href={`tel:${appointment.clients.phone}`}
-                    style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#E2A7B5', marginTop: '4px', textDecoration: 'none' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#8E4457', marginTop: '4px', textDecoration: 'none' }}
                   >
                     <Phone size={12} /> {appointment.clients.phone}
                   </a>
@@ -191,22 +191,22 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
               <InfoRow icon={<Scissors size={14} />} label="Service">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0, backgroundColor: color, boxShadow: `0 0 6px ${color}50` }} />
-                  <p style={{ fontWeight: 500, color: 'rgba(255,255,255,0.85)', fontSize: '14px' }}>{appointment.services?.name}</p>
+                  <p style={{ fontWeight: 500, color: '#432B31', fontSize: '14px' }}>{appointment.services?.name}</p>
                 </div>
               </InfoRow>
 
               <InfoRow icon={<Calendar size={14} />} label="Date & Heure">
-                <p style={{ fontWeight: 500, color: 'rgba(255,255,255,0.85)', fontSize: '14px', textTransform: 'capitalize' }}>{dateStr}</p>
-                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>
+                <p style={{ fontWeight: 500, color: '#432B31', fontSize: '14px', textTransform: 'capitalize' }}>{dateStr}</p>
+                <p style={{ fontSize: '13px', color: '#8A6E74', marginTop: '4px' }}>
                   {appointment.start_time.slice(0, 5)} – {appointment.end_time.slice(0, 5)}
                   <span style={{
                     marginLeft: '8px',
                     fontSize: '11px',
                     padding: '2px 8px',
                     borderRadius: '20px',
-                    background: 'rgba(226, 167, 181,0.1)',
-                    color: '#E2A7B5',
-                    border: '1px solid rgba(226, 167, 181,0.15)',
+                    background: '#F7E9E6',
+                    color: '#8E4457',
+                    border: '1px solid #F7E9E6',
                   }}>
                     {appointment.duration_minutes} min
                   </span>
@@ -215,20 +215,20 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
 
               <InfoRow icon={<User size={14} />} label="Staff assigné">
                 {appointment.staff?.name
-                  ? <p style={{ fontWeight: 500, color: 'rgba(255,255,255,0.85)', fontSize: '14px' }}>{appointment.staff.name}</p>
-                  : <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.3)', fontStyle: 'italic' }}>Non assigné</p>}
+                  ? <p style={{ fontWeight: 500, color: '#432B31', fontSize: '14px' }}>{appointment.staff.name}</p>
+                  : <p style={{ fontSize: '13px', color: '#9A8288', fontStyle: 'italic' }}>Non assigné</p>}
               </InfoRow>
 
               {appointment.notes && (
                 <InfoRow icon={<MinusCircle size={14} />} label="Notes">
                   <p style={{
                     fontSize: '13px',
-                    color: 'rgba(255,255,255,0.7)',
-                    background: 'rgba(255,255,255,0.04)',
+                    color: '#54383E',
+                    background: '#FFFFFF',
                     padding: '12px',
                     borderRadius: '12px',
                     lineHeight: 1.6,
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    border: '1px solid #FFFFFF',
                   }}>
                     {appointment.notes}
                   </p>
@@ -237,7 +237,7 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
             </div>
 
             {/* Actions */}
-            <div style={{ padding: '16px', borderTop: '1px solid rgba(255,255,255,0.06)', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ padding: '16px', borderTop: '1px solid #FFFFFF', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {appointment.status === 'pending' && (
                 <>
                   <button
@@ -255,9 +255,9 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '8px',
-                      background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)',
-                      color: '#2B1B1E',
-                      boxShadow: '0 4px 16px rgba(226, 167, 181,0.2)',
+                      background: 'linear-gradient(135deg, #A85D70, #7E4452)',
+                      color: '#FFFFFF',
+                      boxShadow: '0 4px 16px #E8C7CE',
                       opacity: loading ? 0.5 : 1,
                     }}
                   >
@@ -273,8 +273,8 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
                       fontSize: '13px',
                       cursor: 'pointer',
                       background: 'transparent',
-                      border: '1px solid rgba(248,113,113,0.2)',
-                      color: '#F87171',
+                      border: '1px solid #F0CCCC',
+                      color: '#C94F4F',
                       opacity: loading ? 0.5 : 1,
                     }}
                   >
@@ -299,9 +299,9 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '8px',
-                      background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)',
-                      color: '#2B1B1E',
-                      boxShadow: '0 4px 16px rgba(226, 167, 181,0.2)',
+                      background: 'linear-gradient(135deg, #A85D70, #7E4452)',
+                      color: '#FFFFFF',
+                      boxShadow: '0 4px 16px #E8C7CE',
                       opacity: loading ? 0.5 : 1,
                     }}
                   >
@@ -317,8 +317,8 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
                         fontSize: '12px',
                         cursor: 'pointer',
                         background: 'transparent',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        color: 'rgba(255,255,255,0.4)',
+                        border: '1px solid #FFFFFF',
+                        color: '#8A6E74',
                         opacity: loading ? 0.5 : 1,
                       }}
                     >
@@ -333,8 +333,8 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
                         fontSize: '12px',
                         cursor: 'pointer',
                         background: 'transparent',
-                        border: '1px solid rgba(248,113,113,0.15)',
-                        color: '#F87171',
+                        border: '1px solid #FBECEC',
+                        color: '#C94F4F',
                         opacity: loading ? 0.5 : 1,
                       }}
                     >
@@ -352,12 +352,12 @@ export default function AppointmentSlideOver({ appointment, onClose, onAction }:
                   background: 'transparent',
                   border: 'none',
                   fontSize: '12px',
-                  color: 'rgba(255,255,255,0.2)',
+                  color: '#B8A6AA',
                   cursor: 'pointer',
                   transition: 'color 0.15s',
                 }}
-                onMouseEnter={e => e.currentTarget.style.color = '#F87171'}
-                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.2)'}
+                onMouseEnter={e => e.currentTarget.style.color = '#C94F4F'}
+                onMouseLeave={e => e.currentTarget.style.color = '#B8A6AA'}
               >
                 Supprimer le rendez-vous
               </button>

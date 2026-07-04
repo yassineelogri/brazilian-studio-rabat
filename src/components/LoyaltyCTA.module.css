@@ -1,0 +1,234 @@
+.section {
+  background: var(--color-dark);
+  padding: 6rem 2rem;
+  overflow: hidden;
+}
+
+.inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.kicker {
+  display: block;
+  color: var(--color-accent-soft);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.title {
+  color: #FDF6F0;
+  font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.lead {
+  color: rgba(253, 246, 240, 0.7);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 46ch;
+}
+
+.benefits {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0 0 2.25rem;
+  padding: 0;
+}
+
+.benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  color: rgba(253, 246, 240, 0.85);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.benefit svg {
+  color: var(--color-accent-soft);
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.benefit strong {
+  color: #FDF6F0;
+  font-weight: 600;
+}
+
+.ctaRow {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  background: var(--gradient-rose-gold);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.98rem;
+  transition: transform 0.4s var(--ease-out-quint), box-shadow 0.4s var(--ease-out-quint);
+  box-shadow: 0 6px 24px rgba(168, 93, 112, 0.35);
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(168, 93, 112, 0.45);
+}
+
+.securityNote {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(253, 246, 240, 0.5);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.securityNote svg {
+  color: #7FBF98;
+  flex-shrink: 0;
+}
+
+/* ── Premium card mock ── */
+.cardWrap {
+  display: flex;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 1.6;
+  border-radius: 22px;
+  padding: 1.6rem 1.7rem;
+  background: linear-gradient(135deg, #332026 0%, #4A2A35 48%, #2B1A20 100%);
+  border: 1px solid rgba(226, 167, 181, 0.3);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: rotate(-4deg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  right: -25%;
+  width: 80%;
+  height: 160%;
+  background: radial-gradient(circle, rgba(226, 167, 181, 0.16) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardBrand {
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(226, 167, 181, 0.8);
+  font-weight: 600;
+}
+
+.cardTier {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #2B1B1E;
+  background: #EBC3A8;
+  border-radius: 20px;
+  padding: 0.25rem 0.7rem;
+}
+
+.cardPoints {
+  font-family: var(--font-serif), 'Playfair Display', serif;
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1;
+}
+
+.cardPoints span {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(226, 167, 181, 0.75);
+  margin-left: 0.5rem;
+}
+
+.cardBarTrack {
+  height: 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  margin-bottom: 0.45rem;
+}
+
+.cardBarFill {
+  height: 100%;
+  width: 68%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #E2A7B5, #C98FA0);
+}
+
+.cardCaption {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cardName {
+  font-family: var(--font-serif), 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding: 4.5rem 1.5rem;
+  }
+
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .cardWrap {
+    order: -1;
+  }
+
+  .card {
+    transform: rotate(0deg);
+    max-width: 340px;
+  }
+}

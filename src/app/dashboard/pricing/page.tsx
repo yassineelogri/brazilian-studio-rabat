@@ -6,25 +6,25 @@ import type { PricingCategory, PricingItem } from '@/lib/supabase/types'
 
 type CategoryWithItems = PricingCategory & { items: PricingItem[] }
 
-const gold = '#E2A7B5'
+const gold = '#8E4457'
 const card: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(255,255,255,0.08)',
+  background: '#FFFFFF',
+  border: '1px solid #FFFFFF',
   borderRadius: '16px',
   padding: '20px',
 }
 const input: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.07)',
-  border: '1px solid rgba(255,255,255,0.12)',
+  background: '#FFFFFF',
+  border: '1px solid #EEDCD7',
   borderRadius: '10px',
-  color: 'rgba(255,255,255,0.9)',
+  color: '#382227',
   padding: '7px 11px',
   fontSize: '13px',
   outline: 'none',
 }
 const btnGold: React.CSSProperties = {
-  background: `linear-gradient(135deg, ${gold}, #C98FA0)`,
-  color: '#2B1B1E',
+  background: `linear-gradient(135deg, ${gold}, #A85D70)`,
+  color: '#FFFFFF',
   border: 'none',
   borderRadius: '10px',
   padding: '7px 14px',
@@ -36,9 +36,9 @@ const btnGold: React.CSSProperties = {
   gap: '6px',
 }
 const btnGhost: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.06)',
-  border: '1px solid rgba(255,255,255,0.10)',
-  color: 'rgba(255,255,255,0.5)',
+  background: '#FFFFFF',
+  border: '1px solid #EEDCD7',
+  color: '#7E6469',
   borderRadius: '10px',
   padding: '7px 14px',
   fontSize: '13px',
@@ -48,8 +48,8 @@ const btnGhost: React.CSSProperties = {
   gap: '6px',
 }
 const btnRed: React.CSSProperties = {
-  background: 'rgba(248,113,113,0.08)',
-  border: '1px solid rgba(248,113,113,0.15)',
+  background: '#FBECEC',
+  border: '1px solid #FBECEC',
   color: 'rgba(248,113,113,0.7)',
   borderRadius: '8px',
   padding: '5px 8px',
@@ -134,7 +134,7 @@ export default function PricingPage() {
   if (loading) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '200px' }}>
-        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '14px' }}>Chargement...</p>
+        <p style={{ color: '#9A8288', fontSize: '14px' }}>Chargement...</p>
       </div>
     )
   }
@@ -143,13 +143,13 @@ export default function PricingPage() {
     <div style={{ maxWidth: '720px' }}>
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.5)', fontWeight: 500 }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#B26478', fontWeight: 500 }}>
           Gestion
         </p>
-        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.95)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: '#382227', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Tag size={22} style={{ color: gold }} /> Tarifs & Services
         </h1>
-        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)', marginTop: '6px' }}>
+        <p style={{ fontSize: '13px', color: '#9A8288', marginTop: '6px' }}>
           Les changements s'affichent immédiatement sur le site public.
         </p>
       </div>
@@ -161,11 +161,11 @@ export default function PricingPage() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: collapsed.has(cat.id) ? 0 : '16px' }}>
               <button
                 onClick={() => toggleCollapse(cat.id)}
-                style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.9)', fontSize: '15px', fontWeight: 600, padding: 0 }}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', cursor: 'pointer', color: '#382227', fontSize: '15px', fontWeight: 600, padding: 0 }}
               >
-                {collapsed.has(cat.id) ? <ChevronDown size={16} style={{ color: 'rgba(255,255,255,0.4)' }} /> : <ChevronUp size={16} style={{ color: 'rgba(255,255,255,0.4)' }} />}
+                {collapsed.has(cat.id) ? <ChevronDown size={16} style={{ color: '#8A6E74' }} /> : <ChevronUp size={16} style={{ color: '#8A6E74' }} />}
                 {cat.name}
-                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', fontWeight: 400 }}>({cat.items.length})</span>
+                <span style={{ fontSize: '12px', color: '#B8A6AA', fontWeight: 400 }}>({cat.items.length})</span>
               </button>
               <button onClick={() => deleteCategory(cat.id)} style={btnRed} title="Supprimer catégorie">
                 <Trash2 size={13} />
@@ -214,7 +214,7 @@ export default function PricingPage() {
         ) : (
           <button
             onClick={() => setAddingCategory(true)}
-            style={{ ...btnGhost, justifyContent: 'center', padding: '12px', borderStyle: 'dashed', borderColor: 'rgba(226, 167, 181,0.2)', color: gold }}
+            style={{ ...btnGhost, justifyContent: 'center', padding: '12px', borderStyle: 'dashed', borderColor: '#E8C7CE', color: gold }}
           >
             <Plus size={16} /> Nouvelle catégorie
           </button>
@@ -269,12 +269,12 @@ function ItemRow({ item, onUpdate, onDelete }: {
 
   if (editing) {
     return (
-      <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap', padding: '8px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px' }}>
+      <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap', padding: '8px', background: '#FFFFFF', borderRadius: '10px' }}>
         <input value={name} onChange={e => setName(e.target.value)} placeholder="Nom" style={{ ...input, flex: '2 1 140px', minWidth: '120px' }} />
         <input type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="Prix min (DH)" style={{ ...input, width: '90px', flexShrink: 0 }} />
         <input type="number" value={priceMax} onChange={e => setPriceMax(e.target.value)} placeholder="Prix max (DH)" style={{ ...input, width: '100px', flexShrink: 0 }} />
         <input type="number" value={origPrice} onChange={e => setOrigPrice(e.target.value)} placeholder="Ancien prix (promo)" style={{ ...input, width: '130px', flexShrink: 0 }} />
-        <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer', fontSize: '12px', color: 'rgba(255,255,255,0.5)', flexShrink: 0 }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer', fontSize: '12px', color: '#7E6469', flexShrink: 0 }}>
           <input type="checkbox" checked={fromPrice} onChange={e => setFromPrice(e.target.checked)} style={{ accentColor: gold, width: '14px', height: '14px' }} />
           à partir de
         </label>
@@ -285,14 +285,14 @@ function ItemRow({ item, onUpdate, onDelete }: {
   }
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 4px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-      <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.75)', flex: 1 }}>{item.name}</span>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 4px', borderBottom: '1px solid #FFFFFF' }}>
+      <span style={{ fontSize: '13px', color: '#54383E', flex: 1 }}>{item.name}</span>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
         {isPromo ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '10px', background: 'rgba(234,88,12,0.15)', color: '#FB923C', border: '1px solid rgba(234,88,12,0.25)', borderRadius: '4px', padding: '1px 6px', fontWeight: 600, letterSpacing: '0.05em' }}>PROMO</span>
-            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', textDecoration: 'line-through' }}>{item.original_price}DH</span>
-            <span style={{ fontSize: '13px', color: '#4ADE80', fontWeight: 600 }}>{item.is_from_price ? 'à partir de ' : ''}{item.price}{item.price_max ? ` / ${item.price_max}` : ''}DH</span>
+            <span style={{ fontSize: '12px', color: '#9A8288', textDecoration: 'line-through' }}>{item.original_price}DH</span>
+            <span style={{ fontSize: '13px', color: '#1C9950', fontWeight: 600 }}>{item.is_from_price ? 'à partir de ' : ''}{item.price}{item.price_max ? ` / ${item.price_max}` : ''}DH</span>
           </div>
         ) : (
           <span style={{ fontSize: '13px', color: gold, fontWeight: 500 }}>
@@ -335,7 +335,7 @@ function AddItemRow({ categoryId, nextOrder, onAdd }: {
 
   if (!open) {
     return (
-      <button onClick={() => setOpen(true)} style={{ ...btnGhost, marginTop: '8px', fontSize: '12px', color: 'rgba(255,255,255,0.35)', justifyContent: 'center' }}>
+      <button onClick={() => setOpen(true)} style={{ ...btnGhost, marginTop: '8px', fontSize: '12px', color: '#9A8288', justifyContent: 'center' }}>
         <Plus size={13} /> Ajouter un service
       </button>
     )

@@ -15,19 +15,19 @@ const STATUS_LABELS: Record<string, string> = {
 }
 
 const STATUS_STYLES: Record<string, React.CSSProperties> = {
-  draft:    { background: 'rgba(156,163,175,0.15)', color: '#9CA3AF' },
+  draft:    { background: '#EFEBEA', color: '#6B7280' },
   sent:     { background: 'rgba(96,165,250,0.15)',  color: '#60A5FA' },
-  accepted: { background: 'rgba(74,222,128,0.15)',  color: '#4ADE80' },
-  rejected: { background: 'rgba(248,113,113,0.15)', color: '#F87171' },
-  expired:  { background: 'rgba(251,191,36,0.15)',  color: '#FBBF24' },
+  accepted: { background: '#E7F6EC',  color: '#1C9950' },
+  rejected: { background: '#FBECEC', color: '#C94F4F' },
+  expired:  { background: '#FBF2DC',  color: '#B07818' },
 }
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: 'rgba(255,255,255,0.07)',
-  border: '1px solid rgba(255,255,255,0.12)',
+  background: '#FFFFFF',
+  border: '1px solid #EEDCD7',
   borderRadius: '10px',
-  color: 'rgba(255,255,255,0.9)',
+  color: '#382227',
   padding: '8px 12px',
   fontSize: '13px',
   outline: 'none',
@@ -36,7 +36,7 @@ const inputStyle: React.CSSProperties = {
 const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: '11px',
-  color: 'rgba(255,255,255,0.4)',
+  color: '#8A6E74',
   textTransform: 'uppercase',
   letterSpacing: '0.1em',
   marginBottom: '6px',
@@ -44,9 +44,9 @@ const labelStyle: React.CSSProperties = {
 
 const btnGlass: React.CSSProperties = {
   display: 'flex', alignItems: 'center', gap: '6px',
-  background: 'rgba(255,255,255,0.06)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  color: 'rgba(255,255,255,0.7)',
+  background: '#FFFFFF',
+  border: '1px solid #EEDCD7',
+  color: '#54383E',
   borderRadius: '10px', padding: '8px 14px',
   fontSize: '13px', cursor: 'pointer',
 }
@@ -191,7 +191,7 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
     setSaving(false)
   }
 
-  if (loading) return <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Chargement...</p>
+  if (loading) return <p style={{ color: '#9A8288', fontSize: '14px' }}>Chargement...</p>
   if (!devis) return null
 
   const client = devis.clients
@@ -201,12 +201,12 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginBottom: '4px' }}>
+          <p style={{ fontSize: '12px', color: '#9A8288', marginBottom: '4px' }}>
             <Link href="/dashboard/devis" style={{ color: 'rgba(226, 167, 181,0.7)', textDecoration: 'none' }}>Devis</Link>
             {' / '}
             <span style={{ fontFamily: 'monospace' }}>{devis.number}</span>
           </p>
-          <h1 style={{ fontFamily: 'monospace', fontSize: '22px', fontWeight: 600, color: 'rgba(255,255,255,0.9)' }}>{devis.number}</h1>
+          <h1 style={{ fontFamily: 'monospace', fontSize: '22px', fontWeight: 600, color: '#382227' }}>{devis.number}</h1>
           <span style={{ display: 'inline-block', marginTop: '6px', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, ...(STATUS_STYLES[devis.status] ?? {}) }}>
             {STATUS_LABELS[devis.status] ?? devis.status}
           </span>
@@ -229,12 +229,12 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
                 </button>
               )}
               {devis.status === 'sent' && (
-                <button type="button" onClick={() => action('reject')} disabled={!!actionLoading} style={{ ...btnGlass, color: '#F87171' }}>
+                <button type="button" onClick={() => action('reject')} disabled={!!actionLoading} style={{ ...btnGlass, color: '#C94F4F' }}>
                   <XCircle size={13} /> Refuser
                 </button>
               )}
               {['draft', 'sent'].includes(devis.status) && (
-                <button type="button" onClick={handleConvert} disabled={!!actionLoading} style={{ ...btnGlass, color: '#4ADE80' }}>
+                <button type="button" onClick={handleConvert} disabled={!!actionLoading} style={{ ...btnGlass, color: '#1C9950' }}>
                   <ArrowRightLeft size={13} /> Convertir
                 </button>
               )}
@@ -242,7 +242,7 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
                 <Copy size={13} /> Dupliquer
               </button>
               {devis.status === 'draft' && (
-                <button type="button" onClick={handleDelete} disabled={!!actionLoading} style={{ ...btnGlass, color: '#F87171' }}>
+                <button type="button" onClick={handleDelete} disabled={!!actionLoading} style={{ ...btnGlass, color: '#C94F4F' }}>
                   <Trash2 size={13} /> Supprimer
                 </button>
               )}
@@ -252,19 +252,19 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
       </div>
 
       {error && (
-        <div style={{ background: 'rgba(248,113,113,0.12)', border: '1px solid rgba(248,113,113,0.25)', color: '#F87171', padding: '10px 16px', borderRadius: '12px', fontSize: '13px' }}>
+        <div style={{ background: '#F0CCCC', border: '1px solid rgba(248,113,113,0.25)', color: '#C94F4F', padding: '10px 16px', borderRadius: '12px', fontSize: '13px' }}>
           {error}
         </div>
       )}
 
       {/* Edit form */}
       {isEditing && (
-        <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <p style={{ fontSize: '15px', fontWeight: 500, color: 'rgba(255,255,255,0.85)' }}>Modifier le devis</p>
+        <div style={{ background: '#FFFFFF', border: '1px solid #EEDCD7', borderRadius: '20px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <p style={{ fontSize: '15px', fontWeight: 500, color: '#432B31' }}>Modifier le devis</p>
 
           {/* Client */}
-          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(226, 167, 181,0.15)', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#E2A7B5', margin: 0 }}>Client</p>
+          <div style={{ background: '#FFFFFF', border: '1px solid #F7E9E6', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8E4457', margin: 0 }}>Client</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
                 <label style={labelStyle}>Nom</label>
@@ -294,8 +294,8 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
           </div>
 
           {/* RDV + Avance + Payment mode */}
-          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(226, 167, 181,0.15)', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#E2A7B5', margin: 0 }}>Rendez-vous &amp; Paiement</p>
+          <div style={{ background: '#FFFFFF', border: '1px solid #F7E9E6', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8E4457', margin: 0 }}>Rendez-vous &amp; Paiement</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
                 <label style={labelStyle}>Date de rendez-vous</label>
@@ -303,11 +303,11 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
               </div>
               <div>
                 <label style={labelStyle}>Mode de paiement</label>
-                <select value={editPaymentMode} onChange={e => setEditPaymentMode(e.target.value)} style={{ ...inputStyle, colorScheme: 'dark' }}>
-                  <option value="" style={{ background: '#2A191D', color: '#fff' }}>— Non spécifié —</option>
-                  <option value="cash" style={{ background: '#2A191D', color: '#fff' }}>Espèces / Cash</option>
-                  <option value="cheque" style={{ background: '#2A191D', color: '#fff' }}>Chèque</option>
-                  <option value="card" style={{ background: '#2A191D', color: '#fff' }}>Carte de crédit</option>
+                <select value={editPaymentMode} onChange={e => setEditPaymentMode(e.target.value)} style={{ ...inputStyle, colorScheme: 'light' }}>
+                  <option value="" style={{ background: '#FFFFFF', color: '#fff' }}>— Non spécifié —</option>
+                  <option value="cash" style={{ background: '#FFFFFF', color: '#fff' }}>Espèces / Cash</option>
+                  <option value="cheque" style={{ background: '#FFFFFF', color: '#fff' }}>Chèque</option>
+                  <option value="card" style={{ background: '#FFFFFF', color: '#fff' }}>Carte de crédit</option>
                 </select>
               </div>
             </div>
@@ -320,7 +320,7 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
                 <div>
                   <label style={labelStyle}>Réglée ?</label>
                   <button type="button" onClick={() => setEditAvancePaid(v => !v)}
-                    style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '10px', border: editAvancePaid ? '1px solid rgba(74,222,128,0.4)' : '1px solid rgba(255,255,255,0.12)', background: editAvancePaid ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.07)', color: editAvancePaid ? '#4ADE80' : 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '13px' }}>
+                    style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '10px', border: editAvancePaid ? '1px solid rgba(74,222,128,0.4)' : '1px solid #EEDCD7', background: editAvancePaid ? '#E7F6EC' : '#FFFFFF', color: editAvancePaid ? '#1C9950' : '#7E6469', cursor: 'pointer', fontSize: '13px' }}>
                     {editAvancePaid ? '✓ Oui' : 'Non'}
                   </button>
                 </div>
@@ -337,7 +337,7 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
 
           <div style={{ display: 'flex', gap: '10px' }}>
             <button type="button" onClick={handleSave} disabled={saving}
-              style={{ padding: '9px 20px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}>
+              style={{ padding: '9px 20px', background: 'linear-gradient(135deg, #A85D70, #7E4452)', color: '#FFFFFF', borderRadius: '10px', fontWeight: 600, border: 'none', cursor: 'pointer', fontSize: '13px' }}>
               {saving ? 'Enregistrement...' : 'Enregistrer'}
             </button>
             <button type="button" onClick={() => setIsEditing(false)} disabled={saving} style={btnGlass}>Annuler</button>
@@ -346,103 +346,103 @@ export default function DevisDetailPage({ params }: { params: { id: string } }) 
       )}
 
       {/* Client + meta */}
-      <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', padding: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '13px' }}>
+      <div style={{ background: '#FFFFFF', border: '1px solid #FFFFFF', borderRadius: '20px', padding: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '13px' }}>
         <div>
-          <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>Client</p>
-          <p style={{ fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{client?.name}</p>
-          {client?.phone && <p style={{ color: 'rgba(255,255,255,0.45)', marginTop: '2px' }}>{client.phone}</p>}
-          {client?.email && <p style={{ color: 'rgba(255,255,255,0.45)', marginTop: '2px' }}>{client.email}</p>}
+          <p style={{ fontSize: '10px', color: '#9A8288', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '6px' }}>Client</p>
+          <p style={{ fontWeight: 500, color: '#382227' }}>{client?.name}</p>
+          {client?.phone && <p style={{ color: '#8A6E74', marginTop: '2px' }}>{client.phone}</p>}
+          {client?.email && <p style={{ color: '#8A6E74', marginTop: '2px' }}>{client.email}</p>}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Date de création</p>
-          <p style={{ color: 'rgba(255,255,255,0.7)' }}>{new Date(devis.created_at).toLocaleDateString('fr-FR')}</p>
+          <p style={{ fontSize: '10px', color: '#9A8288', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Date de création</p>
+          <p style={{ color: '#54383E' }}>{new Date(devis.created_at).toLocaleDateString('fr-FR')}</p>
           {devis.valid_until && (
             <>
-              <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Valable jusqu&apos;au</p>
-              <p style={{ color: 'rgba(255,255,255,0.7)' }}>{new Date(devis.valid_until).toLocaleDateString('fr-FR')}</p>
+              <p style={{ fontSize: '10px', color: '#9A8288', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Valable jusqu&apos;au</p>
+              <p style={{ color: '#54383E' }}>{new Date(devis.valid_until).toLocaleDateString('fr-FR')}</p>
             </>
           )}
           {(devis as any).rdv_date && (
             <>
-              <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Date de RDV</p>
-              <p style={{ color: '#E2A7B5' }}>{new Date((devis as any).rdv_date + 'T00:00:00').toLocaleDateString('fr-FR')}</p>
+              <p style={{ fontSize: '10px', color: '#9A8288', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Date de RDV</p>
+              <p style={{ color: '#8E4457' }}>{new Date((devis as any).rdv_date + 'T00:00:00').toLocaleDateString('fr-FR')}</p>
             </>
           )}
           {(devis as any).avance_amount != null && (
             <>
-              <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Avance</p>
-              <p style={{ color: (devis as any).avance_paid ? '#4ADE80' : 'rgba(255,255,255,0.7)' }}>
+              <p style={{ fontSize: '10px', color: '#9A8288', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Avance</p>
+              <p style={{ color: (devis as any).avance_paid ? '#1C9950' : '#54383E' }}>
                 {Number((devis as any).avance_amount).toFixed(2)} MAD — {(devis as any).avance_paid ? 'Réglée' : 'En attente'}
               </p>
             </>
           )}
           {(devis as any).payment_mode && (
             <>
-              <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Mode de paiement</p>
-              <p style={{ color: 'rgba(255,255,255,0.7)' }}>{{ cash: 'Espèces / Cash', cheque: 'Chèque', card: 'Carte de crédit' }[(devis as any).payment_mode as string] ?? (devis as any).payment_mode}</p>
+              <p style={{ fontSize: '10px', color: '#9A8288', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>Mode de paiement</p>
+              <p style={{ color: '#54383E' }}>{{ cash: 'Espèces / Cash', cheque: 'Chèque', card: 'Carte de crédit' }[(devis as any).payment_mode as string] ?? (devis as any).payment_mode}</p>
             </>
           )}
-          <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>TVA</p>
-          <p style={{ color: 'rgba(255,255,255,0.7)' }}>{Number(devis.tva_rate)}%</p>
+          <p style={{ fontSize: '10px', color: '#9A8288', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '8px' }}>TVA</p>
+          <p style={{ color: '#54383E' }}>{Number(devis.tva_rate)}%</p>
         </div>
       </div>
 
       {/* Items table */}
-      <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden' }}>
+      <div style={{ background: '#FFFFFF', border: '1px solid #FFFFFF', borderRadius: '16px', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
           <thead>
-            <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <tr style={{ background: '#FFFFFF', borderBottom: '1px solid #FFFFFF' }}>
               {['Description', 'Qté', 'Prix HT', 'Total HT'].map((h, i) => (
-                <th key={h} style={{ padding: '12px 16px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', textAlign: i === 0 ? 'left' : i === 1 ? 'center' : 'right' }}>{h}</th>
+                <th key={h} style={{ padding: '12px 16px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#9A8288', textAlign: i === 0 ? 'left' : i === 1 ? 'center' : 'right' }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {devis.items.map((item, i) => (
-              <tr key={item.id} style={{ borderBottom: i < devis.items.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
-                <td style={{ padding: '12px 16px', color: 'rgba(255,255,255,0.85)' }}>{item.description}</td>
-                <td style={{ padding: '12px 16px', textAlign: 'center', color: 'rgba(255,255,255,0.7)' }}>{Number(item.quantity)}</td>
-                <td style={{ padding: '12px 16px', textAlign: 'right', color: 'rgba(255,255,255,0.5)' }}>{Number(item.unit_price).toFixed(2)} MAD</td>
-                <td style={{ padding: '12px 16px', textAlign: 'right', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>
+              <tr key={item.id} style={{ borderBottom: i < devis.items.length - 1 ? '1px solid #FFFFFF' : 'none' }}>
+                <td style={{ padding: '12px 16px', color: '#432B31' }}>{item.description}</td>
+                <td style={{ padding: '12px 16px', textAlign: 'center', color: '#54383E' }}>{Number(item.quantity)}</td>
+                <td style={{ padding: '12px 16px', textAlign: 'right', color: '#7E6469' }}>{Number(item.unit_price).toFixed(2)} MAD</td>
+                <td style={{ padding: '12px 16px', textAlign: 'right', fontWeight: 600, color: '#432B31' }}>
                   {(Number(item.quantity) * Number(item.unit_price)).toFixed(2)} MAD
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '6px', borderTop: '1px solid rgba(255,255,255,0.06)', fontSize: '13px' }}>
+        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '6px', borderTop: '1px solid #FFFFFF', fontSize: '13px' }}>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '32px' }}>
-            <span style={{ color: 'rgba(255,255,255,0.4)' }}>Sous-total HT</span>
-            <span style={{ width: '112px', textAlign: 'right', color: 'rgba(255,255,255,0.7)' }}>{devis.subtotal_ht.toFixed(2)} MAD</span>
+            <span style={{ color: '#8A6E74' }}>Sous-total HT</span>
+            <span style={{ width: '112px', textAlign: 'right', color: '#54383E' }}>{devis.subtotal_ht.toFixed(2)} MAD</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '32px' }}>
-            <span style={{ color: 'rgba(255,255,255,0.4)' }}>TVA ({Number(devis.tva_rate)}%)</span>
-            <span style={{ width: '112px', textAlign: 'right', color: 'rgba(255,255,255,0.7)' }}>{devis.tva_amount.toFixed(2)} MAD</span>
+            <span style={{ color: '#8A6E74' }}>TVA ({Number(devis.tva_rate)}%)</span>
+            <span style={{ width: '112px', textAlign: 'right', color: '#54383E' }}>{devis.tva_amount.toFixed(2)} MAD</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '32px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '10px', marginTop: '4px' }}>
-            <span style={{ fontWeight: 700, color: '#E2A7B5' }}>Total TTC</span>
-            <span style={{ width: '112px', textAlign: 'right', fontWeight: 700, color: '#E2A7B5' }}>{devis.total_ttc.toFixed(2)} MAD</span>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '32px', borderTop: '1px solid #FFFFFF', paddingTop: '10px', marginTop: '4px' }}>
+            <span style={{ fontWeight: 700, color: '#8E4457' }}>Total TTC</span>
+            <span style={{ width: '112px', textAlign: 'right', fontWeight: 700, color: '#8E4457' }}>{devis.total_ttc.toFixed(2)} MAD</span>
           </div>
         </div>
       </div>
 
       {/* Notes */}
       {devis.notes && (
-        <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '20px', fontSize: '13px' }}>
-          <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Notes</p>
-          <p style={{ color: 'rgba(255,255,255,0.7)', whiteSpace: 'pre-wrap' }}>{devis.notes}</p>
+        <div style={{ background: '#FFFFFF', border: '1px solid #FFFFFF', borderRadius: '16px', padding: '20px', fontSize: '13px' }}>
+          <p style={{ fontSize: '10px', color: '#9A8288', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Notes</p>
+          <p style={{ color: '#54383E', whiteSpace: 'pre-wrap' }}>{devis.notes}</p>
         </div>
       )}
 
       {/* Status timeline */}
-      <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '20px' }}>
-        <p style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginBottom: '12px' }}>Historique du statut</p>
+      <div style={{ background: '#FFFFFF', border: '1px solid #FFFFFF', borderRadius: '16px', padding: '20px' }}>
+        <p style={{ fontSize: '13px', fontWeight: 500, color: '#54383E', marginBottom: '12px' }}>Historique du statut</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {((devis.events ?? []) as StatusEvent[]).map((ev, idx) => (
             <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' }}>
-              <CheckCircle size={13} style={{ color: '#E2A7B5', flexShrink: 0 }} />
-              <span style={{ color: 'rgba(255,255,255,0.35)' }}>{new Date(ev.at).toLocaleString('fr-FR')}</span>
-              <span style={{ color: 'rgba(255,255,255,0.7)', textTransform: 'capitalize' }}>{STATUS_LABELS[ev.status] ?? ev.status}</span>
+              <CheckCircle size={13} style={{ color: '#8E4457', flexShrink: 0 }} />
+              <span style={{ color: '#9A8288' }}>{new Date(ev.at).toLocaleString('fr-FR')}</span>
+              <span style={{ color: '#54383E', textTransform: 'capitalize' }}>{STATUS_LABELS[ev.status] ?? ev.status}</span>
             </div>
           ))}
         </div>

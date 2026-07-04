@@ -59,7 +59,7 @@ export default async function DashboardPage() {
     <div>
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.5)', fontWeight: 500 }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#B26478', fontWeight: 500 }}>
           {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
         </p>
         <h1
@@ -67,7 +67,7 @@ export default async function DashboardPage() {
             fontFamily: 'serif',
             fontSize: '32px',
             fontWeight: 300,
-            color: 'rgba(255,255,255,0.95)',
+            color: '#382227',
             marginTop: '4px',
             letterSpacing: '-0.01em',
           }}
@@ -92,9 +92,9 @@ export default async function DashboardPage() {
           style={{
             padding: '10px 18px',
             borderRadius: '14px',
-            background: 'linear-gradient(135deg, rgba(226, 167, 181,0.15), rgba(226, 167, 181,0.08))',
-            border: '1px solid rgba(226, 167, 181,0.2)',
-            color: '#E2A7B5',
+            background: '#F7E9E6',
+            border: '1px solid #E8C7CE',
+            color: '#8E4457',
           }}
         >
           <Plus size={15} /> Nouveau RDV
@@ -105,9 +105,9 @@ export default async function DashboardPage() {
           style={{
             padding: '10px 18px',
             borderRadius: '14px',
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            color: 'rgba(255,255,255,0.6)',
+            background: '#FFFFFF',
+            border: '1px solid #FFFFFF',
+            color: '#6A4A52',
           }}
         >
           <CalendarDays size={15} /> Calendrier
@@ -118,9 +118,9 @@ export default async function DashboardPage() {
           style={{
             padding: '10px 18px',
             borderRadius: '14px',
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            color: 'rgba(255,255,255,0.6)',
+            background: '#FFFFFF',
+            border: '1px solid #FFFFFF',
+            color: '#6A4A52',
           }}
         >
           <ShoppingBag size={15} /> Nouvelle vente
@@ -135,7 +135,7 @@ export default async function DashboardPage() {
               fontFamily: 'serif',
               fontSize: '18px',
               fontWeight: 400,
-              color: 'rgba(255,255,255,0.85)',
+              color: '#432B31',
               marginBottom: '14px',
             }}
           >
@@ -148,28 +148,28 @@ export default async function DashboardPage() {
                 style={{
                   borderRadius: '16px',
                   padding: '14px 16px',
-                  background: 'rgba(255,255,255,0.08)',
-                  border: '1px solid rgba(255,255,255,0.10)',
+                  background: '#FFFFFF',
+                  border: '1px solid #EEDCD7',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                  boxShadow: '0 2px 8px rgba(56,34,39,0.05)',
                 }}
               >
                 
                 {/* Info */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.9)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <p style={{ fontSize: '14px', fontWeight: 500, color: '#382227', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {a.clients?.name}
                   </p>
-                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0, display: 'inline-block', backgroundColor: a.services?.color ?? '#E2A7B5' }} />
+                  <p style={{ fontSize: '12px', color: '#7E6469', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0, display: 'inline-block', backgroundColor: a.services?.color ?? '#8E4457' }} />
                     {a.services?.name}
                   </p>
                 </div>
                 {/* Time + status */}
                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <p style={{ fontSize: '13px', fontFamily: 'monospace', color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>
+                  <p style={{ fontSize: '13px', fontFamily: 'monospace', color: '#54383E', fontWeight: 500 }}>
                     {a.start_time?.slice(0, 5)}
                   </p>
                   <span
@@ -180,9 +180,9 @@ export default async function DashboardPage() {
                       fontWeight: 600,
                       display: 'inline-block',
                       marginTop: '4px',
-                      background: a.status === 'confirmed' ? 'rgba(74,222,128,0.12)' : 'rgba(251,191,36,0.12)',
-                      color: a.status === 'confirmed' ? '#4ADE80' : '#FBBF24',
-                      border: a.status === 'confirmed' ? '1px solid rgba(74,222,128,0.2)' : '1px solid rgba(251,191,36,0.2)',
+                      background: a.status === 'confirmed' ? '#E7F6EC' : '#FBF2DC',
+                      color: a.status === 'confirmed' ? '#1C9950' : '#B07818',
+                      border: a.status === 'confirmed' ? '1px solid #BFE5CD' : '1px solid #EAD3A2',
                     }}
                   >
                     {a.status === 'confirmed' ? 'Confirmé' : 'En attente'}
@@ -200,19 +200,19 @@ export default async function DashboardPage() {
           style={{
             borderRadius: '20px',
             padding: '48px 24px',
-            background: 'rgba(255,255,255,0.02)',
-            border: '1px solid rgba(255,255,255,0.05)',
+            background: '#FFFFFF',
+            border: '1px solid #F7E9E6',
             textAlign: 'center',
           }}
         >
-          <CalendarDays size={32} style={{ color: 'rgba(226, 167, 181,0.3)', margin: '0 auto 12px' }} />
-          <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.4)', fontWeight: 400 }}>
+          <CalendarDays size={32} style={{ color: '#D8A8B5', margin: '0 auto 12px' }} />
+          <p style={{ fontSize: '14px', color: '#8A6E74', fontWeight: 400 }}>
             Aucun rendez-vous aujourd&apos;hui
           </p>
           <Link
             href="/dashboard/appointments/new"
             className="inline-flex items-center gap-1.5 text-sm font-medium mt-3"
-            style={{ color: '#E2A7B5' }}
+            style={{ color: '#8E4457' }}
           >
             <Plus size={14} /> Créer un rendez-vous
           </Link>

@@ -20,10 +20,10 @@ interface ClientHistory {
 const supabase = createClient()
 
 const inp: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.07)',
-  border: '1px solid rgba(255,255,255,0.12)',
+  background: '#FFFFFF',
+  border: '1px solid #EEDCD7',
   borderRadius: '10px',
-  color: 'rgba(255,255,255,0.9)',
+  color: '#382227',
   padding: '8px 12px',
   fontSize: '13px',
   outline: 'none',
@@ -31,15 +31,15 @@ const inp: React.CSSProperties = {
 }
 const lbl: React.CSSProperties = {
   fontSize: '11px',
-  color: 'rgba(255,255,255,0.4)',
+  color: '#8A6E74',
   textTransform: 'uppercase',
   letterSpacing: '0.1em',
   marginBottom: '5px',
   display: 'block',
 }
 const btnGold: React.CSSProperties = {
-  background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)',
-  color: '#2B1B1E',
+  background: 'linear-gradient(135deg, #A85D70, #7E4452)',
+  color: '#FFFFFF',
   border: 'none',
   borderRadius: '10px',
   padding: '8px 16px',
@@ -51,9 +51,9 @@ const btnGold: React.CSSProperties = {
   gap: '6px',
 }
 const btnGhost: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.06)',
-  border: '1px solid rgba(255,255,255,0.10)',
-  color: 'rgba(255,255,255,0.5)',
+  background: '#FFFFFF',
+  border: '1px solid #EEDCD7',
+  color: '#7E6469',
   borderRadius: '10px',
   padding: '8px 14px',
   fontSize: '13px',
@@ -64,14 +64,14 @@ const btnGhost: React.CSSProperties = {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  pending:   '#FBBF24',
+  pending:   '#B07818',
   confirmed: '#60A5FA',
-  completed: '#4ADE80',
-  cancelled: '#F87171',
-  no_show:   '#9CA3AF',
-  draft:     '#9CA3AF',
+  completed: '#1C9950',
+  cancelled: '#C94F4F',
+  no_show:   '#6B7280',
+  draft:     '#6B7280',
   sent:      '#60A5FA',
-  paid:      '#4ADE80',
+  paid:      '#1C9950',
 }
 
 export default function ClientsPage() {
@@ -130,16 +130,16 @@ export default function ClientsPage() {
     <div style={{ maxWidth: '720px' }}>
       {/* Header */}
       <div style={{ marginBottom: '28px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.5)', fontWeight: 500 }}>Gestion</p>
-        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.95)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Users size={22} style={{ color: '#E2A7B5' }} /> Clients
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#B26478', fontWeight: 500 }}>Gestion</p>
+        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: '#382227', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Users size={22} style={{ color: '#8E4457' }} /> Clients
         </h1>
       </div>
 
       {/* Search + Add */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
         <div style={{ flex: 1, position: 'relative' }}>
-          <Search size={14} style={{ position: 'absolute', left: '11px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)', pointerEvents: 'none' }} />
+          <Search size={14} style={{ position: 'absolute', left: '11px', top: '50%', transform: 'translateY(-50%)', color: '#9A8288', pointerEvents: 'none' }} />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
@@ -165,14 +165,14 @@ export default function ClientsPage() {
       )}
 
       {/* Client count */}
-      <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginBottom: '12px' }}>
+      <p style={{ fontSize: '12px', color: '#9A8288', marginBottom: '12px' }}>
         {filtered.length} client{filtered.length !== 1 ? 's' : ''}
         {search ? ` trouvé${filtered.length !== 1 ? 's' : ''}` : ' au total'}
       </p>
 
       {/* List */}
       {loading ? (
-        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '14px', textAlign: 'center', padding: '40px 0' }}>Chargement...</p>
+        <p style={{ color: '#9A8288', fontSize: '14px', textAlign: 'center', padding: '40px 0' }}>Chargement...</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {filtered.map(client => (
@@ -201,7 +201,7 @@ export default function ClientsPage() {
             />
           ))}
           {filtered.length === 0 && !loading && (
-            <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '14px', padding: '40px 0' }}>
+            <p style={{ textAlign: 'center', color: '#B8A6AA', fontSize: '14px', padding: '40px 0' }}>
               {search ? 'Aucun client trouvé.' : 'Aucun client pour le moment.'}
             </p>
           )}
@@ -219,8 +219,8 @@ function AddClientForm({ onSave, onCancel }: { onSave: (n: string, p: string, e:
   useEffect(() => { ref.current?.focus() }, [])
 
   return (
-    <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(226, 167, 181,0.2)', borderRadius: '16px', padding: '20px', marginBottom: '12px' }}>
-      <p style={{ fontSize: '13px', fontWeight: 600, color: '#E2A7B5', marginBottom: '14px', letterSpacing: '0.05em' }}>Nouveau client</p>
+    <div style={{ background: '#F7E9E6', border: '1px solid #E8C7CE', borderRadius: '16px', padding: '20px', marginBottom: '12px' }}>
+      <p style={{ fontSize: '13px', fontWeight: 600, color: '#8E4457', marginBottom: '14px', letterSpacing: '0.05em' }}>Nouveau client</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
         <div>
           <label style={lbl}>Nom *</label>
@@ -266,23 +266,23 @@ function ClientRow({ client, expanded, editing, historyData, historyLoading, onT
   }, [editing, client])
 
   return (
-    <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', overflow: 'hidden' }}>
+    <div style={{ background: '#FFFFFF', border: '1px solid #FFFFFF', borderRadius: '14px', overflow: 'hidden' }}>
       {/* Row header */}
       <div style={{ display: 'flex', alignItems: 'center', padding: '14px 16px', gap: '12px' }}>
         {/* Avatar */}
-        <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(226, 167, 181,0.2), rgba(226, 167, 181,0.08))', border: '1px solid rgba(226, 167, 181,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <span style={{ fontSize: '13px', fontWeight: 600, color: '#E2A7B5' }}>{client.name.charAt(0).toUpperCase()}</span>
+        <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'linear-gradient(135deg, #E8C7CE, #F7E9E6)', border: '1px solid #E8C7CE', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <span style={{ fontSize: '13px', fontWeight: 600, color: '#8E4457' }}>{client.name.charAt(0).toUpperCase()}</span>
         </div>
 
         {/* Info */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ fontSize: '14px', fontWeight: 600, color: 'rgba(255,255,255,0.9)', marginBottom: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{client.name}</p>
+          <p style={{ fontSize: '14px', fontWeight: 600, color: '#382227', marginBottom: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{client.name}</p>
           <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ fontSize: '12px', color: '#8A6E74', display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Phone size={10} /> {client.phone}
             </span>
             {client.email && (
-              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ fontSize: '12px', color: '#8A6E74', display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <Mail size={10} /> {client.email}
               </span>
             )}
@@ -292,11 +292,11 @@ function ClientRow({ client, expanded, editing, historyData, historyLoading, onT
         {/* Actions */}
         <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
           {!editing && (
-            <button onClick={onStartEdit} style={{ fontSize: '12px', color: '#E2A7B5', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px' }}>
+            <button onClick={onStartEdit} style={{ fontSize: '12px', color: '#8E4457', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px' }}>
               Modifier
             </button>
           )}
-          <button onClick={onToggle} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '5px 8px', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px' }}>
+          <button onClick={onToggle} style={{ background: '#FFFFFF', border: '1px solid #FFFFFF', borderRadius: '8px', padding: '5px 8px', cursor: 'pointer', color: '#7E6469', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px' }}>
             <Calendar size={12} />
             {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
           </button>
@@ -305,7 +305,7 @@ function ClientRow({ client, expanded, editing, historyData, historyLoading, onT
 
       {/* Edit form */}
       {editing && (
-        <div style={{ padding: '0 16px 16px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ padding: '0 16px 16px', borderTop: '1px solid #FFFFFF' }}>
           <div style={{ paddingTop: '14px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
@@ -328,7 +328,7 @@ function ClientRow({ client, expanded, editing, historyData, historyLoading, onT
                 </button>
                 <button onClick={onCancelEdit} style={btnGhost}><X size={13} /> Annuler</button>
               </div>
-              <button onClick={onDelete} style={{ background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.15)', color: 'rgba(248,113,113,0.7)', borderRadius: '10px', padding: '8px 12px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <button onClick={onDelete} style={{ background: '#FBECEC', border: '1px solid #FBECEC', color: 'rgba(248,113,113,0.7)', borderRadius: '10px', padding: '8px 12px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <Trash2 size={12} /> Supprimer
               </button>
             </div>
@@ -338,9 +338,9 @@ function ClientRow({ client, expanded, editing, historyData, historyLoading, onT
 
       {/* History panel */}
       {expanded && !editing && (
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.15)', padding: '16px' }}>
+        <div style={{ borderTop: '1px solid #FFFFFF', background: 'rgba(56,34,39,0.05)', padding: '16px' }}>
           {historyLoading ? (
-            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '13px', textAlign: 'center', padding: '8px 0' }}>Chargement...</p>
+            <p style={{ color: '#9A8288', fontSize: '13px', textAlign: 'center', padding: '8px 0' }}>Chargement...</p>
           ) : historyData ? (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               {/* RDVs */}
@@ -349,16 +349,16 @@ function ClientRow({ client, expanded, editing, historyData, historyLoading, onT
                   Rendez-vous ({historyData.appointments.length})
                 </p>
                 {historyData.appointments.length === 0 ? (
-                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.2)' }}>Aucun RDV</p>
+                  <p style={{ fontSize: '12px', color: '#B8A6AA' }}>Aucun RDV</p>
                 ) : historyData.appointments.map(a => (
                   <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', fontSize: '12px' }}>
                     <div>
-                      <p style={{ color: 'rgba(255,255,255,0.75)' }}>{a.service}</p>
-                      <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px' }}>
+                      <p style={{ color: '#54383E' }}>{a.service}</p>
+                      <p style={{ color: '#9A8288', fontSize: '11px' }}>
                         {new Date(a.date + 'T00:00:00').toLocaleDateString('fr-FR')} à {a.start_time.slice(0, 5)}
                       </p>
                     </div>
-                    <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '20px', background: `${STATUS_COLORS[a.status] ?? '#9CA3AF'}20`, color: STATUS_COLORS[a.status] ?? '#9CA3AF', fontWeight: 600 }}>
+                    <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '20px', background: `${STATUS_COLORS[a.status] ?? '#6B7280'}20`, color: STATUS_COLORS[a.status] ?? '#6B7280', fontWeight: 600 }}>
                       {a.status}
                     </span>
                   </div>
@@ -370,16 +370,16 @@ function ClientRow({ client, expanded, editing, historyData, historyLoading, onT
                   Factures ({historyData.factures.length})
                 </p>
                 {historyData.factures.length === 0 ? (
-                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.2)' }}>Aucune facture</p>
+                  <p style={{ fontSize: '12px', color: '#B8A6AA' }}>Aucune facture</p>
                 ) : historyData.factures.map(f => (
                   <div key={f.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', fontSize: '12px' }}>
                     <div>
-                      <p style={{ color: 'rgba(255,255,255,0.75)', fontFamily: 'monospace' }}>{f.number}</p>
-                      <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px' }}>
+                      <p style={{ color: '#54383E', fontFamily: 'monospace' }}>{f.number}</p>
+                      <p style={{ color: '#9A8288', fontSize: '11px' }}>
                         {new Date(f.created_at).toLocaleDateString('fr-FR')} — {f.total_ttc.toFixed(0)} MAD
                       </p>
                     </div>
-                    <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '20px', background: `${STATUS_COLORS[f.status] ?? '#9CA3AF'}20`, color: STATUS_COLORS[f.status] ?? '#9CA3AF', fontWeight: 600 }}>
+                    <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '20px', background: `${STATUS_COLORS[f.status] ?? '#6B7280'}20`, color: STATUS_COLORS[f.status] ?? '#6B7280', fontWeight: 600 }}>
                       {f.status}
                     </span>
                   </div>

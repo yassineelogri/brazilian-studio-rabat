@@ -5,6 +5,7 @@ import About from '@/components/About';
 import Services from '@/components/Services';
 import BeforeAfter from '@/components/BeforeAfter';
 import Testimonials from '@/components/Testimonials';
+import LoyaltyCTA from '@/components/LoyaltyCTA';
 import Gallery from '@/components/Gallery';
 import BookingCTA from '@/components/BookingCTA';
 import Footer from '@/components/Footer';
@@ -19,6 +20,7 @@ export default function Home() {
       <Services />
       <BeforeAfter />
       <Testimonials />
+      <LoyaltyCTA />
       <Gallery />
       <BookingCTA />
       <Footer />

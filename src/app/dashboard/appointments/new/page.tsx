@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic'
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  background: 'rgba(255,255,255,0.07)',
-  border: '1px solid rgba(255,255,255,0.12)',
+  background: '#FFFFFF',
+  border: '1px solid #EEDCD7',
   borderRadius: '12px',
-  color: 'rgba(255,255,255,0.9)',
+  color: '#382227',
   padding: '10px 14px',
   fontSize: '14px',
   outline: 'none',
@@ -23,7 +23,7 @@ const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: '11px',
   fontWeight: 500,
-  color: 'rgba(255,255,255,0.4)',
+  color: '#8A6E74',
   textTransform: 'uppercase',
   letterSpacing: '0.1em',
   marginBottom: '6px',
@@ -112,19 +112,19 @@ export default function NewAppointmentPage() {
     <div style={{ maxWidth: '520px' }}>
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.5)', fontWeight: 500 }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#B26478', fontWeight: 500 }}>
           Agenda
         </p>
-        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.95)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <CalendarDays size={22} style={{ color: '#E2A7B5' }} /> Nouveau rendez-vous
+        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: '#382227', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <CalendarDays size={22} style={{ color: '#8E4457' }} /> Nouveau rendez-vous
         </h1>
       </div>
 
       <form
         onSubmit={handleSubmit}
         style={{
-          background: 'rgba(255,255,255,0.06)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          background: '#FFFFFF',
+          border: '1px solid #FFFFFF',
           borderRadius: '20px',
           padding: '24px',
           display: 'flex',
@@ -139,18 +139,18 @@ export default function NewAppointmentPage() {
           <div ref={serviceRef} style={{ position: 'relative' }}>
             <button type="button" onClick={() => setServiceOpen(o => !o)}
               style={{ ...inputStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', textAlign: 'left' }}>
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: form.serviceId ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.35)' }}>
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: form.serviceId ? '#382227' : '#9A8288' }}>
                 {form.serviceId ? services.find(s => s.id === form.serviceId)?.name ?? 'Choisir un service' : 'Choisir un service'}
               </span>
-              <ChevronDown size={14} style={{ flexShrink: 0, marginLeft: '8px', color: 'rgba(255,255,255,0.4)', transform: serviceOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+              <ChevronDown size={14} style={{ flexShrink: 0, marginLeft: '8px', color: '#8A6E74', transform: serviceOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
             </button>
             {serviceOpen && (
-              <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#2A191D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '220px', overflowY: 'auto' }}>
+              <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#FFFFFF', border: '1px solid #EEDCD7', borderRadius: '10px', zIndex: 50, maxHeight: '220px', overflowY: 'auto' }}>
                 {services.map((s, i) => (
                   <button key={s.id} type="button"
                     onClick={() => { setForm(f => ({...f, serviceId: s.id, durationMinutes: s.min_duration ?? 60})); setServiceOpen(false) }}
-                    style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: form.serviceId === s.id ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none', cursor: 'pointer', color: form.serviceId === s.id ? '#E2A7B5' : 'rgba(255,255,255,0.85)', borderRadius: i === 0 ? '10px 10px 0 0' : i === services.length - 1 ? '0 0 10px 10px' : '0' }}>
-                    {s.name} <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>({s.min_duration}–{s.max_duration} min)</span>
+                    style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: form.serviceId === s.id ? '#F7E9E6' : 'none', border: 'none', borderTop: i > 0 ? '1px solid #F7E9E6' : 'none', cursor: 'pointer', color: form.serviceId === s.id ? '#8E4457' : '#432B31', borderRadius: i === 0 ? '10px 10px 0 0' : i === services.length - 1 ? '0 0 10px 10px' : '0' }}>
+                    {s.name} <span style={{ color: '#9A8288', fontSize: '12px' }}>({s.min_duration}–{s.max_duration} min)</span>
                   </button>
                 ))}
               </div>
@@ -162,22 +162,22 @@ export default function NewAppointmentPage() {
           <div ref={staffRef} style={{ position: 'relative' }}>
             <button type="button" onClick={() => setStaffOpen(o => !o)}
               style={{ ...inputStyle, display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', textAlign: 'left' }}>
-              <span style={{ color: form.staffId ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.35)' }}>
+              <span style={{ color: form.staffId ? '#382227' : '#9A8288' }}>
                 {form.staffId ? staff.find(s => s.id === form.staffId)?.name ?? 'À assigner plus tard' : 'À assigner plus tard'}
               </span>
-              <ChevronDown size={14} style={{ flexShrink: 0, marginLeft: '8px', color: 'rgba(255,255,255,0.4)', transform: staffOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+              <ChevronDown size={14} style={{ flexShrink: 0, marginLeft: '8px', color: '#8A6E74', transform: staffOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
             </button>
             {staffOpen && (
-              <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#2A191D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', zIndex: 50, maxHeight: '200px', overflowY: 'auto' }}>
+              <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, background: '#FFFFFF', border: '1px solid #EEDCD7', borderRadius: '10px', zIndex: 50, maxHeight: '200px', overflowY: 'auto' }}>
                 <button type="button" onClick={() => { setForm(f => ({...f, staffId: ''})); setStaffOpen(false) }}
-                  style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: !form.staffId ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', borderRadius: '10px 10px 0 0' }}>
+                  style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: !form.staffId ? '#F7E9E6' : 'none', border: 'none', cursor: 'pointer', color: '#8A6E74', borderRadius: '10px 10px 0 0' }}>
                   À assigner plus tard
                 </button>
                 {staff.filter(s => s.role !== 'secretary').map((s, i, arr) => (
                   <button key={s.id} type="button"
                     onClick={() => { setForm(f => ({...f, staffId: s.id})); setStaffOpen(false) }}
-                    style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: form.staffId === s.id ? 'rgba(226, 167, 181,0.1)' : 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', color: form.staffId === s.id ? '#E2A7B5' : 'rgba(255,255,255,0.85)', borderRadius: i === arr.length - 1 ? '0 0 10px 10px' : '0' }}>
-                    {s.name} <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>({s.role})</span>
+                    style={{ width: '100%', textAlign: 'left', padding: '10px 14px', fontSize: '14px', background: form.staffId === s.id ? '#F7E9E6' : 'none', border: 'none', borderTop: '1px solid #F7E9E6', cursor: 'pointer', color: form.staffId === s.id ? '#8E4457' : '#432B31', borderRadius: i === arr.length - 1 ? '0 0 10px 10px' : '0' }}>
+                    {s.name} <span style={{ color: '#9A8288', fontSize: '12px' }}>({s.role})</span>
                   </button>
                 ))}
               </div>
@@ -199,8 +199,8 @@ export default function NewAppointmentPage() {
           style={{
             width: '100%',
             padding: '12px',
-            background: loading ? 'rgba(226, 167, 181,0.4)' : 'linear-gradient(135deg, #E2A7B5, #C98FA0)',
-            color: '#2B1B1E',
+            background: loading ? '#D8A8B5' : 'linear-gradient(135deg, #A85D70, #7E4452)',
+            color: '#FFFFFF',
             borderRadius: '12px',
             fontSize: '14px',
             fontWeight: 600,

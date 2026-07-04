@@ -96,7 +96,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         }
       `}</style>
 
-      <div style={{ minHeight: '100vh', background: '#221418' }}>
+      <div style={{ minHeight: '100vh', background: '#FAF3EE' }}>
 
         {/* ── Desktop Sidebar ── */}
         <aside
@@ -176,7 +176,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </aside>
 
         {/* ── Main content ── */}
-        <main className="dash-main" style={{ minHeight: '100vh', background: '#221418', transition: 'margin-left 0.3s' }}>
+        <main className="dash-main" style={{ minHeight: '100vh', background: '#FAF3EE', transition: 'margin-left 0.3s' }}>
           {children}
         </main>
 

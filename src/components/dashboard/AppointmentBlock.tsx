@@ -12,17 +12,17 @@ interface Props {
 }
 
 const STATUS_DOT: Record<string, string> = {
-  confirmed: '#4ADE80',
-  pending:   '#FBBF24',
-  cancelled: '#9CA3AF',
+  confirmed: '#1C9950',
+  pending:   '#B07818',
+  cancelled: '#6B7280',
   completed: '#60A5FA',
-  no_show:   '#F87171',
+  no_show:   '#C94F4F',
 }
 
 export default function AppointmentBlock({ appointment, onClick, style, copiedId, onCopyLink, showTime }: Props) {
   const serviceName = appointment.services?.name ?? 'RDV'
   const clientName  = appointment.clients?.name ?? ''
-  const color       = appointment.services?.color ?? '#E2A7B5'
+  const color       = appointment.services?.color ?? '#8E4457'
   const durationMin = appointment.duration_minutes ?? 60
   const timeStr     = appointment.start_time?.slice(0, 5) ?? ''
   const dotColor    = STATUS_DOT[appointment.status] ?? STATUS_DOT.pending
@@ -35,11 +35,11 @@ export default function AppointmentBlock({ appointment, onClick, style, copiedId
         borderRadius: '10px',
         overflow: 'hidden',
         cursor: 'pointer',
-        background: 'rgba(255,255,255,0.05)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: '#F7E9E6',
+        border: '1px solid #FFFFFF',
       }}
       onClick={() => onClick(appointment)}
-      whileHover={{ y: -1, boxShadow: `0 4px 16px rgba(0,0,0,0.3), 0 0 0 1px ${color}30` }}
+      whileHover={{ y: -1, boxShadow: `0 4px 16px rgba(56,34,39,0.08), 0 0 0 1px ${color}30` }}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.15 }}
     >
@@ -73,17 +73,17 @@ export default function AppointmentBlock({ appointment, onClick, style, copiedId
             <span style={{ fontSize: '10px', fontWeight: 700, fontVariantNumeric: 'tabular-nums', color }}>
               {timeStr}
             </span>
-            <span style={{ fontSize: '9px', color: 'rgba(255,255,255,0.3)', marginLeft: 'auto' }}>
+            <span style={{ fontSize: '9px', color: '#9A8288', marginLeft: 'auto' }}>
               {Math.floor(durationMin / 60)}h{durationMin % 60 ? String(durationMin % 60).padStart(2, '0') : ''}
             </span>
           </div>
         )}
 
         {/* Service + client */}
-        <p style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.85)', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <p style={{ fontSize: '11px', fontWeight: 600, color: '#432B31', lineHeight: 1.3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {serviceName}
         </p>
-        <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '2px' }}>
+        <p style={{ fontSize: '10px', color: '#8A6E74', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '2px' }}>
           {clientName}
         </p>
       </div>
@@ -107,14 +107,14 @@ export default function AppointmentBlock({ appointment, onClick, style, copiedId
             background: 'transparent',
             border: 'none',
             cursor: 'pointer',
-            color: 'rgba(255,255,255,0.25)',
+            color: '#B8A6AA',
             transition: 'all 0.15s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(226, 167, 181,0.15)'; e.currentTarget.style.color = '#E2A7B5' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.25)' }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#F7E9E6'; e.currentTarget.style.color = '#8E4457' }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#B8A6AA' }}
         >
           {copiedId === appointment.id
-            ? <Check size={10} style={{ color: '#4ADE80' }} />
+            ? <Check size={10} style={{ color: '#1C9950' }} />
             : <Link2 size={10} />}
         </button>
       )}

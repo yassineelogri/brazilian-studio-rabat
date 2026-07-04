@@ -25,11 +25,11 @@ export default function ServicesPage() {
     <div style={{ maxWidth: '600px' }}>
       {/* Header */}
       <div style={{ marginBottom: '32px' }}>
-        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(226, 167, 181,0.5)', fontWeight: 500 }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#B26478', fontWeight: 500 }}>
           Gestion
         </p>
-        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: 'rgba(255,255,255,0.95)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Scissors size={22} style={{ color: '#E2A7B5' }} /> Prestations
+        <h1 style={{ fontFamily: 'serif', fontSize: '28px', fontWeight: 300, color: '#382227', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Scissors size={22} style={{ color: '#8E4457' }} /> Prestations
         </h1>
       </div>
 
@@ -38,8 +38,8 @@ export default function ServicesPage() {
           <div
             key={service.id}
             style={{
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              background: '#FFFFFF',
+              border: '1px solid #FFFFFF',
               borderRadius: '16px',
               padding: '16px',
             }}
@@ -51,13 +51,13 @@ export default function ServicesPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: service.color, flexShrink: 0, boxShadow: `0 0 8px ${service.color}60` }} />
                   <div>
-                    <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{service.name}</p>
-                    <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{service.min_duration}–{service.max_duration} min</p>
+                    <p style={{ fontSize: '14px', fontWeight: 500, color: '#382227' }}>{service.name}</p>
+                    <p style={{ fontSize: '12px', color: '#9A8288', marginTop: '2px' }}>{service.min_duration}–{service.max_duration} min</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setEditing(service.id)}
-                  style={{ fontSize: '12px', color: '#E2A7B5', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+                  style={{ fontSize: '12px', color: '#8E4457', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
                 >
                   Modifier
                 </button>
@@ -79,12 +79,12 @@ function EditServiceForm({ service, onSave, onCancel }: {
   const [max, setMax] = useState(service.max_duration)
   const [color, setColor] = useState(service.color)
 
-  const labelStyle = { fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase' as const, letterSpacing: '0.1em', marginBottom: '4px', display: 'block' }
-  const inputStyle = { background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', color: 'rgba(255,255,255,0.9)', padding: '8px 12px', fontSize: '13px', width: '100%', outline: 'none' }
+  const labelStyle = { fontSize: '11px', color: '#8A6E74', textTransform: 'uppercase' as const, letterSpacing: '0.1em', marginBottom: '4px', display: 'block' }
+  const inputStyle = { background: '#FFFFFF', border: '1px solid #EEDCD7', borderRadius: '10px', color: '#382227', padding: '8px 12px', fontSize: '13px', width: '100%', outline: 'none' }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      <p style={{ fontSize: '14px', fontWeight: 500, color: 'rgba(255,255,255,0.9)' }}>{service.name}</p>
+      <p style={{ fontSize: '14px', fontWeight: 500, color: '#382227' }}>{service.name}</p>
       <div style={{ display: 'flex', gap: '12px' }}>
         <div style={{ flex: 1 }}>
           <label style={labelStyle}>Durée min (min)</label>
@@ -100,20 +100,20 @@ function EditServiceForm({ service, onSave, onCancel }: {
             type="color"
             value={color}
             onChange={e => setColor(e.target.value)}
-            style={{ height: '38px', width: '48px', borderRadius: '10px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.07)', padding: '2px' }}
+            style={{ height: '38px', width: '48px', borderRadius: '10px', cursor: 'pointer', border: '1px solid #EEDCD7', background: '#FFFFFF', padding: '2px' }}
           />
         </div>
       </div>
       <div style={{ display: 'flex', gap: '8px' }}>
         <button
           onClick={() => onSave({ min_duration: min, max_duration: max, color })}
-          style={{ padding: '8px 16px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '10px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}
+          style={{ padding: '8px 16px', background: 'linear-gradient(135deg, #A85D70, #7E4452)', color: '#FFFFFF', borderRadius: '10px', fontSize: '13px', fontWeight: 600, border: 'none', cursor: 'pointer' }}
         >
           Sauvegarder
         </button>
         <button
           onClick={onCancel}
-          style={{ padding: '8px 16px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}
+          style={{ padding: '8px 16px', background: '#FFFFFF', border: '1px solid #EEDCD7', color: '#7E6469', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}
         >
           Annuler
         </button>

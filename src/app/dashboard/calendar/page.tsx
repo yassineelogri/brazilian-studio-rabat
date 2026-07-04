@@ -127,14 +127,14 @@ export default function CalendarPage() {
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: '10px',
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              color: 'rgba(255,255,255,0.5)',
+              background: '#FFFFFF',
+              border: '1px solid #FFFFFF',
+              color: '#7E6469',
               cursor: 'pointer',
               transition: 'all 0.15s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(226, 167, 181,0.1)'; e.currentTarget.style.color = '#E2A7B5'; e.currentTarget.style.borderColor = 'rgba(226, 167, 181,0.2)' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F7E9E6'; e.currentTarget.style.color = '#8E4457'; e.currentTarget.style.borderColor = '#E8C7CE' }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#7E6469'; e.currentTarget.style.borderColor = '#FFFFFF' }}
           >
             <ChevronLeft size={15} />
           </button>
@@ -147,14 +147,14 @@ export default function CalendarPage() {
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: '10px',
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              color: 'rgba(255,255,255,0.5)',
+              background: '#FFFFFF',
+              border: '1px solid #FFFFFF',
+              color: '#7E6469',
               cursor: 'pointer',
               transition: 'all 0.15s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(226, 167, 181,0.1)'; e.currentTarget.style.color = '#E2A7B5'; e.currentTarget.style.borderColor = 'rgba(226, 167, 181,0.2)' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F7E9E6'; e.currentTarget.style.color = '#8E4457'; e.currentTarget.style.borderColor = '#E8C7CE' }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#7E6469'; e.currentTarget.style.borderColor = '#FFFFFF' }}
           >
             <ChevronRight size={15} />
           </button>
@@ -171,10 +171,10 @@ export default function CalendarPage() {
               >
                 {view === 'day' ? (
                   <>
-                    <h1 style={{ fontFamily: 'serif', fontSize: '20px', color: 'rgba(255,255,255,0.9)', textTransform: 'capitalize', lineHeight: 1.2, fontWeight: 400 }}>
+                    <h1 style={{ fontFamily: 'serif', fontSize: '20px', color: '#382227', textTransform: 'capitalize', lineHeight: 1.2, fontWeight: 400 }}>
                       {headerLabel}
                     </h1>
-                    <p style={{ fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>
+                    <p style={{ fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#9A8288', marginTop: '2px' }}>
                       {appointments.length} rendez-vous
                       {pendingCount > 0 && (
                         <span
@@ -184,9 +184,9 @@ export default function CalendarPage() {
                             borderRadius: '20px',
                             fontSize: '10px',
                             fontWeight: 600,
-                            background: 'rgba(251,191,36,0.12)',
-                            color: '#FBBF24',
-                            border: '1px solid rgba(251,191,36,0.2)',
+                            background: '#FBF2DC',
+                            color: '#B07818',
+                            border: '1px solid #EAD3A2',
                           }}
                         >
                           {pendingCount} en attente
@@ -196,10 +196,10 @@ export default function CalendarPage() {
                   </>
                 ) : (
                   <>
-                    <h2 style={{ fontSize: '16px', fontWeight: 600, color: 'rgba(255,255,255,0.9)', textTransform: 'capitalize', lineHeight: 1.2 }}>
+                    <h2 style={{ fontSize: '16px', fontWeight: 600, color: '#382227', textTransform: 'capitalize', lineHeight: 1.2 }}>
                       {headerLabel}
                     </h2>
-                    <p style={{ fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>
+                    <p style={{ fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#9A8288', marginTop: '2px' }}>
                       {appointments.length} rendez-vous cette semaine
                     </p>
                   </>
@@ -217,9 +217,9 @@ export default function CalendarPage() {
               padding: '5px 12px',
               borderRadius: '8px',
               cursor: 'pointer',
-              background: 'rgba(226, 167, 181,0.08)',
-              border: '1px solid rgba(226, 167, 181,0.2)',
-              color: '#E2A7B5',
+              background: '#F7E9E6',
+              border: '1px solid #E8C7CE',
+              color: '#8E4457',
               fontWeight: 500,
               transition: 'all 0.15s',
             }}
@@ -235,8 +235,8 @@ export default function CalendarPage() {
             gap: '4px',
             padding: '4px',
             borderRadius: '12px',
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.06)',
+            background: '#FFFFFF',
+            border: '1px solid #FFFFFF',
           }}
         >
           {(['day', 'week'] as View[]).map(v => (
@@ -252,7 +252,7 @@ export default function CalendarPage() {
                 cursor: 'pointer',
                 border: 'none',
                 background: 'transparent',
-                color: view === v ? '#E2A7B5' : 'rgba(255,255,255,0.4)',
+                color: view === v ? '#8E4457' : '#8A6E74',
                 transition: 'color 0.15s',
                 position: 'relative',
                 zIndex: 1,
@@ -265,8 +265,8 @@ export default function CalendarPage() {
                     position: 'absolute',
                     inset: 0,
                     borderRadius: '8px',
-                    background: 'rgba(226, 167, 181,0.12)',
-                    border: '1px solid rgba(226, 167, 181,0.2)',
+                    background: '#F7E9E6',
+                    border: '1px solid #E8C7CE',
                     zIndex: -1,
                   }}
                   transition={{ type: 'spring', damping: 25, stiffness: 350 }}
@@ -288,7 +288,7 @@ export default function CalendarPage() {
             padding: '10px 14px',
             borderRadius: '12px',
             marginBottom: '16px',
-            color: '#F87171',
+            color: '#C94F4F',
             background: 'rgba(239,68,68,0.08)',
             border: '1px solid rgba(239,68,68,0.15)',
           }}
@@ -302,9 +302,9 @@ export default function CalendarPage() {
         <div className="grid grid-cols-6 gap-2">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="space-y-2">
-              <div style={{ height: '64px', borderRadius: '12px', background: 'rgba(255,255,255,0.04)', animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 80}ms` }} />
-              <div style={{ height: '64px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 120}ms` }} />
-              <div style={{ height: '48px', borderRadius: '12px', background: 'rgba(255,255,255,0.02)', animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 160}ms` }} />
+              <div style={{ height: '64px', borderRadius: '12px', background: '#FFFFFF', animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 80}ms` }} />
+              <div style={{ height: '64px', borderRadius: '12px', background: '#FFFFFF', animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 120}ms` }} />
+              <div style={{ height: '48px', borderRadius: '12px', background: '#FFFFFF', animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 160}ms` }} />
             </div>
           ))}
         </div>
