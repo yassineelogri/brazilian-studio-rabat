@@ -18,6 +18,7 @@ export interface Service {
   description: string | null
   min_duration: number
   max_duration: number
+  price: number | null
   color: string
   is_active: boolean
 }
