@@ -22,14 +22,21 @@ export async function POST(request: NextRequest) {
         : 'http://localhost:3000')
     ).replace(/\/+$/, '')
 
-    await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithOtp({
       email: email.trim().toLowerCase(),
       options: {
         emailRedirectTo: `${siteUrl}/api/client/auth/callback`,
       },
     })
 
-    // Always return 200 — never reveal whether email exists (prevents enumeration)
+    if (error) {
+      console.error('Supabase signInWithOtp error:', error.message)
+      if (error.status === 429) {
+        return NextResponse.json({ error: 'rate_limit' }, { status: 429 })
+      }
+      return NextResponse.json({ error: error.message }, { status: 400 })
+    }
+
     return NextResponse.json({ ok: true }, { status: 200 })
   } catch (err) {
     console.error('POST /api/client/auth/magic-link error:', err)

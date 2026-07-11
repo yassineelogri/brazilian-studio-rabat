@@ -56,7 +56,12 @@ function LoginForm() {
     if (res.ok) {
       setStep('otp')
     } else {
-      setError("Une erreur est survenue. Réessayez.")
+      const data = await res.json().catch(() => ({}))
+      if (res.status === 429 || data.error === 'rate_limit') {
+        setError("Veuillez patienter 60 secondes avant de demander un nouveau code.")
+      } else {
+        setError("Une erreur est survenue. Réessayez.")
+      }
     }
   }
 
