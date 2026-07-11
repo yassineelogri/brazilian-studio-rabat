@@ -38,7 +38,8 @@ export async function requireClient(): Promise<{
     .from('clients')
     .select('id, name, phone, email')
     .eq('auth_user_id', user.id)
-    .single()
+    .limit(1)
+    .maybeSingle()
   return data ?? null
 }
 

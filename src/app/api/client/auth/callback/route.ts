@@ -48,7 +48,8 @@ export async function GET(request: NextRequest) {
     .from('clients')
     .select('id, auth_user_id')
     .eq('email', user.email)
-    .single()
+    .limit(1)
+    .maybeSingle()
 
   // First visit without any prior booking: create the client record so
   // account registration works for brand-new visitors too

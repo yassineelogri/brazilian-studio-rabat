@@ -8,6 +8,7 @@ import { Plus, LogOut, FileText, Receipt, User, CalendarDays } from 'lucide-reac
 import type { AppointmentForClient, AppointmentStatus } from '@/lib/supabase/types'
 import { canCancel } from '@/lib/client-portal-utils'
 import LoyaltyCard from '@/components/client/LoyaltyCard'
+import CompleteProfile from '@/components/client/CompleteProfile'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,6 +27,7 @@ const STATUS_STYLES: Record<string, React.CSSProperties> = {
 export default function EspaceClientDashboard() {
   const router = useRouter()
   const [clientName, setClientName] = useState('')
+  const [needsProfile, setNeedsProfile] = useState(false)
   const [upcoming, setUpcoming] = useState<AppointmentForClient[]>([])
   const [past, setPast] = useState<AppointmentForClient[]>([])
   const [loading, setLoading] = useState(true)
@@ -35,9 +37,10 @@ export default function EspaceClientDashboard() {
   useEffect(() => {
     async function load() {
       const profileRes = await fetch('/api/client/profile')
-      if (!profileRes.ok) { router.push('/espace-client'); return }
+      if (!profileRes.ok) { window.location.href = '/espace-client'; return }
       const profile = await profileRes.json()
       setClientName(profile.name)
+      setNeedsProfile(!profile.phone || profile.phone.trim() === '')
       const [upRes, pastRes] = await Promise.all([
         fetch('/api/client/appointments?filter=upcoming'),
         fetch('/api/client/appointments?filter=past'),
@@ -75,6 +78,13 @@ export default function EspaceClientDashboard() {
     <div style={{ minHeight: '100vh', background: '#221418', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px' }}>Chargement...</p>
     </div>
+  )
+
+  if (needsProfile) return (
+    <CompleteProfile
+      initialName={clientName}
+      onDone={p => { setClientName(p.name); setNeedsProfile(false) }}
+    />
   )
 
   return (
