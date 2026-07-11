@@ -71,7 +71,7 @@ function LoginForm() {
     })
     setLoading(false)
     if (res.ok) {
-      router.push('/espace-client/dashboard')
+      window.location.href = '/espace-client/dashboard'
     } else {
       const data = await res.json()
       if (data.error === 'invalid_code') {
