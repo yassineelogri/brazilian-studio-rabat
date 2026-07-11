@@ -40,7 +40,7 @@ export default function CalendarPage() {
   const copiedTimerRef = useRef<ReturnType<typeof setTimeout>>()
 
   const weekStart = getMondayOfWeek(currentDate)
-  const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 5)
+  const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6)
   const rangeStart = view === 'day' ? formatDate(currentDate) : formatDate(weekStart)
   const rangeEnd   = view === 'day' ? formatDate(currentDate) : formatDate(weekEnd)
 
@@ -299,8 +299,8 @@ export default function CalendarPage() {
 
       {/* Calendar */}
       {loading ? (
-        <div className="grid grid-cols-6 gap-2">
-          {Array.from({ length: 6 }).map((_, i) => (
+        <div className="grid grid-cols-7 gap-2">
+          {Array.from({ length: 7 }).map((_, i) => (
             <div key={i} className="space-y-2">
               <div style={{ height: '64px', borderRadius: '12px', background: '#FFFFFF', animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 80}ms` }} />
               <div style={{ height: '64px', borderRadius: '12px', background: '#FFFFFF', animation: 'pulse 2s ease-in-out infinite', animationDelay: `${i * 120}ms` }} />

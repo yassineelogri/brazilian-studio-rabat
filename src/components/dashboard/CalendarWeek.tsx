@@ -14,7 +14,7 @@ interface Props {
 }
 
 const HOURS = Array.from({ length: 11 }, (_, i) => i + 10) // 10h → 20h
-const DAY_LABELS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
+const DAY_LABELS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
 
 function formatDate(d: Date) {
   const y = d.getFullYear()
@@ -37,7 +37,7 @@ const cardVariants: Variants = {
 }
 
 export default function CalendarWeek({ weekStart, appointments, onAppointmentClick, copiedId, onCopyLink }: Props) {
-  const days = Array.from({ length: 6 }, (_, i) => addDays(weekStart, i))
+  const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
   const todayStr = formatDate(new Date())
 
   return (
@@ -51,7 +51,7 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
       }}
     >
       {/* Day header row */}
-      <div className="grid" style={{ gridTemplateColumns: '52px repeat(6, 1fr)', borderBottom: '1px solid #FFFFFF' }}>
+      <div className="grid" style={{ gridTemplateColumns: '52px repeat(7, 1fr)', borderBottom: '1px solid #FFFFFF' }}>
         <div style={{ padding: '16px 0' }} />
         {days.map((day, i) => {
           const dateStr = formatDate(day)
@@ -130,7 +130,7 @@ export default function CalendarWeek({ weekStart, appointments, onAppointmentCli
             animate="show"
             className="grid"
             style={{
-              gridTemplateColumns: '52px repeat(6, 1fr)',
+              gridTemplateColumns: '52px repeat(7, 1fr)',
               minHeight: '80px',
               borderBottom: hi < HOURS.length - 1 ? '1px solid #FFFFFF' : 'none',
             }}
