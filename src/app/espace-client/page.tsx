@@ -173,13 +173,13 @@ function LoginForm() {
             )}
 
             <div>
-              <label style={labelStyle}>Code à 6 chiffres</label>
+              <label style={labelStyle}>Code de vérification</label>
               <input 
                 type="text" 
                 required 
-                maxLength={6}
+                maxLength={8}
                 value={token} 
-                onChange={e => setToken(e.target.value.replace(/\D/g, ''))} 
+                onChange={e => setToken(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))} 
                 placeholder="000000" 
                 style={{ ...inputStyle, textAlign: 'center', fontSize: '24px', letterSpacing: '0.5em', padding: '16px' }} 
               />
