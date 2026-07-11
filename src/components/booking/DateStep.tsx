@@ -11,7 +11,7 @@ interface DayOption {
   date: string
 }
 
-/* Next 14 open days (salon closed on Sundays) */
+/* Next 14 reservation days */
 function buildDays(): DayOption[] {
   const days: DayOption[] = []
   const cursor = new Date()
@@ -19,15 +19,13 @@ function buildDays(): DayOption[] {
   const dateFmt = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short' })
 
   while (days.length < 14) {
-    if (cursor.getDay() !== 0) {
-      const value = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, '0')}-${String(cursor.getDate()).padStart(2, '0')}`
-      const isToday = days.length === 0 && cursor.getDate() === new Date().getDate()
-      days.push({
-        value,
-        dow: isToday ? "Auj." : dowFmt.format(cursor).replace('.', ''),
-        date: dateFmt.format(cursor),
-      })
-    }
+    const value = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, '0')}-${String(cursor.getDate()).padStart(2, '0')}`
+    const isToday = days.length === 0 && cursor.getDate() === new Date().getDate()
+    days.push({
+      value,
+      dow: isToday ? 'Auj.' : dowFmt.format(cursor).replace('.', ''),
+      date: dateFmt.format(cursor),
+    })
     cursor.setDate(cursor.getDate() + 1)
   }
   return days
@@ -39,7 +37,7 @@ export default function DateStep({ selectedDate, onChange }: Props) {
   return (
     <div>
       <h2 className={styles.stepTitle}>Quel jour vous convient ?</h2>
-      <p className={styles.stepHint}>Ouvert du lundi au samedi, de 10h à 20h.</p>
+      <p className={styles.stepHint}>Ouvert tous les jours, de 10h à 20h.</p>
 
       <div className={styles.dayGrid}>
         {days.map(day => (

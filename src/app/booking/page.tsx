@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Star, MapPin, MessageCircle } from 'lucide-react'
+import { MapPin, MessageCircle, Star } from 'lucide-react'
 import { createAnonSupabaseClient } from '@/lib/supabase/server'
 import BookingForm from '@/components/booking/BookingForm'
 import styles from '@/components/booking/Booking.module.css'
@@ -44,7 +44,7 @@ export default async function BookingPage() {
           <MessageCircle size={15} /> Confirmation rapide par WhatsApp
         </span>
         <span className={styles.trustItem}>
-          <MapPin size={15} /> Rabat-Agdal · Lun-Sam 10h-20h
+          <MapPin size={15} /> Rabat-Agdal - Tous les jours 10h-20h
         </span>
       </div>
 

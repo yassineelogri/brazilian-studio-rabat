@@ -64,11 +64,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid date: year out of range' }, { status: 400 })
   }
 
-  // 2. Validate date is not Sunday and not in the past
+  // 2. Validate date is not in the past
   const appointmentDate = new Date(date + 'T00:00:00')
-  if (appointmentDate.getDay() === 0) {
-    return NextResponse.json({ error: 'Invalid date: salon is closed on Sundays' }, { status: 400 })
-  }
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   if (appointmentDate < today) {
