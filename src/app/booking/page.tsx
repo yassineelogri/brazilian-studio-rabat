@@ -6,6 +6,7 @@ import BookingForm from '@/components/booking/BookingForm'
 import styles from '@/components/booking/Booking.module.css'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export const metadata: Metadata = {
   title: 'Réserver en ligne',

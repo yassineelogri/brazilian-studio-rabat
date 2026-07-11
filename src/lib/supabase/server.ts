@@ -9,7 +9,12 @@ import type { Database } from './types'
 export function createServerSupabaseClient() {
   return createClient<any>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      global: {
+        fetch: (url, init) => fetch(url, { ...init, cache: 'no-store' })
+      }
+    }
   )
 }
 
@@ -29,6 +34,9 @@ export async function createSessionSupabaseClient() {
           )
         },
       },
+      global: {
+        fetch: (url, init) => fetch(url, { ...init, cache: 'no-store' })
+      }
     }
   )
 }
@@ -39,6 +47,11 @@ export function createAnonSupabaseClient() {
   return createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false } }
+    { 
+      auth: { persistSession: false },
+      global: {
+        fetch: (url, init) => fetch(url, { ...init, cache: 'no-store' })
+      }
+    }
   )
 }

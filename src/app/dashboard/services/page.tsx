@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Check, Eye, EyeOff, Plus, Scissors, X } from 'lucide-react'
+import { Check, Eye, EyeOff, Plus, Scissors, X, Trash2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import type { Service } from '@/lib/supabase/types'
 import { formatDurationRange, formatServicePrice, validateServiceInput } from '@/lib/services'
@@ -164,6 +164,23 @@ export default function ServicesPage() {
     setSaving(false)
   }
 
+  async function deleteService(id: string) {
+    if (!confirm('Etes-vous sur de vouloir supprimer cette prestation ?')) return
+    setSaving(true)
+    setError(null)
+    const { error: deleteError } = await supabase
+      .from('services')
+      .delete()
+      .eq('id', id)
+
+    if (deleteError) {
+      setError(deleteError.message)
+    } else {
+      setServices(prev => prev.filter(s => s.id !== id))
+    }
+    setSaving(false)
+  }
+
   async function toggleActive(service: Service) {
     const next = !service.is_active
     setServices(prev => prev.map(s => s.id === service.id ? { ...s, is_active: next } : s))
@@ -277,6 +294,13 @@ export default function ServicesPage() {
                     style={{ fontSize: '12px', color: gold, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
                   >
                     Modifier
+                  </button>
+                  <button
+                    onClick={() => deleteService(service.id)}
+                    title="Supprimer"
+                    style={{ ...btnGhost, padding: '8px 10px', color: '#9F3A3A', marginLeft: '4px' }}
+                  >
+                    <Trash2 size={14} />
                   </button>
                 </div>
               </div>
