@@ -173,32 +173,32 @@ function LoginForm() {
             )}
 
             <div>
-              <label style={labelStyle}>Code de vérification</label>
+              <label style={labelStyle}>Code à 8 chiffres</label>
               <input 
                 type="text" 
                 required 
                 maxLength={8}
                 value={token} 
-                onChange={e => setToken(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))} 
-                placeholder="000000" 
+                onChange={e => setToken(e.target.value.replace(/\D/g, ''))} 
+                placeholder="00000000" 
                 style={{ ...inputStyle, textAlign: 'center', fontSize: '24px', letterSpacing: '0.5em', padding: '16px' }} 
               />
             </div>
 
-            <button type="submit" disabled={loading || token.length < 6}
+            <button type="submit" disabled={loading || token.length < 8}
               style={{ 
                 padding: '14px', 
-                background: (loading || token.length < 6) ? 'rgba(226, 167, 181, 0.4)' : 'linear-gradient(135deg, #E2A7B5 0%, #C98FA0 100%)', 
-                color: (loading || token.length < 6) ? 'rgba(43, 27, 30, 0.5)' : '#2B1B1E', 
+                background: (loading || token.length < 8) ? 'rgba(226, 167, 181, 0.4)' : 'linear-gradient(135deg, #E2A7B5 0%, #C98FA0 100%)', 
+                color: (loading || token.length < 8) ? 'rgba(43, 27, 30, 0.5)' : '#2B1B1E', 
                 borderRadius: '12px', 
                 fontWeight: 600, 
                 border: 'none', 
-                cursor: (loading || token.length < 6) ? 'not-allowed' : 'pointer', 
+                cursor: (loading || token.length < 8) ? 'not-allowed' : 'pointer', 
                 fontSize: '15px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: (loading || token.length < 6) ? 'none' : '0 4px 14px rgba(226, 167, 181, 0.25)',
+                boxShadow: (loading || token.length < 8) ? 'none' : '0 4px 14px rgba(226, 167, 181, 0.25)',
                 transition: 'all 0.2s ease'
               }}>
               {loading ? 'Vérification...' : 'Se connecter'}
