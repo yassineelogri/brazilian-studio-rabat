@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
       client = created
     }
 
-    if (!client.auth_user_id) {
+    if (client.auth_user_id !== user.id) {
       const { error: updateError } = await admin
         .from('clients')
         .update({ auth_user_id: user.id })
