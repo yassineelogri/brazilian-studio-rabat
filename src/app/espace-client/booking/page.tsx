@@ -8,7 +8,7 @@ import ClientBookingForm from '@/components/booking/ClientBookingForm'
 export const dynamic = 'force-dynamic'
 
 export default async function ClientBookingPage() {
-  const { client } = await requireClient()
+  const client = await requireClient()
   
   if (!client) {
     redirect('/espace-client')
