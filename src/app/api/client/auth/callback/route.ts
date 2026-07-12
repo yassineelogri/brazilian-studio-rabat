@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   }
 
   // Build the redirect response first so we can set cookies on it
-  const successResponse = NextResponse.redirect(`${origin}/espace-client/dashboard`)
+  const successResponse = NextResponse.redirect(`${origin}/espace-client/set-password`)
   const errorResponse = (err: string) =>
     NextResponse.redirect(`${origin}/espace-client?error=${err}`)
 
