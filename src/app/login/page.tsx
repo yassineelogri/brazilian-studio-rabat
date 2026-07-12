@@ -24,10 +24,17 @@ export default function LoginPage() {
     setLoading(true)
 
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
       setError('Email ou mot de passe incorrect.')
+      setLoading(false)
+      return
+    }
+
+    if (data.user?.app_metadata?.role !== 'staff') {
+      await supabase.auth.signOut()
+      setError('Cet espace est réservé au personnel autorisé.')
       setLoading(false)
       return
     }
