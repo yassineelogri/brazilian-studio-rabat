@@ -108,7 +108,7 @@ export default function EspaceClientDashboard() {
         <LoyaltyCard clientName={clientName} />
 
         {/* Book CTA */}
-        <Link href="/booking" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '13px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '14px', fontWeight: 700, fontSize: '14px', textDecoration: 'none', marginBottom: '20px', boxShadow: '0 4px 20px rgba(226, 167, 181,0.25)' }}>
+        <Link href="/espace-client/booking" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '13px', background: 'linear-gradient(135deg, #E2A7B5, #C98FA0)', color: '#2B1B1E', borderRadius: '14px', fontWeight: 700, fontSize: '14px', textDecoration: 'none', marginBottom: '20px', boxShadow: '0 4px 20px rgba(226, 167, 181,0.25)' }}>
           <Plus size={16} /> Prendre un nouveau rendez-vous
         </Link>
 
