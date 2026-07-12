@@ -18,7 +18,7 @@ function minutesToTime(minutes: number): string {
 export async function POST(request: NextRequest) {
   try {
     const authResult = await requireClient()
-    if (!authResult.client) {
+    if (!authResult || !authResult.client) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
