@@ -17,12 +17,10 @@ function minutesToTime(minutes: number): string {
 
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireClient()
-    if (!authResult || !authResult.client) {
+    const client = await requireClient()
+    if (!client) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
-    const client = authResult.client
     const body = await request.json()
     const { service_id, date, start_time, duration_minutes } = body
 
