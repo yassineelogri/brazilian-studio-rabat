@@ -8,6 +8,7 @@ const CLIENT_PATHS = [
   '/espace-client/devis',
   '/espace-client/factures',
   '/espace-client/profile',
+  '/espace-client/set-password',
 ]
 
 export async function middleware(request: NextRequest) {
@@ -67,5 +68,6 @@ export const config = {
     '/espace-client/devis/:path*',
     '/espace-client/factures/:path*',
     '/espace-client/profile/:path*',
+    '/espace-client/set-password/:path*',
   ],
 }

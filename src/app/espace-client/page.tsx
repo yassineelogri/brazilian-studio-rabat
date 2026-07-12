@@ -3,7 +3,8 @@
 import { Suspense, useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, KeyRound, Mail, Sparkles } from 'lucide-react'
+import { ArrowRight, KeyRound, Mail, Sparkles, Lock } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,12 +29,16 @@ const labelStyle: React.CSSProperties = {
 
 function LoginForm() {
   const searchParams = useSearchParams()
-  const router = useRouter()
   const errorParam = searchParams.get('error')
   
+  const [mode, setMode] = useState<'login' | 'register'>('login')
+  
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  
   const [token, setToken] = useState('')
-  const [step, setStep] = useState<'email' | 'otp'>('email')
+  const [registerStep, setRegisterStep] = useState<'email' | 'otp'>('email')
+  
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -42,6 +47,27 @@ function LoginForm() {
     else if (errorParam === 'expired') setError("Ce lien a expiré. Demandez-en un nouveau.")
     else if (errorParam === 'invalid_link') setError("Lien invalide. Demandez un nouveau lien ci-dessous.")
   }, [errorParam])
+
+  async function handlePasswordLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    const supabase = createClient()
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    })
+    setLoading(false)
+    if (signInError) {
+      if (signInError.message.includes('Invalid login credentials')) {
+        setError("Email ou mot de passe incorrect.")
+      } else {
+        setError("Une erreur est survenue. Réessayez.")
+      }
+    } else {
+      window.location.href = '/espace-client/dashboard'
+    }
+  }
 
   async function handleSendEmail(e: React.FormEvent) {
     e.preventDefault()
@@ -54,7 +80,7 @@ function LoginForm() {
     })
     setLoading(false)
     if (res.ok) {
-      setStep('otp')
+      setRegisterStep('otp')
     } else {
       const data = await res.json().catch(() => ({}))
       if (res.status === 429 || data.error === 'rate_limit') {
@@ -76,7 +102,7 @@ function LoginForm() {
     })
     setLoading(false)
     if (res.ok) {
-      window.location.href = '/espace-client/dashboard'
+      window.location.href = '/espace-client/set-password'
     } else {
       const data = await res.json()
       if (data.error === 'invalid_code') {
@@ -89,13 +115,131 @@ function LoginForm() {
 
   return (
     <div style={{ position: 'relative', overflow: 'hidden' }}>
+      
+      {/* Segmented Control for Mode Selection */}
+      <div style={{ display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: '14px', padding: '4px', marginBottom: '24px' }}>
+        <button
+          onClick={() => { setMode('login'); setError(null) }}
+          style={{
+            flex: 1, padding: '10px 0', border: 'none', borderRadius: '10px',
+            background: mode === 'login' ? 'rgba(255,255,255,0.1)' : 'transparent',
+            color: mode === 'login' ? '#fff' : 'rgba(255,255,255,0.4)',
+            fontSize: '13px', fontWeight: mode === 'login' ? 600 : 500,
+            cursor: 'pointer', transition: 'all 0.2s ease',
+            boxShadow: mode === 'login' ? '0 2px 8px rgba(0,0,0,0.2)' : 'none'
+          }}
+        >
+          Connexion
+        </button>
+        <button
+          onClick={() => { setMode('register'); setError(null) }}
+          style={{
+            flex: 1, padding: '10px 0', border: 'none', borderRadius: '10px',
+            background: mode === 'register' ? 'rgba(255,255,255,0.1)' : 'transparent',
+            color: mode === 'register' ? '#fff' : 'rgba(255,255,255,0.4)',
+            fontSize: '13px', fontWeight: mode === 'register' ? 600 : 500,
+            cursor: 'pointer', transition: 'all 0.2s ease',
+            boxShadow: mode === 'register' ? '0 2px 8px rgba(0,0,0,0.2)' : 'none'
+          }}
+        >
+          Inscription
+        </button>
+      </div>
+
       <AnimatePresence mode="wait">
-        {step === 'email' ? (
+        {mode === 'login' ? (
           <motion.form 
-            key="email-form"
+            key="login-form"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.3 }}
+            onSubmit={handlePasswordLogin} 
+            style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
+          >
+            <div>
+              <p style={{ fontSize: '22px', fontFamily: 'serif', fontWeight: 400, color: '#fff', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <KeyRound size={20} color="#E2A7B5" /> Connectez-vous
+              </p>
+              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>
+                Entrez votre email et votre mot de passe pour accéder à votre espace.
+              </p>
+            </div>
+
+            {error && (
+              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.25)', color: '#F87171', padding: '12px 16px', borderRadius: '12px', fontSize: '13px' }}>
+                {error}
+              </motion.div>
+            )}
+
+            <div>
+              <label style={labelStyle}>Adresse email</label>
+              <div style={{ position: 'relative' }}>
+                <Mail size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.4)' }} />
+                <input 
+                  type="email" 
+                  required 
+                  value={email} 
+                  onChange={e => setEmail(e.target.value)} 
+                  placeholder="votre@email.com" 
+                  style={{ ...inputStyle, paddingLeft: '44px' }} 
+                />
+              </div>
+            </div>
+
+            <div>
+              <label style={labelStyle}>Mot de passe</label>
+              <div style={{ position: 'relative' }}>
+                <Lock size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.4)' }} />
+                <input 
+                  type="password" 
+                  required 
+                  value={password} 
+                  onChange={e => setPassword(e.target.value)} 
+                  placeholder="••••••••" 
+                  style={{ ...inputStyle, paddingLeft: '44px' }} 
+                />
+              </div>
+            </div>
+
+            <button type="submit" disabled={loading}
+              style={{ 
+                padding: '14px', 
+                background: loading ? 'rgba(226, 167, 181, 0.4)' : 'linear-gradient(135deg, #E2A7B5 0%, #C98FA0 100%)', 
+                color: '#2B1B1E', 
+                borderRadius: '12px', 
+                fontWeight: 600, 
+                border: 'none', 
+                cursor: loading ? 'not-allowed' : 'pointer', 
+                fontSize: '15px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 14px rgba(226, 167, 181, 0.25)',
+                transition: 'all 0.2s ease'
+              }}>
+              {loading ? 'Connexion...' : (
+                <>Se connecter <ArrowRight size={18} /></>
+              )}
+            </button>
+
+            <div style={{ textAlign: 'center', marginTop: '4px' }}>
+              <button type="button" onClick={() => { setMode('register'); setError(null) }}
+                style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontSize: '13px', cursor: 'pointer', transition: 'color 0.2s' }}>
+                Nouveau ? <span style={{ color: '#E2A7B5', textDecoration: 'underline' }}>Inscrivez-vous ici</span>
+              </button>
+              <p style={{ marginTop: '12px', fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>
+                Mot de passe oublié ? Allez dans <strong>Inscription</strong> pour en recréer un.
+              </p>
+            </div>
+          </motion.form>
+        ) : registerStep === 'email' ? (
+          <motion.form 
+            key="register-email-form"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
             onSubmit={handleSendEmail} 
             style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
@@ -155,9 +299,9 @@ function LoginForm() {
         ) : (
           <motion.form 
             key="otp-form"
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
+            exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
             onSubmit={handleVerifyOtp} 
             style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
@@ -206,10 +350,10 @@ function LoginForm() {
                 boxShadow: (loading || token.length < 8) ? 'none' : '0 4px 14px rgba(226, 167, 181, 0.25)',
                 transition: 'all 0.2s ease'
               }}>
-              {loading ? 'Vérification...' : 'Se connecter'}
+              {loading ? 'Vérification...' : 'Continuer'}
             </button>
 
-            <button type="button" onClick={() => { setStep('email'); setToken(''); setError(null) }}
+            <button type="button" onClick={() => { setRegisterStep('email'); setToken(''); setError(null) }}
               style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '13px', cursor: 'pointer', textDecoration: 'underline', marginTop: '-8px' }}>
               Utiliser une autre adresse
             </button>
@@ -242,7 +386,7 @@ export default function EspaceClientLoginPage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          style={{ textAlign: 'center', marginBottom: '40px' }}
+          style={{ textAlign: 'center', marginBottom: '32px' }}
         >
           <div style={{ 
             width: '64px', height: '64px', 
